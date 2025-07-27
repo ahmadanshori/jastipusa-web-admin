@@ -18,4 +18,16 @@ Route::get('/ajax-purchase',[PurchaseOrderController::class, 'ajax']);
 
 Route::get('/customers/{id}',[PurchaseOrderController::class, 'list_detail_customer']);
 Route::get('/customer-orders/{id}',[PurchaseOrderController::class, 'list_detail_customer_order']);
+Route::get('/customer-orders',[PurchaseOrderController::class, 'list_customer_order']);
 
+Route::post('/purchase-order-detail/{id}/update-estimasi', [PurchaseOrderController::class, 'updateEstimasi'])
+    ->name('purchase-items.update-estimasi');
+
+    Route::post('/purchase-order-detail/{id}/update-hpp', [PurchaseOrderController::class, 'updateHpp'])
+    ->name('purchase-items.update-hpp');
+
+     Route::post('/purchase-order-detail/{id}/update-operasional', [PurchaseOrderController::class, 'updateOprasional'])
+    ->name('purchase-items.update-oprasional');
+
+Route::get('/purchase/{id}/pdf', [PurchaseOrderController::class, 'generatePDF'])
+    ->name('purchase.pdf');

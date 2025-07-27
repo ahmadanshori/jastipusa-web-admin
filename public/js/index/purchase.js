@@ -16,7 +16,7 @@ $("#show-table").DataTable({
     },
     columns: [
         {
-            data: "no_po"
+            data: "id"
         },
         {
             data: "nama"

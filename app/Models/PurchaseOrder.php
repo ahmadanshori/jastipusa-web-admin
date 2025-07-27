@@ -18,33 +18,11 @@ class PurchaseOrder extends Model
      * @var array
      */
     protected $fillable = [
-        'no_po',
         'nama',
         'no_telp',
         'alamat',
         'email',
-        'nama_barang',
-        'link_barang',
-        'estimasi_kg',
-        'estimasi_harga',
-        'status_follow_up',
-        'nama_rek_transfer',
-        'jumlah_transfer',
-        'dp',
-        'fullpayment',
-        'foto_bukti_tf',
-        'mutasi_check',
-        'payment_method',
-        'total_purchase',
-        'foto_bukti_pembelian',
-        'status_purchase',
-        'notes',
-        'wh_usa',
-        'status_on_check',
-        'wh_indo',
-        'fix_weight',
-        'fix_price',
-        'status_barang_sampai'
+        'status'
     ];
 
    

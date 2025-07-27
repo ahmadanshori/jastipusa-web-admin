@@ -2,6 +2,11 @@
 <a href="{{ route('purchase.edit', [$purchase->id]) }}" class="btn icon btn-primary"><span
     class="fa-fw select-all fas"></span></a>
 
+<a href="{{ route('purchase.show', [$purchase->id]) }}" class="btn icon btn-warning"> <i class="bi bi-eye-fill"></i></a>
+<a href="{{ route('purchase.pdf', [$purchase->id]) }}" class="btn icon btn-info"> <i class="fas fa-file-pdf me-2"></i></a>
+
+
+
 <button class="btn icon btn-danger" data-bs-toggle="modal"
 data-bs-target="#default-delete{{$purchase->id}}">  <i class="bi bi-trash3-fill"></i></button>
 </div>
