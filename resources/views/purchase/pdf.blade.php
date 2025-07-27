@@ -100,7 +100,7 @@
                 <tr>
                     <td><strong>Total Amount:</strong></td>
                     <td class="text-right">Rp {{ number_format($purchaseOrderDetail->sum(function($item) {
-                        return  $item->estimasi_harga * 1.1;
+                        return  $item->estimasi_harga;
                     }), 0, ',', '.') }}</td>
                 </tr>
             </table>
