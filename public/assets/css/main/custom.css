@@ -18,7 +18,121 @@
 .logo{
     width:100%;
 }
+ .accordion-button {
+        padding: 0.75rem 1.25rem;
+        flex-grow: 1;
+        text-align: left;
+    }
+    
+    /* Menghilangkan background saat aktif */
+    .accordion-button:not(.collapsed) {
+        background-color: transparent;
+        box-shadow: none;
+    }
+    
+    /* Style untuk tombol edit */
+    .edit-estimasi-btn {
+        white-space: nowrap;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
+        border-radius: 4px;
+        z-index: 1; /* Agar tombol tetap di atas */
+    }
+    
+    /* Hover effect untuk tombol edit */
+    .edit-estimasi-btn:hover {
+        background-color: #0d6efd;
+        color: white;
+    }
+    
+    .edit-hpp-btn {
+        white-space: nowrap;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
+        border-radius: 4px;
+        z-index: 1; /* Agar tombol tetap di atas */
+    }
+    
+    /* Hover effect untuk tombol edit */
+    .edit-hpp-btn:hover {
+        background-color: #0d6efd;
+        color: white;
+    }
+    
+     .edit-operasional-btn {
+        white-space: nowrap;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
+        border-radius: 4px;
+        z-index: 1; /* Agar tombol tetap di atas */
+    }
+    
+    /* Hover effect untuk tombol edit */
+    .edit-operasional-btn:hover {
+        background-color: #0d6efd;
+        color: white;
+    }
+    /* Menghilangkan outline saat focus */
+    .accordion-button:focus {
+        box-shadow: none;
+        border-color: transparent;
+    }
+ .estimasi-simple {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    color: #607081 !important
+}
+    
+.estimasi-simple .badge {
+    font-weight: 500;
+    padding: 5px 10px;
+    font-size: 0.85rem;
+}
 
+.estimasi-simple .btn-sm {
+    padding: 3px 10px;
+    font-size: 0.85rem;
+}
+
+.hpp-simple {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    color: #607081 !important
+}
+    
+.hpp-simple .badge {
+    font-weight: 500;
+    padding: 5px 10px;
+    font-size: 0.85rem;
+}
+
+.hpp-simple .btn-sm {
+    padding: 3px 10px;
+    font-size: 0.85rem;
+}
+
+.operasional-simple {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    color: #607081 !important
+}
+   
+.operasional-simple .badge {
+    font-weight: 500;
+    padding: 5px 10px;
+    font-size: 0.85rem;
+}
+.accordion{
+    border-color: rgb(110 117 125) !important;
+    --bs-accordion-border-color:  rgb(110 117 125) !important;
+}
+.operasional-simple .btn-sm {
+    padding: 3px 10px;
+    font-size: 0.85rem;
+}
 .card-border{
     border: 2px solid #ebf3ff;
     border-radius: 0px !important;

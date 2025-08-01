@@ -558,7 +558,7 @@
                                    <div class="col-md-6 col-12">
                                     <div class="form-group">
                                          <label for="customer" class="form-label">Customer</label>
-                                        <select class="required choices form-select" id="customer" name="no_telp">
+                                        <select class="choices form-select" id="customer" name="no_telp">
                                             <option value="">Press to select</option>
                                             @if(isset($purchase))
                                                 @foreach($customer as $customers)
@@ -581,7 +581,7 @@
                                 <div class="col-md-6 col-12">
                                     <div class="form-group mandatory">
                                         <label for="name" class="form-label">Name</label>
-                                        <input type="text" id="name" class="form-control form-control-lg required"  value="{{ (isset($purchase->nama)? $purchase->nama:old('nama')) }}"  name="nama">
+                                        <input type="text" id="name" class="form-control form-control-lg"  value="{{ (isset($purchase->nama)? $purchase->nama:old('nama')) }}"  name="nama">
                                     </div>
                                     @error('name')
                                     <div class="invalid-feedback">
@@ -593,7 +593,7 @@
                                 <div class="col-md-6 col-12">
                                     <div class="form-group mandatory">
                                         <label for="email" class="form-label">Email</label>
-                                        <input type="text" id="email" class="form-control form-control-lg required"  value="{{ (isset($purchase->email)? $purchase->email:old('email')) }}"  name="email">
+                                        <input type="text" id="email" class="form-control form-control-lg"  value="{{ (isset($purchase->email)? $purchase->email:old('email')) }}"  name="email">
                                     </div>
                                     @error('name')
                                     <div class="invalid-feedback">
@@ -605,7 +605,7 @@
                                   <div class="col-md-12 col-12">
                                     <div class="form-group mandatory">
                                         <label for="name" class="form-label">Alamat</label>
-                                        <input type="text" id="address" class="form-control form-control-lg required"  value="{{ (isset($purchase->alamat)? $purchase->alamat:old('alamat')) }}"  name="alamat">
+                                        <input type="text" id="address" class="form-control form-control-lg"  value="{{ (isset($purchase->alamat)? $purchase->alamat:old('alamat')) }}"  name="alamat">
                                     </div>
                                     @error('name')
                                     <div class="invalid-feedback">
@@ -636,7 +636,7 @@
                                   <div class="col-md-12 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Customer Order</label>
-                                            <select class="required form-select customer-order-select" name="items[0][customer_order_id]" data-index="0">
+                                            <select class="form-select customer-order-select" name="items[0][customer_order_id]" data-index="0">
                                                 <option value="">Select Customer Order</option>
                                                 <!-- Options akan diisi oleh Choices.js -->
                                             </select>
@@ -645,39 +645,31 @@
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label class="form-label">No. PO Customer</label>
-                                            <input type="text" class="form-control required" name="items[0][no_po_customer]" readonly>
+                                            <input type="text" class="form-control" name="items[0][no_po_customer]" readonly>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Nama Barang</label>
-                                            <input type="text" class="form-control required" name="items[0][nama_barang]">
+                                            <input type="text" class="form-control" name="items[0][nama_barang]">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
-                                        
-                                         <div class="form-group">
+                                        <div class="form-group">
                                             <label class="form-label">Link Barang</label>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control required link-input"
-                                                    name="items[0][link_barang]">
-                                                <button class="btn btn-outline-primary btn-open-link"
-                                                    type="button">
-                                                    <i class="bi bi-box-arrow-up-right"></i>
-                                                </button>
-                                            </div>
+                                            <input type="text" class="form-control" name="items[0][link_barang]">
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Estimasi Kg</label>
-                                            <input type="text" class="form-control required" name="items[0][estimasi_kg]">
+                                            <input type="text" class="form-control" name="items[0][estimasi_kg]">
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Estimasi Harga</label>
-                                            <input type="text" class="form-control required" name="items[0][estimasi_harga]">
+                                            <input type="text" class="form-control" name="items[0][estimasi_harga]">
                                         </div>
                                     </div>
                                     <div class="col-md-12 col-12 text-end">
@@ -713,131 +705,13 @@
 
    $(document).ready(function() {
     // Inisialisasi data customer order dari controller
-initLinkButtons();
-
-     $('form').submit(function(e) {
-        e.preventDefault();
-        
-        // Validasi semua field wajib
-        let isValid = true;
-     
-    const emptyFields = new Set(); // Gunakan Set untuk menghindari duplikasi
-
-    // Validasi field utama
-    $('.required').each(function() {
-        const label = $(this).prev('label').text().trim();
-        if ($(this).is('select') ? !$(this).val() : !$(this).val() || $(this).val().trim() === '') {
-            isValid = false;
-            $(this).addClass('is-invalid');
-            if (label) emptyFields.add(label);
-        } else {
-            $(this).removeClass('is-invalid');
-        }
-    });
-
-    // Validasi item
-    $('.item-row').each(function(index) {
-        const itemSelect = $(this).find('.customer-order-select');
-        if (!itemSelect.val()) {
-            isValid = false;
-            itemSelect.addClass('is-invalid');
-            emptyFields.add(`Customer Order Item ${index + 1}`);
-        } else {
-            itemSelect.removeClass('is-invalid');
-        }
-    });
-
-    if (!isValid) {
-        // Format pesan error lebih rapi
-        let errorMessage;
-        if (emptyFields.size > 0) {
-            const fieldsArray = Array.from(emptyFields).filter(field => field);
-            if (fieldsArray.length > 3) {
-                errorMessage = `<b>${fieldsArray.length} field wajib</b> belum diisi`;
-            } else {
-                errorMessage = `<b>Field wajib berikut belum diisi:</b><br>• ${fieldsArray.join('<br>• ')}`;
-            }
-        } else {
-            errorMessage = 'Terdapat field yang belum diisi';
-        }
-
-        Swal.fire({
-            icon: 'error',
-            title: 'Form Tidak Lengkap',
-            html: errorMessage,
-            footer: 'Harap periksa kembali form Anda'
-        });
-        return;
-    }
-        
-        // Validasi minimal 1 item
-        const itemCount = $('.item-row').length;
-        if (itemCount === 0) {
-            isValid = false;
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Anda harus menambahkan minimal 1 item'
-            });
-            return;
-        }
-
-     
-
-        // Jika validasi sukses, tampilkan konfirmasi
-        Swal.fire({
-            title: 'Apakah Anda yakin?',
-            text: "Data akan disimpan ke database",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, Simpan!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Submit form jika konfirmasi OK
-                $.ajax({
-                    url: $(this).attr('action'),
-                    method: $(this).attr('method'),
-                    data: $(this).serialize(),
-                    success: function(response) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil!',
-                            text: 'Data berhasil disimpan',
-                            timer: 2000,
-                            showConfirmButton: false
-                        }).then(() => {
-                            window.location.href = "{{ route('purchase.index') }}";
-                        });
-                    },
-                    error: function(xhr) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Gagal!',
-                            text: 'Terjadi kesalahan saat menyimpan data'
-                        });
-                    }
-                });
-            }
-        });
-    });
-
-    // Untuk menghilangkan error saat mulai mengisi
-    $('.required').on('input change', function() {
-        if ($(this).val()) {
-            $(this).removeClass('is-invalid');
-        }
-    });
-
        $('#customer').change(function() {
             const customerId = $(this).val();
             if(customerId) {
                 $.get('/customers/' + customerId, function(data) {
-                    $('#name').val(data.display_name ? data.display_name : "");
-                    $('#email').val(data.email_address ? data.email_address  : "");
-                    $('#address').val(data.address ? data.address  : "");
+                    $('#name').val(data.display_name ? data.display_name : "-");
+                    $('#email').val(data.email ? data.email  : "-");
+                    $('#address').val(data.address ? data.address  : "-");
                     // Fill other fields as needed
                 });
             }
@@ -848,36 +722,33 @@ initLinkButtons();
 let selectedCustomerOrders = [];
    const customerOrders = [...new Map(@json($customerOrders).map(item => [item.value, item])).values()];
     const customerOrdersJson = JSON.parse('{!! addslashes($customerOrdersJson) !!}');
+    console.log(customerOrders);
     let choicesInstances = [];
     let itemCounter = $('#items-container .item-row').length;
 
-      const customerSelect = document.getElementById('customer');
-    const customerChoicesInstance = new Choices(customerSelect, {
-        searchEnabled: true,
-        shouldSort: false,
-        itemSelectText: '',
-        classNames: {
-            containerInner: 'choices__inner form-select'
-        }
-    });
-       $('#customer').change(function() {
-        currentCustomerId = $(this).val();
-        selectedCustomerOrders = []; // Reset selected orders
+    $('#customer').change(function() {
+    const customerId = $(this).val();
+    currentCustomerId = customerId;
+    
+    if (customerId) {
+        // Reset semua item terlebih dahulu
+        resetAllItems();
         
-        if (currentCustomerId) {
-            // Filter and update all customer order selects
-            filterCustomerOrders(currentCustomerId);
-            
-            // Clear all item forms
-            $('.item-row').each(function() {
-                const index = $(this).find('.customer-order-select').data('index');
-                resetItemForm(index);
-            });
-        } else {
-            // Reset all selects if no customer selected
-            resetCustomerOrderSelects();
-        }
-    });
+        // Fetch customer details
+        $.get('/customers/' + customerId, function(data) {
+            $('#name').val(data.display_name || "-");
+            $('#email').val(data.email || "-");
+            $('#address').val(data.address || "-");
+        });
+
+        // Filter customer orders
+        filterCustomerOrders(customerId);
+    } else {
+        // Reset semua jika tidak ada customer yang dipilih
+        resetAllItems();
+        resetCustomerOrderSelects();
+    }
+});
 
  function resetAllItems() {
     $('.item-row').each(function() {
@@ -893,8 +764,8 @@ let selectedCustomerOrders = [];
     });
 }
 
- function filterCustomerOrders(customerId) {
-        resetAllItems();
+    function filterCustomerOrders(customerId) {
+         resetAllItems();
         const filteredOrders = customerOrders.filter(order => 
             order.customProperties.customer_id == customerId
         );
@@ -921,12 +792,9 @@ let selectedCustomerOrders = [];
                     false
                 );
 
-                // Restore selection if still valid
+                // Restore previous selection if still valid
                 if (currentValue && filteredOrders.some(o => o.value == currentValue)) {
                     choicesInstance.setValue([currentValue]);
-                    selectedCustomerOrders.push(currentValue);
-                } else {
-                    $(this).val('').trigger('change');
                 }
             }
         });
@@ -954,73 +822,44 @@ let selectedCustomerOrders = [];
         });
     }
     // Fungsi untuk menginisialisasi Choices
-function initializeChoices(selectElement, index) {
-        const existingInstance = choicesInstances.find(i => i.element === selectElement);
-        if (existingInstance) {
-            existingInstance.instance.destroy();
-            choicesInstances = choicesInstances.filter(i => i.element !== selectElement);
-        }
-
-        // Get available orders (not selected or for current customer)
-        const availableOrders = currentCustomerId
-            ? customerOrders.filter(order => 
-                order.customProperties.customer_id == currentCustomerId &&
-                (!selectedCustomerOrders.includes(order.value) || 
-                 order.value === $(selectElement).val()))
-            : [];
-
-        const choices = new Choices(selectElement, {
-            choices: availableOrders,
-            searchEnabled: true,
-            shouldSort: false,
-            itemSelectText: '',
-            classNames: {
-                containerInner: 'choices__inner form-select'
-            },
-            callbackOnInit: function() {
-                const selectedValue = $(selectElement).val();
-                if (selectedValue && !selectedCustomerOrders.includes(selectedValue)) {
-                    selectedCustomerOrders.push(selectedValue);
-                    autoFillItem(index, selectedValue);
-                }
-            }
-        });
-
-        choicesInstances.push({
-            element: selectElement,
-            instance: choices
-        });
-
-        return choices;
+   function initializeChoices(selectElement, index) {
+    const existingInstance = choicesInstances.find(i => i.element === selectElement);
+    if (existingInstance) {
+        existingInstance.instance.destroy();
+        choicesInstances = choicesInstances.filter(i => i.element !== selectElement);
     }
 
-
-
- function initLinkButtons() {
-            // Handler untuk input link
-            $(document).on('input', '.link-input', function() {
-                const btn = $(this).next('.btn-open-link');
-                btn.prop('disabled', !$(this).val().trim());
-            });
-
-            // Handler untuk klik tombol buka link
-            $(document).on('click', '.btn-open-link', function() {
-                const url = $(this).prev('.link-input').val().trim();
-                if (url) {
-                    // Validasi URL
-                    let finalUrl = url;
-                    if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                        finalUrl = 'https://' + url;
-                    }
-                    window.open(finalUrl, '_blank');
+    const choices = new Choices(selectElement, {
+        choices: currentCustomerId 
+            ? customerOrders.filter(o => o.customProperties.customer_id == currentCustomerId)
+            : customerOrders,
+        searchEnabled: true,
+        shouldSort: false,
+        itemSelectText: '',
+        classNames: {
+            containerInner: 'choices__inner form-select'
+        },
+        callbackOnInit: function() {
+            const selectedValue = $(selectElement).val();
+            if (selectedValue) {
+                autoFillItem(index, selectedValue);
+                // Tambahkan ke daftar yang sudah dipilih
+                if (!selectedCustomerOrders.includes(selectedValue)) {
+                    selectedCustomerOrders.push(selectedValue);
                 }
-            });
-
-            // Auto-disable button jika link kosong saat load
-            $('.link-input').each(function() {
-                $(this).next('.btn-open-link').prop('disabled', !$(this).val().trim());
-            });
+            }
         }
+    });
+
+    choicesInstances.push({
+        element: selectElement,
+        instance: choices
+    });
+
+    return choices;
+}
+
+
     // Fungsi untuk auto-fill data
    function autoFillItem(index, customerOrderId) {
     // Reset form terlebih dahulu
@@ -1028,97 +867,66 @@ function initializeChoices(selectElement, index) {
     
     const customerOrders = @json($customerOrders);
     const order = customerOrders.find(o => o.value == customerOrderId);
+
     if (!order) return;
+    
     const itemRow = $(`.item-row [data-index="${index}"]`).closest('.item-row');
     itemRow.find(`input[name="items[${index}][no_po_customer]"]`).val(order.customProperties.po_number || '');
     itemRow.find(`input[name="items[${index}][nama_barang]"]`).val(order.customProperties.nama_barang || '');
     itemRow.find(`input[name="items[${index}][link_barang]"]`).val(order.customProperties.link_product || '');
     itemRow.find(`input[name="items[${index}][estimasi_kg]"]`).val(order.customProperties.jumlah_berat || '');
     itemRow.find(`input[name="items[${index}][estimasi_harga]"]`).val(order.customProperties.total_harga || '');
-initLinkButtons();
-
 }
 
     // Inisialisasi Choices untuk elemen yang sudah ada
     $('.customer-order-select').each(function() {
         initializeChoices(this, $(this).data('index'));
     });
-function refreshAllSelects() {
-    $('.customer-order-select').each(function() {
-        const index = $(this).data('index');
-        const currentValue = $(this).val();
-        const choicesInstance = choicesInstances.find(i => i.element === this)?.instance;
-        
-        if (choicesInstance) {
-            // Dapatkan order yang tersedia untuk customer saat ini
-            const availableOrders = currentCustomerId
-                ? customerOrders.filter(order => 
-                    order.customProperties.customer_id == currentCustomerId &&
-                    (!selectedCustomerOrders.includes(order.value) || order.value === currentValue)
-                )
-                : [];
-            
-            // Simpan nilai yang sedang dipilih
-            const currentSelection = choicesInstance.getValue(true);
-            
-            // Perbarui pilihan
-            choicesInstance.clearChoices();
-            choicesInstance.setChoices(
-                availableOrders,
-                'value',
-                'label',
-                false
-            );
-            
-            // Kembalikan seleksi jika masih tersedia
-            if (currentValue && availableOrders.some(o => o.value == currentValue)) {
-                choicesInstance.setValue([currentValue]);
-            }
-        }
-    });
-}
-    // Event listener untuk perubahan select
- $('#items-container').on('change', '.customer-order-select', function() {
-        const index = $(this).data('index');
-        const selectedValue = $(this).val();
-        const previousValue = $(this).data('prev-value') || '';
-        const choicesInstance = choicesInstances.find(i => i.element === this)?.instance;
 
-        // Remove previous value from tracking
-        if (previousValue && selectedCustomerOrders.includes(previousValue)) {
-            selectedCustomerOrders = selectedCustomerOrders.filter(v => v !== previousValue);
+    // Event listener untuk perubahan select
+$('#items-container').on('change', '.customer-order-select', function() {
+    const index = $(this).data('index');
+    const selectedValue = $(this).val();
+    const previousValue = $(this).data('prev-value') || '';
+    const choicesInstance = choicesInstances.find(i => i.element === this)?.instance;
+
+    // Hapus nilai sebelumnya dari daftar yang dipilih
+    if (previousValue && selectedCustomerOrders.includes(previousValue)) {
+        selectedCustomerOrders = selectedCustomerOrders.filter(v => v !== previousValue);
+    }
+    
+    // Cek apakah sudah dipilih di item lain
+    if (selectedValue && selectedCustomerOrders.includes(selectedValue)) {
+        alert('Customer Order ini sudah dipilih di item lain!');
+        
+        // Kembalikan ke nilai sebelumnya
+        if (choicesInstance) {
+            choicesInstance.setValue([previousValue]);
         }
         
-        // Check for duplicate selection
-        if (selectedValue) {
-            if (selectedCustomerOrders.includes(selectedValue)) {
-                  Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Customer Order ini sudah dipilih di item lain!',
-                        confirmButtonColor: '#dc3545',
-                        confirmButtonText: 'Mengerti'
-                    });
-                if (choicesInstance) {
-                    choicesInstance.setValue([previousValue]);
-                    if (previousValue) {
-                        selectedCustomerOrders.push(previousValue);
-                    }
-                }
-                return;
-            }
-            
-            // Add to selected orders and auto-fill
-            selectedCustomerOrders.push(selectedValue);
-            $(this).data('prev-value', selectedValue);
-            autoFillItem(index, selectedValue);
-        } else {
-            resetItemForm(index);
+        // Tambahkan kembali previousValue ke selectedCustomerOrders
+        if (previousValue) {
+            selectedCustomerOrders.push(previousValue);
         }
         
-        // Refresh all selects to update available options
-        refreshAllSelects();
-    });
+        return;
+    }
+    
+    // Tambahkan ke daftar yang dipilih jika ada nilai
+    if (selectedValue) {
+        selectedCustomerOrders.push(selectedValue);
+    }
+    
+    // Simpan nilai saat ini sebagai previous value
+    $(this).data('prev-value', selectedValue);
+    
+    // Lanjutkan dengan auto-fill atau reset
+    if (!selectedValue) {
+        resetItemForm(index);
+    } else {
+        autoFillItem(index, selectedValue);
+    }
+});
 
     // Tambah item baru
     $('#add-item-btn').click(function() {
@@ -1127,7 +935,7 @@ function refreshAllSelects() {
             <div class="col-md-12 col-12">
                 <div class="form-group">
                     <label class="form-label">Customer Order</label>
-                    <select class="form-select customer-order-select required" name="items[${itemCounter}][customer_order_id]" data-index="${itemCounter}">
+                    <select class="form-select customer-order-select" name="items[${itemCounter}][customer_order_id]" data-index="${itemCounter}">
                         <option value="">Select Customer Order</option>
                     </select>
                 </div>
@@ -1135,39 +943,31 @@ function refreshAllSelects() {
              <div class="col-md-6 col-12">
                     <div class="form-group">
                         <label class="form-label">No. PO Customer</label>
-                        <input type="text" class="form-control required" name="items[${itemCounter}][no_po_customer]" readonly>
+                        <input type="text" class="form-control" name="items[${itemCounter}][no_po_customer]" readonly>
                     </div>
                 </div>
                 <div class="col-md-6 col-12">
                     <div class="form-group">
                         <label class="form-label">Nama Barang</label>
-                        <input type="text" class="form-control required" name="items[${itemCounter}][nama_barang]">
+                        <input type="text" class="form-control" name="items[${itemCounter}][nama_barang]">
                     </div>
                 </div>
                 <div class="col-md-6 col-12">
-                   
                     <div class="form-group">
                         <label class="form-label">Link Barang</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control required link-input"
-                                name="items[${itemCounter}][link_barang]">
-                            <button class="btn btn-outline-primary btn-open-link"
-                                type="button">
-                                <i class="bi bi-box-arrow-up-right"></i>
-                            </button>
-                        </div>
+                        <input type="text" class="form-control" name="items[${itemCounter}][link_barang]">
                     </div>
                 </div>
                 <div class="col-md-3 col-12">
                     <div class="form-group">
                         <label class="form-label">Estimasi Kg</label>
-                        <input type="text" class="form-control required" name="items[${itemCounter}][estimasi_kg]">
+                        <input type="text" class="form-control" name="items[${itemCounter}][estimasi_kg]">
                     </div>
                 </div>
                 <div class="col-md-3 col-12">
                     <div class="form-group">
                         <label class="form-label">Estimasi Harga</label>
-                        <input type="text" class="form-control required" name="items[${itemCounter}][estimasi_harga]">
+                        <input type="text" class="form-control" name="items[${itemCounter}][estimasi_harga]">
                     </div>
                 </div>
                 <div class="col-md-12 col-12 text-end">
@@ -1190,40 +990,28 @@ function refreshAllSelects() {
 });
 
     // Hapus item
-  $('#items-container').on('click', '.remove-item-btn', function() {
+   $('#items-container').on('click', '.remove-item-btn', function() {
     if ($('#items-container .item-row').length > 1) {
         const itemRow = $(this).closest('.item-row');
         const selectElement = itemRow.find('.customer-order-select')[0];
         const selectedValue = $(selectElement).val();
         
-        // 1. Hapus dari daftar yang dipilih jika ada nilai
+        // Hapus dari daftar yang dipilih
         if (selectedValue && selectedCustomerOrders.includes(selectedValue)) {
             selectedCustomerOrders = selectedCustomerOrders.filter(v => v !== selectedValue);
         }
         
-        // 2. Hancurkan instance Choices sebelum menghapus
+        // Hancurkan instance Choices
         const instanceIndex = choicesInstances.findIndex(i => i.element === selectElement);
         if (instanceIndex !== -1) {
             choicesInstances[instanceIndex].instance.destroy();
             choicesInstances.splice(instanceIndex, 1);
         }
         
-        // 3. Hapus baris item
         itemRow.remove();
-        
-        // 4. Re-index item yang tersisa
         reindexItems();
-        
-        // 5. Refresh semua select untuk mengembalikan opsi yang dihapus
-        refreshAllSelects();
     } else {
-          Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Anda harus memiliki setidaknya satu item',
-                confirmButtonColor: '#dc3545',
-                confirmButtonText: 'Mengerti'
-            });
+        alert('You must have at least one item.');
     }
 });
 
@@ -1236,13 +1024,22 @@ function refreshAllSelects() {
     }
    function reindexItems() {
     let newIndex = 0;
+    selectedCustomerOrders = []; // Reset daftar yang dipilih
+    
     $('#items-container .item-row').each(function() {
+        const selectElement = $(this).find('.customer-order-select')[0];
+        const selectedValue = $(selectElement).val();
+        
+        // Tambahkan kembali nilai yang dipilih
+        if (selectedValue) {
+            selectedCustomerOrders.push(selectedValue);
+        }
+        
         $(this).find('input, select').each(function() {
             const name = $(this).attr('name').replace(/items\[\d+\]/, `items[${newIndex}]`);
             $(this).attr('name', name);
         });
         
-        const selectElement = $(this).find('.customer-order-select')[0];
         $(selectElement).attr('data-index', newIndex);
         
         const instance = choicesInstances.find(i => i.element === selectElement);
@@ -1252,6 +1049,7 @@ function refreshAllSelects() {
         
         newIndex++;
     });
+    
     itemCounter = newIndex;
 }
 

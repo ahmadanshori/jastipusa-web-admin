@@ -1,30 +1,32 @@
 <a href="{{ route('user.edit', [$user->id]) }}" class="btn icon btn-primary"><span
     class="fa-fw select-all fas"></span></a>
 
-<button class="btn icon btn-danger" data-bs-toggle="modal"
-data-bs-target="#default-delete{{$user->id}}"> <i class="bi bi-trash3-fill"></i></button>
+<button class="btn icon btn-danger" data-bs-toggle="modal" 
+        data-bs-target="#deleteModal{{$user->id}}">
+    <i class="bi bi-trash3-fill"></i>
+</button>
+</div>
 
-
-<div class="modal fade text-left" id="default-delete{{$user->id}}" tabindex="-1" user="dialog" aria-hidden="true">
-
-    <div class="modal-dialog modal-confirm">
+<div class="modal fade" id="deleteModal{{$user->id}}" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header flex-column">
-                                
-                <h4 class="modal-title w-100">Are you sure?</h4>	
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <div class="modal-header">
+                <h5 class="modal-title">Konfirmasi Hapus</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Do you really want to delete these records? This process cannot be undone.</p>
+                <p>Yakin ingin menghapus user #{{$user->id}}? Data tidak dapat dikembalikan.</p>
             </div>
-            <div class="modal-footer justify-content-center">
-                <form class="form" method="DELETE" action="{{route('user.destroy', $user->id)}}" enctype="multipart/form-data">
-                    <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Delete</button>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                
+                <!-- Form Delete yang Benar -->
+                <form id="deleteForm{{$user->id}}" method="POST" action="{{ route('user.destroy', $user->id) }}">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Hapus</button>
                 </form>
             </div>
         </div>
     </div>
-
-
 </div>

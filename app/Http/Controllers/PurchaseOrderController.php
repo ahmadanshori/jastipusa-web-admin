@@ -15,6 +15,8 @@ use App\Helpers\Bahasa;
 use Carbon\Carbon;
 use DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\PurchaseOrderExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PurchaseOrderController extends Controller
 
@@ -39,7 +41,10 @@ class PurchaseOrderController extends Controller
 {
     $customer = $this->customer->get();
 
-    $customerOrders = $this->customerOrder->whereNotNull('po_number')->get()
+    $customerOrders = $this->customerOrder->whereNotIn('po_number', function($query) {
+        $query->select('no_po')
+              ->from('purchase_order_detail');
+    })->whereNotNull('po_number')->get()
         ->map(function ($order) {
             return [
                 'value' => $order->po_number,
@@ -47,9 +52,10 @@ class PurchaseOrderController extends Controller
                 'customProperties' => [
                     'po_number' => $order->po_number,
                     'nama_barang' => $order->nama_barang,
-                    'link_product' => $order->link_barang,
-                    'jumlah_berat' => $order->estimasi_kg,
-                    'total_harga' => $order->estimasi_harga
+                    'link_product' => $order->link_product,
+                    'jumlah_berat' => $order->jumlah_berat,
+                    'total_harga' => $order->estimasi_harga,
+                    'customer_id' => $order->id_whatsapp_number,
                 ]
             ];
         });
@@ -467,6 +473,7 @@ public function updateOprasional(Request $request, $id)
 
     public function destroy($id)
     {
+        $this->purchaseOrderDetail->where('purchase_order_id', $id)->delete();
         $purchaseOrder = $this->purchase->where('id', $id)->first();
 
         $purchaseOrder->delete();
@@ -518,9 +525,15 @@ public function updateOprasional(Request $request, $id)
             'date' => now()->format('d F Y')
         ];
         
-        $pdf = PDF::loadView('purchase.pdf', $data);
+        $pdf = PDF::loadView('purchase.pdf_purchase_order', $data);
         
         return $pdf->download('purchase-order-'.$purchase->purchase_number.'.pdf');
+    }
+
+    public function export() 
+    {
+        $date = now()->format('Y-m-d');
+        return Excel::download(new PurchaseOrderExport(), "purchase_orders_{$date}.xlsx");
     }
 
 }

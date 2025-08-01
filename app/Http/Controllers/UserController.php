@@ -55,8 +55,8 @@ class UserController extends Controller
                 'updated_by' =>  Auth::id(),
             ];
             $user = $this->user->create($data);
-
-            $user->assignRole($request->input('role'));
+//  $user->syncRoles($request->role);
+//  $user->assignRole($request->input('role'));
 
             \Session::flash('success', 'Account has been created');
             return redirect()->route('user.index');

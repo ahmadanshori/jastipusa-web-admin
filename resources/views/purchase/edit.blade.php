@@ -34,7 +34,7 @@
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="customer" class="form-label">Customer</label>
-                                            <select class="choices form-select" id="customer" name="no_telp">
+                                            <select class="choices form-select" disabled id="customer" name="no_telp">
                                                 <option value="">Select customer</option>
                                                 @foreach($customers as $customer)
                                                 <option value="{{ $customer->whatsapp_number }}" 
@@ -94,7 +94,7 @@
                                         <div class="col-md-12 col-12">
                                             <div class="form-group">
                                                 <label class="form-label">Customer Order</label>
-                                                <select class="form-select customer-order-select" 
+                                                <select class="choices form-select customer-order-select" disabled
                                                     name="items[{{ $index }}][customer_order_id]" 
                                                     data-index="{{ $index }}"
                                                     data-selected="{{ $item->no_po }}">
@@ -177,7 +177,7 @@ $(document).ready(function() {
         if(customerId) {
             $.get('/customers/' + customerId, function(data) {
                 $('#name').val(data.display_name ? data.display_name : "-");
-                $('#email').val(data.email ? data.email  : "-");
+                $('#email').val(data.email_address ? data.email_address  : "-");
                 $('#address').val(data.address ? data.address  : "-");
                 // Fill other fields as needed
             });
