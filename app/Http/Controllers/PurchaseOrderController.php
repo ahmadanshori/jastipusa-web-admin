@@ -536,4 +536,88 @@ public function updateOprasional(Request $request, $id)
         return Excel::download(new PurchaseOrderExport(), "purchase_orders_{$date}.xlsx");
     }
 
+     public function generatePDFEstimasi($id)
+    {
+        
+        $purchase = $this->purchase->where('id', $id)->first();
+        $purchaseOrderDetail = $this->purchaseOrderDetail->where('purchase_order_id', $id)->get();
+        
+        // Ambil data customer untuk dropdown
+        $customers = $this->customer->where('whatsapp_number',$purchase->no_telp)->first();
+        $data = [
+            'purchase' => $purchase,
+            'purchaseOrderDetail' => $purchaseOrderDetail,
+            'customer' => $customers,
+            'title' => 'Purchase Order #' . $purchase->id,
+            'date' => now()->format('d F Y')
+        ];
+        
+        $pdf = PDF::loadView('purchase.pdf_estimasi', $data);
+        
+        return $pdf->download('purchase-estimasi-'.$purchase->purchase_number.'.pdf');
+    }
+
+    public function generatePDFHpp($id)
+    {
+        
+        $purchase = $this->purchase->where('id', $id)->first();
+        $purchaseOrderDetail = $this->purchaseOrderDetail->where('purchase_order_id', $id)->get();
+        
+        // Ambil data customer untuk dropdown
+        $customers = $this->customer->where('whatsapp_number',$purchase->no_telp)->first();
+        $data = [
+            'purchase' => $purchase,
+            'purchaseOrderDetail' => $purchaseOrderDetail,
+            'customer' => $customers,
+            'title' => 'Purchase Order #' . $purchase->id,
+            'date' => now()->format('d F Y')
+        ];
+        
+        $pdf = PDF::loadView('purchase.pdf_hpp', $data);
+        
+        return $pdf->download('purchase-hpp-'.$purchase->purchase_number.'.pdf');
+    }
+
+    public function generatePDFOperasional($id)
+    {
+        
+        $purchase = $this->purchase->where('id', $id)->first();
+        $purchaseOrderDetail = $this->purchaseOrderDetail->where('purchase_order_id', $id)->get();
+        
+        // Ambil data customer untuk dropdown
+        $customers = $this->customer->where('whatsapp_number',$purchase->no_telp)->first();
+        $data = [
+            'purchase' => $purchase,
+            'purchaseOrderDetail' => $purchaseOrderDetail,
+            'customer' => $customers,
+            'title' => 'Purchase Order #' . $purchase->id,
+            'date' => now()->format('d F Y')
+        ];
+        
+        $pdf = PDF::loadView('purchase.pdf_operasional', $data);
+        
+        return $pdf->download('purchase-operasional-'.$purchase->purchase_number.'.pdf');
+    }
+
+    public function generatePDFReceived($id)
+    {
+        
+        $purchase = $this->purchase->where('id', $id)->first();
+        $purchaseOrderDetail = $this->purchaseOrderDetail->where('purchase_order_id', $id)->get();
+        
+        // Ambil data customer untuk dropdown
+        $customers = $this->customer->where('whatsapp_number',$purchase->no_telp)->first();
+        $data = [
+            'purchase' => $purchase,
+            'purchaseOrderDetail' => $purchaseOrderDetail,
+            'customer' => $customers,
+            'title' => 'Purchase Order #' . $purchase->id,
+            'date' => now()->format('d F Y')
+        ];
+        
+        $pdf = PDF::loadView('purchase.pdf_received', $data);
+        
+        return $pdf->download('purchase-received-'.$purchase->purchase_number.'.pdf');
+    }
+
 }

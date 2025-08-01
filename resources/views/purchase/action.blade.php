@@ -5,7 +5,7 @@
     @endif
 
 <a href="{{ route('purchase.show', [$purchase->id]) }}" class="btn icon btn-warning"> <i class="bi bi-eye-fill"></i></a>
-<a href="{{ route('purchase.pdf', [$purchase->id]) }}" class="btn icon btn-info"> <i class="fas fa-file-pdf me-2"></i></a>
+{{-- <a href="{{ route('purchase.pdf', [$purchase->id]) }}" class="btn icon btn-info"> <i class="fas fa-file-pdf me-2"></i></a> --}}
 
 
       @if (App\Models\User::checkRole('master_admin'))

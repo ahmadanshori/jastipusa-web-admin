@@ -28,6 +28,35 @@
                 <div class="row">
                     <div class="col-md-12 col-12">
                         <div class="card">
+                            <div class="card-header bg-light">
+                                @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_chat_input'))
+
+                                <a href="{{ route('purchase-estimasi.pdf', [$purchase->id]) }}" target="_blank" class="btn icon btn-info"> <i class="fas fa-file-pdf me-2"></i>
+                                Invoice Estimasi
+                                </a>
+                                @endif
+                                @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_purchase'))
+
+                                 <a href="{{ route('purchase-hpp.pdf', [$purchase->id]) }}" target="_blank" class="btn icon btn-warning"> <i class="fas fa-file-pdf me-2"></i>
+                                Invoice HPP
+                                </a>
+                                @endif
+
+                                @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('operasional'))
+
+                                <a href="{{ route('purchase-operasional.pdf', [$purchase->id]) }}" target="_blank" class="btn icon btn-danger"> <i class="fas fa-file-pdf me-2"></i>
+                                Invoice Oprasional
+                                </a>
+                                @endif
+
+                                @if (App\Models\User::checkRole('master_admin'))
+
+                                 <a href="{{ route('purchase-received.pdf', [$purchase->id]) }}" target="_blank" class="btn icon btn-primary"> <i class="fas fa-file-pdf me-2"></i>
+                                Invoice Received
+                                </a>
+                                @endif
+
+                            </div>
                             <div class="card-content">
                                 <div class="card-body">
                                     <h5 class="card-title">Customer Information</h5>

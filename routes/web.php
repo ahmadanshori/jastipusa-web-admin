@@ -41,3 +41,15 @@ Route::post('/purchase-order-detail/{id}/update-estimasi', [PurchaseOrderControl
 
 Route::get('/purchase/{id}/pdf', [PurchaseOrderController::class, 'generatePDF'])
     ->name('purchase.pdf');
+
+Route::get('/purchase-estimasi/{id}/pdf', [PurchaseOrderController::class, 'generatePDFEstimasi'])
+->name('purchase-estimasi.pdf');
+
+Route::get('/purchase-hpp/{id}/pdf', [PurchaseOrderController::class, 'generatePDFHpp'])
+->name('purchase-hpp.pdf');
+
+Route::get('/purchase-operasional/{id}/pdf', [PurchaseOrderController::class, 'generatePDFOperasional'])
+->name('purchase-operasional.pdf');
+
+Route::get('/purchase-received/{id}/pdf', [PurchaseOrderController::class, 'generatePDFReceived'])
+->name('purchase-received.pdf');

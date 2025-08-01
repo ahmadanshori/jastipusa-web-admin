@@ -18,9 +18,11 @@
     <section class="section">
         <div class="card">
             <div class="card-header bg-light">
+                @if (App\Models\User::checkRole('master_admin'))
                 <a href="{{ route('purchase.export') }}" class="btn btn-success">
                     <i class="fas fa-file-excel"></i> Export to Excel
                 </a>
+                @endif
             </div>
             <div class="card-body">
                
