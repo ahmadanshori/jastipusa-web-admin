@@ -36,7 +36,7 @@ class PurchaseOrderController extends Controller
         return view('purchase.index');
     }
 
-  
+
     public function create()
 {
     $customer = $this->customer->get();
@@ -69,7 +69,7 @@ class PurchaseOrderController extends Controller
 
     // public function store(Request $request)
     // {
-        
+
     //     $validation = Validator::make($request->all(), [
     //         'no_po' => 'required',
     //         'nama' => 'required',
@@ -82,7 +82,7 @@ class PurchaseOrderController extends Controller
     //         'estimasi_harga' => 'required',
     //     ]);
 
-      
+
     //     if ($validation->passes()) {
     //         $data = [
     //             'no_po' => $request->no_po,
@@ -123,7 +123,7 @@ class PurchaseOrderController extends Controller
 
     try {
         // Simpan data purchase order utama
-       
+
 
         $data = [
             // 'no_po' => $request->no_po,
@@ -155,7 +155,7 @@ class PurchaseOrderController extends Controller
     } catch (\Exception $e) {
         // Rollback transaction jika terjadi error
         // dd($e);
-dd($request->items);
+// dd($request->items);
         DB::rollBack();
 
              return back()
@@ -172,7 +172,7 @@ dd($request->items);
     // Load relasi items dan customer
     $purchase = $this->purchase->where('id', $id)->first();
     $purchaseOrderDetail = $this->purchaseOrderDetail->where('purchase_order_id', $id)->get();
-    
+
     // Ambil data customer untuk dropdown
      $customers = $this->customer->get();
     // Ambil data customer order untuk dropdown items
@@ -237,7 +237,7 @@ dd($request->items);
 
     $this->purchaseOrderDetail->where('purchase_order_id', $id)->delete();
 
-        
+
 
         // Buat items baru
         foreach ($request->items as $item) {
@@ -328,8 +328,8 @@ public function updateHpp(Request $request, $id)
 
    if ($request->hasFile('bukti_pembelian')) {
         // Hapus file lama jika ada
-      
-        
+
+
         $path = $request->file('bukti_pembelian')->store('bukti_pembelian', 'public');
         $data['foto_bukti_pembelian'] = $path;
     }
@@ -363,7 +363,7 @@ public function updateOprasional(Request $request, $id)
 
     // Handle file upload
 
-  
+
     $data = [
         'fix_weight' => $request->fix_weight,
         'fix_price' => $request->fix_price,
@@ -373,16 +373,16 @@ public function updateOprasional(Request $request, $id)
 
     if ($request->hasFile('wh_usa')) {
         // Hapus file lama jika ada
-      
-        
+
+
         $path = $request->file('wh_usa')->store('wh_usa', 'public');
         $data['wh_usa'] = $path;
     }
 
     // Handle file upload WH Indonesia
     if ($request->hasFile('wh_indonesia')) {
-      
-        
+
+
         $path = $request->file('wh_indonesia')->store('wh_indonesia', 'public');
         $data['wh_indo'] = $path;
     }
@@ -407,7 +407,7 @@ public function updateOprasional(Request $request, $id)
     // Load relasi items dan customer
     $purchase = $this->purchase->where('id', $id)->first();
     $purchaseOrderDetail = $this->purchaseOrderDetail->where('purchase_order_id', $id)->get();
-    
+
     // Ambil data customer untuk dropdown
      $customers = $this->customer->get();
     // Ambil data customer order untuk dropdown items
@@ -484,7 +484,7 @@ public function updateOprasional(Request $request, $id)
 
     public function ajax(Request $request)
     {
-       
+
         $purchaseOrders = $this->purchase->latest()->get();
 
         return Datatables::of($purchaseOrders)
@@ -495,26 +495,26 @@ public function updateOprasional(Request $request, $id)
     }
 
     public function list_detail_customer($id){
-        $customer = $this->customer->where('whatsapp_number', $id)->orderby('whatsapp_number','asc')->first();    
+        $customer = $this->customer->where('whatsapp_number', $id)->orderby('whatsapp_number','asc')->first();
         return response()->json($customer);
     }
 
      public function list_detail_customer_order($id){
-        $customer = $this->customerOrder->where('po_number', $id)->whereNotNull('po_number')->orderby('po_number','asc')->first();    
+        $customer = $this->customerOrder->where('po_number', $id)->whereNotNull('po_number')->orderby('po_number','asc')->first();
         return response()->json($customer);
     }
 
      public function list_customer_order(){
-        $customer = $this->customerOrder->whereNotNull('po_number')->orderby('po_number','asc')->get();    
+        $customer = $this->customerOrder->whereNotNull('po_number')->orderby('po_number','asc')->get();
         return response()->json($customer);
     }
 
     public function generatePDF($id)
     {
-        
+
         $purchase = $this->purchase->where('id', $id)->first();
         $purchaseOrderDetail = $this->purchaseOrderDetail->where('purchase_order_id', $id)->get();
-        
+
         // Ambil data customer untuk dropdown
         $customers = $this->customer->where('whatsapp_number',$purchase->no_telp)->first();
         $data = [
@@ -524,13 +524,13 @@ public function updateOprasional(Request $request, $id)
             'title' => 'Purchase Order #' . $purchase->id,
             'date' => now()->format('d F Y')
         ];
-        
+
         $pdf = PDF::loadView('purchase.pdf_purchase_order', $data);
-        
+
         return $pdf->download('purchase-order-'.$purchase->purchase_number.'.pdf');
     }
 
-    public function export() 
+    public function export()
     {
         $date = now()->format('Y-m-d');
         return Excel::download(new PurchaseOrderExport(), "purchase_orders_{$date}.xlsx");
@@ -538,10 +538,10 @@ public function updateOprasional(Request $request, $id)
 
      public function generatePDFEstimasi($id)
     {
-        
+
         $purchase = $this->purchase->where('id', $id)->first();
         $purchaseOrderDetail = $this->purchaseOrderDetail->where('purchase_order_id', $id)->get();
-        
+
         // Ambil data customer untuk dropdown
         $customers = $this->customer->where('whatsapp_number',$purchase->no_telp)->first();
         $data = [
@@ -551,18 +551,18 @@ public function updateOprasional(Request $request, $id)
             'title' => 'Purchase Order #' . $purchase->id,
             'date' => now()->format('d F Y')
         ];
-        
+
         $pdf = PDF::loadView('purchase.pdf_estimasi', $data);
-        
+
         return $pdf->download('purchase-estimasi-'.$purchase->purchase_number.'.pdf');
     }
 
     public function generatePDFHpp($id)
     {
-        
+
         $purchase = $this->purchase->where('id', $id)->first();
         $purchaseOrderDetail = $this->purchaseOrderDetail->where('purchase_order_id', $id)->get();
-        
+
         // Ambil data customer untuk dropdown
         $customers = $this->customer->where('whatsapp_number',$purchase->no_telp)->first();
         $data = [
@@ -572,18 +572,18 @@ public function updateOprasional(Request $request, $id)
             'title' => 'Purchase Order #' . $purchase->id,
             'date' => now()->format('d F Y')
         ];
-        
+
         $pdf = PDF::loadView('purchase.pdf_hpp', $data);
-        
+
         return $pdf->download('purchase-hpp-'.$purchase->purchase_number.'.pdf');
     }
 
     public function generatePDFOperasional($id)
     {
-        
+
         $purchase = $this->purchase->where('id', $id)->first();
         $purchaseOrderDetail = $this->purchaseOrderDetail->where('purchase_order_id', $id)->get();
-        
+
         // Ambil data customer untuk dropdown
         $customers = $this->customer->where('whatsapp_number',$purchase->no_telp)->first();
         $data = [
@@ -593,18 +593,18 @@ public function updateOprasional(Request $request, $id)
             'title' => 'Purchase Order #' . $purchase->id,
             'date' => now()->format('d F Y')
         ];
-        
+
         $pdf = PDF::loadView('purchase.pdf_operasional', $data);
-        
+
         return $pdf->download('purchase-operasional-'.$purchase->purchase_number.'.pdf');
     }
 
     public function generatePDFReceived($id)
     {
-        
+
         $purchase = $this->purchase->where('id', $id)->first();
         $purchaseOrderDetail = $this->purchaseOrderDetail->where('purchase_order_id', $id)->get();
-        
+
         // Ambil data customer untuk dropdown
         $customers = $this->customer->where('whatsapp_number',$purchase->no_telp)->first();
         $data = [
@@ -614,9 +614,9 @@ public function updateOprasional(Request $request, $id)
             'title' => 'Purchase Order #' . $purchase->id,
             'date' => now()->format('d F Y')
         ];
-        
+
         $pdf = PDF::loadView('purchase.pdf_received', $data);
-        
+
         return $pdf->download('purchase-received-'.$purchase->purchase_number.'.pdf');
     }
 
