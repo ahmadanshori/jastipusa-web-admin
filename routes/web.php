@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\PaymentMethodController;
 use App\Http\Middleware\CheckRole;
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -13,6 +14,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Auth::routes();
 
 Route::resource('user', UserController::class)->middleware(['auth',CheckRole::class]);
+Route::resource('payment-method', PaymentMethodController::class)->middleware(['auth',CheckRole::class]);
 Route::put('/change-password/{id}', [UserController::class, 'changePassword'])->middleware('auth')->name('user.change-password');
 
 Route::resource('purchase', PurchaseOrderController::class)->middleware('auth');
@@ -24,6 +26,7 @@ Route::get('/ajax-user',[UserController::class, 'ajax']);
 Route::get('/ajax-purchase',[PurchaseOrderController::class, 'ajax']);
 Route::get('/ajax-customer',[CustomerController::class, 'ajax']);
 Route::get('/ajax-order-detail/{id}',[CustomerController::class, 'ajaxOrderDetail']);
+Route::get('/ajax-payment-method',[PaymentMethodController::class, 'ajax']);
 
 
 Route::get('/customers/{id}',[PurchaseOrderController::class, 'list_detail_customer']);

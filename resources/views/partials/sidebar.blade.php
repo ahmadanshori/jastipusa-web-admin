@@ -13,6 +13,14 @@
         </a>
     </li>
     @endif
+      @if (App\Models\User::checkRole('master_admin'))
+    <li class="sidebar-item {{ (request()->is('payment-method*')) ? 'active' : '' }}">
+        <a href="{{ route('payment-method.index') }}" class='sidebar-link'>
+            <i class="bi bi-credit-card-fill"></i>
+            <span>Payment Method</span>
+        </a>
+    </li>
+    @endif
     @if (App\Models\User::checkRole('master_admin'))
      <li class="sidebar-item {{ (request()->is('customer*')) ? 'active' : '' }}">
         <a href="{{ route('customer.index') }}" class='sidebar-link'>

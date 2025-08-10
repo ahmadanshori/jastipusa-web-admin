@@ -30,7 +30,6 @@
                         <div class="card">
                             <div class="card-header bg-light">
                                 @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_chat_input'))
-
                                 <a href="{{ route('purchase-estimasi.pdf', [$purchase->id]) }}" target="_blank" class="btn icon btn-info"> <i class="fas fa-file-pdf me-2"></i>
                                 Invoice Estimasi
                                 </a>
@@ -212,7 +211,7 @@
                                                                         aria-controls="collapseEstimasi{{ $index }}">
                                                                         Estimasi
                                                                     </button>
-                                                                       @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_chat_input'))
+                                                                       @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_chat_input') || App\Models\User::checkRole('accounting'))
                                                                         <button type="button"
                                                                             class="btn btn-outline-primary btn-sm edit-estimasi-btn ms-2"
                                                                             data-item-id="{{ $item->id }}"
