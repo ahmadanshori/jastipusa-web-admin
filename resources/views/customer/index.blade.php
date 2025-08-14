@@ -27,6 +27,8 @@
                             <th>Phone</th>
                             <th>Address</th>
                             <th>Email</th>
+                            <th>Jumlah</th>
+                            <th>Total</th>
                             <th>Action</th>
                         </tr>
                     </thead>

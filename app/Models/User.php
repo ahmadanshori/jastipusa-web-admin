@@ -61,4 +61,16 @@ class User extends Authenticatable
         }
 
     }
+
+     public static function getRole($key)
+    {
+        $data = Role::where('id',Auth::user()->role_id)->where('id',$key)->first();
+        if ($data)
+        {
+            return $data->name;
+        }else{
+            return false;
+        }
+
+    }
 }

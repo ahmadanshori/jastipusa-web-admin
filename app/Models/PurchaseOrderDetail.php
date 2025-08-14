@@ -55,4 +55,9 @@ class PurchaseOrderDetail extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function purchaseOrder()
+    {
+        return $this->belongsTo(PurchaseOrder::class);
+    }
 }

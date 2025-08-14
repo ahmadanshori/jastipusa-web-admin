@@ -1,0 +1,52 @@
+$("#show-table").DataTable({
+    pageLength: 25,
+    processing: true,
+    serverSide: true,
+    language: {
+        paginate: {
+            previous: "<i class='fas fa-angle-left'>",
+            next: "<i class='fas fa-angle-right'>"
+        }
+    },
+    order: [[0, "desc"]],
+    scrollX: true,
+    scrollCollapse: true,
+    ajax: {
+        url: "/ajax-tracking",
+        dataType: "json",
+        type: "GET"
+    },
+    columns: [
+       
+             { data: 'no_po', name: 'no_po' },
+            { data: 'nama', name: 'purchaseOrder.nama' },
+            { data: 'no_telp', name: 'purchaseOrder.no_telp' },
+            { data: 'alamat', name: 'purchaseOrder.alamat' },
+            { data: 'email', name: 'purchaseOrder.email' },
+            { data: 'nama_barang', name: 'nama_barang' },
+            { data: 'link_barang', name: 'link_barang' },
+            { data: 'estimasi_kg', name: 'estimasi_kg' },
+            { data: 'estimasi_harga', name: 'estimasi_harga' },
+            { data: 'status_follow_up', name: 'status_follow_up' },
+            { data: 'estimasi_harga', name: 'estimasi_harga' },
+            { data: 'total_harga', name: 'total_harga' },
+            { data: 'nama_rek_transfer', name: 'nama_rek_transfer' },
+            { data: 'jumlah_transfer', name: 'jumlah_transfer' },
+            { data: 'dp', name: 'dp' },
+            { data: 'fullpayment', name: 'fullpayment' },
+            { data: 'foto_bukti_tf', name: 'foto_bukti_tf' },
+            { data: 'mutasi_check', name: 'mutasi_check' },
+            { data: 'payment_method', name: 'payment_method' },
+            { data: 'total_purchase', name: 'total_purchase' },
+            { data: 'total_purchase', name: 'total_purchase' },
+            { data: 'foto_bukti_pembelian', name: 'foto_bukti_pembelian' },
+            { data: 'status_purchase', name: 'status_purchase' },
+            { data: 'notes', name: 'notes' },
+            { data: 'wh_usa', name: 'wh_usa' },
+            { data: 'status_on_check', name: 'status_on_check' },
+            { data: 'wh_indo', name: 'wh_indo' },
+            { data: 'fix_weight', name: 'fix_weight' },
+            { data: 'fix_price', name: 'fix_price' },
+            { data: 'status_barang_sampai', name: 'status_barang_sampai' },
+    ]
+});

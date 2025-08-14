@@ -39,4 +39,9 @@ class Customer extends Model
         if ($diff->d >= 7) return floor($diff->d / 7) . ' minggu';
         return $diff->d . ' hari';
     }
+
+    public function purchaseOrders()
+    {
+        return $this->hasMany(PurchaseOrder::class, 'no_telp', 'whatsapp_number');
+    }
 }

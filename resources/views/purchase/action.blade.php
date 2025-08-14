@@ -1,5 +1,5 @@
 <div style="display: flex; gap: 5px;">
-      @if (App\Models\User::checkRole('master_admin'))
+      @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_chat_input'))
 <a href="{{ route('purchase.edit', [$purchase->id]) }}" class="btn icon btn-primary"><span
     class="fa-fw select-all fas"></span></a>
     @endif
@@ -8,7 +8,7 @@
 {{-- <a href="{{ route('purchase.pdf', [$purchase->id]) }}" class="btn icon btn-info"> <i class="fas fa-file-pdf me-2"></i></a> --}}
 
 
-      @if (App\Models\User::checkRole('master_admin'))
+      @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_chat_input'))
 
 <button class="btn icon btn-danger" data-bs-toggle="modal" 
         data-bs-target="#deleteModal{{$purchase->id}}">

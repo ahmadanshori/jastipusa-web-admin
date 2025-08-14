@@ -28,6 +28,12 @@ $("#show-table").DataTable({
         {
             data: "email_address"
         },
+         {
+            data: "total_belanja"
+        },
+         {
+            data: "total_order"
+        },
         {
             data: "actions",
             name: "actions",

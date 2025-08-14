@@ -8,8 +8,8 @@
     <title>JASTIPUSA - Login</title>
     <link rel="stylesheet" href="assets/css/main/app.css">
     <link rel="stylesheet" href="assets/css/pages/auth.css">
-    <link rel="shortcut icon" href="assets/images/logo/favicon.png" type="image/x-icon">
-    <link rel="shortcut icon" href="assets/images/logo/favicon.png" type="image/png">
+    <link rel="shortcut icon" href="assets/images/logo/favicon.jpg" type="image/x-icon">
+    <link rel="shortcut icon" href="assets/images/logo/favicon.jpg" type="image/png">
 </head>
 
 <body>
@@ -19,15 +19,14 @@
    
     <div class="col-lg-5 to-top-bar">
         <div id="auth-right">
-            <h1 class="auth-title">Selamat Datang</h1>
-            <p class="auth-subtitle mb-5">
-                Silahkan login untuk mengakses halaman admin</p>
+            <h1 class="auth-title">Hello Team, Have a nice day!</h1>
+          
         </div>
     </div>
     <div class="col-lg-7 col-12">
         <div id="auth-left">
             <div class="auth-logo">
-                <a href="#"><img src="assets/images/logo/logo.png" alt="Logo"></a>
+                <a href="#"><img src="assets/images/logo/login-logo.jpg" alt="Logo"></a>
             </div>
            
 

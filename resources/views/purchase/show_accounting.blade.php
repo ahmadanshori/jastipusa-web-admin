@@ -658,52 +658,7 @@
                     @csrf
                     <input type="hidden" id="item_id" name="item_id">
                     <div class="row">
-                        <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
-                                <label class="form-label">Nama Rek Transfer</label>
-                                <input type="text" id="nama_rek" class="form-control form-control-lg"
-                                    name="nama_rek">
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
-                                <label class="form-label">Jumlah Transfer</label>
-                                <input type="number" id="jumlah_transfer" class="form-control form-control-lg"
-                                    name="jumlah_transfer">
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
-                                <label class="form-label">DP</label>
-                                <input type="number" id="dp" class="form-control form-control-lg"
-                                    name="dp">
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
-                                <label class="form-label">Full Payment</label>
-                                <input type="number" id="full_payment" class="form-control form-control-lg"
-                                    name="full_payment">
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Status Follow Up</label>
-                                <select class="choices form-select" id="status_follow_up" name="status_follow_up">
-                                    <option value="">Press to select</option>
-                                    <option value="Scheduled">Scheduled</option>
-                                    <option value="Followed">Followed</option>
-                                    <option value="Unfollowed">Unfollowed</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
-                                <label class="form-label">Foto Bukti Transfer</label>
-                                <input type="file" id="bukti_transfer" class="form-control form-control-lg"
-                                    name="bukti_transfer">
-                            </div>
-                        </div>
+                       
                         <div class="col-md-6 col-12">
                             <div class="form-group mandatory">
                                 <label class="form-label">Mutasi Check</label>
@@ -738,52 +693,7 @@
                     @csrf
                     <input type="hidden" id="hpp_item_id" name="item_id">
                     <div class="row">
-                        <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
-                                <label class="form-label">Payment Method</label>
-
-                                <select class="choices form-select" id="payment_method" name="payment_method">
-                                    <option value="">Press to select</option>
-                                  
-                                        @foreach($paymentMethod as $paymentMethods)
-                                        <option value="{{ $paymentMethods->name. '-' . $paymentMethods->number }}" >{{$paymentMethods->name. '-' . $paymentMethods->number}}</option>
-                                        @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
-                                <label class="form-label">Total Purchase</label>
-                                <input type="number" id="total_purchase" class="form-control form-control-lg"
-                                    name="total_purchase">
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Status Purchase</label>
-                                <select class="choices form-select" id="status_purchase" name="status_purchase">
-                                    <option value="">Press to select</option>
-                                    <option value="Wait For Order">Wait For Order</option>
-                                    <option value="Ordered">Ordered</option>
-                                    <option value="Failed Order">Failed Order</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
-                                <label class="form-label">Notes</label>
-                                <input type="text" id="notes" class="form-control form-control-lg"
-                                    name="notes">
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
-                                <label class="form-label">Foto Bukti Pembelian</label>
-                                <input type="file" id="bukti_pembelian" class="form-control form-control-lg"
-                                    name="bukti_pembelian">
-                                <div id="bukti_pembelian_preview" class="mt-2"></div>
-                            </div>
-                        </div>
+                        
                         <div class="col-md-6 col-12">
                             <div class="form-group mandatory">
                                 <label class="form-label">Mutasi Check</label>
@@ -903,23 +813,13 @@
             $(document).on('click', '.edit-estimasi-btn', function() {
                 const itemId = $(this).data('item-id');
                 $('#item_id').val(itemId);
-                $('#nama_rek').val($(this).data('nama-rek'));
-                $('#jumlah_transfer').val($(this).data('jumlah-transfer'));
-                $('#dp').val($(this).data('dp'));
-                $('#full_payment').val($(this).data('full-payment'));
-                $('#status_follow_up').val($(this).data('status-follow-up'));
-
+               
                 // Set toggle
                 const isChecked = $(this).data('mutasi-check') === 'true';
                 $('#modal_btn_status').prop('checked', isChecked).change();
                 $('#modal_status').val(isChecked);
 
-                // Inisialisasi Choices untuk select
-                new Choices('#status_follow_up', {
-                    searchEnabled: false,
-                    shouldSort: false,
-                    itemSelectText: ''
-                });
+              
                 // Tampilkan modal
                 estimasiModal.show();
             });

@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Middleware\CheckRole;
 
@@ -27,6 +28,9 @@ Route::get('/ajax-purchase',[PurchaseOrderController::class, 'ajax']);
 Route::get('/ajax-customer',[CustomerController::class, 'ajax']);
 Route::get('/ajax-order-detail/{id}',[CustomerController::class, 'ajaxOrderDetail']);
 Route::get('/ajax-payment-method',[PaymentMethodController::class, 'ajax']);
+Route::get('/ajax-tracking',[TrackingController::class, 'ajax']);
+
+Route::resource('tracking', TrackingController::class)->middleware('auth');
 
 
 Route::get('/customers/{id}',[PurchaseOrderController::class, 'list_detail_customer']);

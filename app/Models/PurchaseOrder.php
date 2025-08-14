@@ -35,4 +35,9 @@ class PurchaseOrder extends Model
         'created_at',
         'updated_at',
     ];
+    
+    public function purchaseOrderDetails()
+    {
+        return $this->hasMany(PurchaseOrderDetail::class);
+    }
 }

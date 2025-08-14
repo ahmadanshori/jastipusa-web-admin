@@ -559,6 +559,8 @@
                                     <div class="form-group">
                                          <label for="customer" class="form-label">Customer</label>
                                         <select class="required choices form-select" id="customer" name="no_telp">
+                                             <option value="custom">-- Custom / Buat Baru --</option>
+                                            
                                             <option value="">Press to select</option>
                                             @if(isset($purchase))
                                                 @foreach($customer as $customers)
@@ -637,6 +639,8 @@
                                         <div class="form-group">
                                             <label class="form-label">Customer Order</label>
                                             <select class="required form-select customer-order-select" name="items[0][customer_order_id]" data-index="0">
+                                          
+                                               
                                                 <option value="">Select Customer Order</option>
                                                 <!-- Options akan diisi oleh Choices.js -->
                                             </select>
@@ -645,7 +649,7 @@
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label class="form-label">No. PO Customer</label>
-                                            <input type="text" class="form-control required" name="items[0][no_po_customer]" readonly>
+                                            <input type="text" class="form-control required" name="items[0][no_po_customer]">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
@@ -969,8 +973,13 @@ function initializeChoices(selectElement, index) {
                  order.value === $(selectElement).val()))
             : [];
 
+    const customOption = {
+        value: "custom",
+        label: "-- Custom / Buat Baru --",
+        customProperties: {}
+    };
         const choices = new Choices(selectElement, {
-            choices: availableOrders,
+            choices: [customOption, ...availableOrders],
             searchEnabled: true,
             shouldSort: false,
             itemSelectText: '',
@@ -979,11 +988,14 @@ function initializeChoices(selectElement, index) {
             },
             callbackOnInit: function() {
                 const selectedValue = $(selectElement).val();
-                if (selectedValue && !selectedCustomerOrders.includes(selectedValue)) {
+                if (selectedValue && !selectedCustomerOrders.includes(selectedValue) && selectedValue !== "custom") {
                     selectedCustomerOrders.push(selectedValue);
                     autoFillItem(index, selectedValue);
                 }
-            }
+            },
+               shouldSortItems: function() {
+                    return false;
+                }
         });
 
         choicesInstances.push({
@@ -1057,6 +1069,11 @@ function refreshAllSelects() {
                     (!selectedCustomerOrders.includes(order.value) || order.value === currentValue)
                 )
                 : [];
+            const customOption = {
+                value: "custom",
+                label: "-- Custom / Buat Baru --",
+                customProperties: {}
+            };
             
             // Simpan nilai yang sedang dipilih
             const currentSelection = choicesInstance.getValue(true);
@@ -1064,14 +1081,14 @@ function refreshAllSelects() {
             // Perbarui pilihan
             choicesInstance.clearChoices();
             choicesInstance.setChoices(
-                availableOrders,
+                [customOption, ...availableOrders],
                 'value',
                 'label',
                 false
             );
             
             // Kembalikan seleksi jika masih tersedia
-            if (currentValue && availableOrders.some(o => o.value == currentValue)) {
+            if (currentValue && (currentValue === "custom" || availableOrders.some(o => o.value == currentValue))) {
                 choicesInstance.setValue([currentValue]);
             }
         }
@@ -1085,12 +1102,19 @@ function refreshAllSelects() {
         const choicesInstance = choicesInstances.find(i => i.element === this)?.instance;
 
         // Remove previous value from tracking
-        if (previousValue && selectedCustomerOrders.includes(previousValue)) {
+        if (previousValue && previousValue !== "custom" && selectedCustomerOrders.includes(previousValue)) {
             selectedCustomerOrders = selectedCustomerOrders.filter(v => v !== previousValue);
         }
         
+         if (selectedValue === "custom") {
+            // Reset form untuk custom input
+            resetItemForm(index);
+            $(`input[name="items[${index}][no_po_customer]"]`).prop('readonly', false);
+            $(`input[name="items[${index}][nama_barang]"]`).prop('readonly', false);
+            return;
+        }
         // Check for duplicate selection
-        if (selectedValue) {
+        if (selectedValue && selectedValue !== "custom") {
             if (selectedCustomerOrders.includes(selectedValue)) {
                   Swal.fire({
                         icon: 'error',
@@ -1257,7 +1281,7 @@ function refreshAllSelects() {
 
    function resetItemForm(index) {
     const itemRow = $(`select[data-index="${index}"]`).closest('.item-row');
-    itemRow.find(`input[name="items[${index}][no_po_customer]"]`).val('');
+        itemRow.find(`input[name="items[${index}][no_po_customer]"]`).val('').prop('readonly', true);
     itemRow.find(`input[name="items[${index}][nama_barang]"]`).val('');
     itemRow.find(`input[name="items[${index}][link_barang]"]`).val('');
     itemRow.find(`input[name="items[${index}][estimasi_kg]"]`).val('');

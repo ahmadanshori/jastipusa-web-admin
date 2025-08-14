@@ -6,6 +6,8 @@ use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderDetail;
 use App\Models\CustomerOrder;
 use App\Models\Customer;
+use App\Models\User;
+use App\Models\PaymentMethod;
 use Auth;
 use Illuminate\Http\Request;
 use DataTables;
@@ -22,12 +24,14 @@ class PurchaseOrderController extends Controller
 
 {
 
-    public function __construct(PurchaseOrder $purchaseOrder, CustomerOrder $customerOrder, Customer $customer, PurchaseOrderDetail $purchaseOrderDetail)
+    public function __construct(PurchaseOrder $purchaseOrder, CustomerOrder $customerOrder, Customer $customer, PaymentMethod $paymentMethod, User $user, PurchaseOrderDetail $purchaseOrderDetail)
     {
         $this->purchase = $purchaseOrder;
         $this->customerOrder = $customerOrder;
         $this->customer = $customer;
+        $this->user = $user;
         $this->purchaseOrderDetail = $purchaseOrderDetail;
+        $this->paymentMethod = $paymentMethod;
 
     }
 
@@ -410,6 +414,8 @@ public function updateOprasional(Request $request, $id)
     
     // Ambil data customer untuk dropdown
      $customers = $this->customer->get();
+     $paymentMethod = $this->paymentMethod->get();
+
     // Ambil data customer order untuk dropdown items
     $customerOrders = $this->customerOrder->whereNotNull('po_number')
         ->get()
@@ -426,9 +432,21 @@ public function updateOprasional(Request $request, $id)
                 ]
             ];
         });
-
-    return view('purchase.show', [
+    if($this->user->checkRole('accounting')){
+        return view('purchase.show_accounting', [
+                'purchase' => $purchase,
+                'paymentMethod' => $paymentMethod,
+                'purchaseOrderDetail' => $purchaseOrderDetail,
+                'customers' => $customers,
+                'customerOrders' => $customerOrders,
+                'customerOrdersJson' => $customerOrders->toJson(),
+                'total_items' => $purchaseOrderDetail->count(),
+                'total_estimasi_harga' => $purchaseOrderDetail->sum('estimasi_harga'),
+            ]);
+    }else{
+         return view('purchase.show', [
         'purchase' => $purchase,
+        'paymentMethod' => $paymentMethod,
         'purchaseOrderDetail' => $purchaseOrderDetail,
         'customers' => $customers,
         'customerOrders' => $customerOrders,
@@ -436,6 +454,8 @@ public function updateOprasional(Request $request, $id)
          'total_items' => $purchaseOrderDetail->count(),
         'total_estimasi_harga' => $purchaseOrderDetail->sum('estimasi_harga'),
     ]);
+    }
+   
 }
 
 //     public function update(Request $request, $id)

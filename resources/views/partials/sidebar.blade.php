@@ -2,9 +2,31 @@
     <li class="sidebar-item {{ (request()->is('/')) || ( request()->is('home*')) ? 'active' : '' }}">
         <a href="/" class='sidebar-link'>
             <i class="bi bi-grid-fill"></i>
-            <span>Dashboard</span>
+            <span>Dashboard Analytic</span>
         </a>
     </li>
+
+    <li class="sidebar-item {{ (request()->is('tracking*')) ? 'active' : '' }}">
+        <a href="{{ route('tracking.index') }}" class='sidebar-link'>
+            <i class="bi bi-geo-alt-fill"></i>
+            <span>Tracking</span>
+        </a>
+    </li>
+
+     <li class="sidebar-item {{ (request()->is('purchase*')) ? 'active' : '' }}">
+        <a href="{{ route('purchase.index') }}" class='sidebar-link'>
+            <i class="bi bi-basket-fill"></i>
+            <span>Order</span>
+        </a>
+    </li>
+       @if (App\Models\User::checkRole('master_admin'))
+     <li class="sidebar-item {{ (request()->is('customer*')) ? 'active' : '' }}">
+        <a href="{{ route('customer.index') }}" class='sidebar-link'>
+            <i class="bi bi-person-lines-fill"></i>
+            <span>Customer</span>
+        </a>
+    </li>
+    @endif
     @if (App\Models\User::checkRole('master_admin'))
     <li class="sidebar-item {{ (request()->is('user*')) ? 'active' : '' }}">
         <a href="{{ route('user.index') }}" class='sidebar-link'>
@@ -21,21 +43,9 @@
         </a>
     </li>
     @endif
-    @if (App\Models\User::checkRole('master_admin'))
-     <li class="sidebar-item {{ (request()->is('customer*')) ? 'active' : '' }}">
-        <a href="{{ route('customer.index') }}" class='sidebar-link'>
-            <i class="bi bi-person-lines-fill"></i>
-            <span>Customer</span>
-        </a>
-    </li>
-    @endif
+ 
 
-    <li class="sidebar-item {{ (request()->is('purchase*')) ? 'active' : '' }}">
-        <a href="{{ route('purchase.index') }}" class='sidebar-link'>
-            <i class="bi bi-basket-fill"></i>
-            <span>Purchase Order</span>
-        </a>
-    </li>
+   
 
     
     

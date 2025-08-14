@@ -9,7 +9,7 @@
                 <p class="text-subtitle text-muted">List Data</p>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-last">
-                 @if (App\Models\User::checkRole('master_admin'))
+                 @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_chat_input'))
                     <a href="{{ route('purchase.create') }}" class="btn icon icon-left btn-info btn-add"><span class="fa-fw select-all fas"></span> Create new entry</a>
                 @endif
             </div>
@@ -18,7 +18,7 @@
     <section class="section">
         <div class="card">
             <div class="card-header bg-light">
-                @if (App\Models\User::checkRole('master_admin'))
+                @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_chat_input'))
                 <a href="{{ route('purchase.export') }}" class="btn btn-success">
                     <i class="fas fa-file-excel"></i> Export to Excel
                 </a>
