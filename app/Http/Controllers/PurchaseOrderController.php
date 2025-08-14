@@ -156,7 +156,6 @@ class PurchaseOrderController extends Controller
     } catch (\Exception $e) {
         // Rollback transaction jika terjadi error
         // dd($e);
-// dd($request->items);
         DB::rollBack();
 
              return back()
