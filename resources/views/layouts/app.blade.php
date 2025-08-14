@@ -8,7 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>JASTIPUSA - Admin Dashboard</title>
-    
     <link rel="icon" href="{{ asset('assets/images/logo/favicon.png') }}" type="image/x-icon">
     <link rel="icon" href="{{ asset('assets/images/logo/favicon.png') }}" type="image/png">
     @include('partials.css')
@@ -22,7 +21,7 @@
     <div class="sidebar-header position-relative">
         <div class="d-flex justify-content-between align-items-center">
             <div class="logo">
-                <a href="/"><img src="{{ asset('assets/images/logo/logo.png') }}" alt="Logo" srcset=""></a>
+                <a href="/"><img src="{{ asset('assets/images/logo/dashboardlogo.jpeg') }}" alt="Logo" srcset="" style="max-width: 100%; height: auto;"></a>
             </div>
             <div class="theme-toggle d-flex gap-2  align-items-center mt-2" style="display:none !important">
                 <div class="form-check form-switch fs-6">
@@ -55,11 +54,9 @@
                         </button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav ms-auto mb-lg-0">
-                               
                             </ul>
                             <div class="dropdown">
                                 <a href="#" id="topbarUserDropdown" class="user-dropdown d-flex align-items-center dropend dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
-                                  
                                     <div class="avatar bg-warning avatar-md2">
                                         {{-- <span class="avatar-content">{{ Helper::avatar(Auth::user()->name) }}</span> --}}
                                       </div>
@@ -89,17 +86,12 @@
                 </nav>
             </header>
         <div id="main-content">
-                
             @yield('content')
-
-             
             </div>
         </div>
     </div>
     @include('partials.js')
     @yield('scripts')
-  
-    
 </body>
 
 </html>
