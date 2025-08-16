@@ -86,6 +86,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Force HTTPS
+    |--------------------------------------------------------------------------
+    |
+    | This option determines if the application should force HTTPS for all
+    | requests. When enabled, all HTTP requests will be redirected to HTTPS.
+    | This is useful for production environments that require secure connections.
+    |
+    */
+
+    'force_https' => env('APP_FORCE_HTTPS', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Encryption Key
     |--------------------------------------------------------------------------
     |
