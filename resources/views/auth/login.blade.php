@@ -16,7 +16,7 @@
     <div id="auth">
 
 <div class="row h-100">
-    <div class="col-lg-5 to-top-bar">
+    <div class="col-lg-6 to-top-bar">
         <div id="auth-right" style="position: relative; overflow: hidden;">
             <div class="auth-image" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
                 <img src="assets/images/loginImage.jpeg" alt="Welcome" style="width: 100%; height: 100%; object-fit: cover;">
@@ -24,12 +24,12 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-7 col-12 ">
+    <div class="col-lg-6 col-12 ">
         <div id="auth-left" style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; padding: 20px;">
             <div class="auth-logo" style="text-align: center; margin-bottom: 120px;">
                 <a href="#"><img src="assets/images/logo/logo.jpeg" alt="Logo" style="max-width: 50%; height: auto;"></a>
             </div>
-            <form method="POST" action="{{ route('login') }}" style="width: 80%; ">
+            <form method="POST" action="{{ route('login') }}" style="width: 70%; ">
                 @csrf
                 <div class="form-group position-relative has-icon-left mb-4">
                     <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus class="form-control form-control-xl @error('email') is-invalid @enderror" placeholder="Username">
