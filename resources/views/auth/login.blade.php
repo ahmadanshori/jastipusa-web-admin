@@ -26,8 +26,8 @@
     </div>
     <div class="col-lg-7 col-12 ">
         <div id="auth-left" style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; padding: 20px;">
-            <div class="auth-logo" style="text-align: center; margin-bottom: 30px;">
-                <a href="#"><img src="assets/images/logo/logo.jpeg" alt="Logo" style="max-width: 60%; height: auto;"></a>
+            <div class="auth-logo" style="text-align: center; margin-bottom: 120px;">
+                <a href="#"><img src="assets/images/logo/logo.jpeg" alt="Logo" style="max-width: 50%; height: auto;"></a>
             </div>
             <form method="POST" action="{{ route('login') }}" style="width: 80%; ">
                 @csrf
