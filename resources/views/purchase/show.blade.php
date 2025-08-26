@@ -67,13 +67,8 @@
                                                 <label for="customer" class="form-label">Customer</label>
                                                 <select class="choices form-select" disabled id="customer"
                                                     name="no_telp">
-                                                    <option value="">Select customer</option>
-                                                    @foreach ($customers as $customer)
-                                                        <option value="{{ $customer->whatsapp_number }}"
-                                                            {{ $purchase->no_telp === $customer->whatsapp_number ? 'selected' : '' }}>
-                                                            {{ $customer->whatsapp_number }} - {{ $customer->display_name }}
-                                                        </option>
-                                                    @endforeach
+                                                    <option value="">{{$purchase->no_telp}} - {{$purchase->nama}}</option>
+                                                    
                                                 </select>
                                             </div>
                                         </div>
