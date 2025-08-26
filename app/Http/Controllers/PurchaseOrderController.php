@@ -129,9 +129,10 @@ class PurchaseOrderController extends Controller
         $data = [
             // 'no_po' => $request->no_po,
             'nama' => $request->nama,
-            'no_telp' => $request->no_telp,
+            'no_telp' => $request->phone,
             'alamat' => $request->alamat,
             'email' => $request->email,
+            'tipe_order' => $request->tipe_order,
         ];
         $purchase = $this->purchase->create($data);
         // dd($purchase);
@@ -140,12 +141,21 @@ class PurchaseOrderController extends Controller
             $this->purchaseOrderDetail->create([
                 'purchase_order_id' => $purchase->id,
                 'no_po' => $item['no_po_customer'],
+                'tipe_order' => $request->tipe_order,
                 'nama_barang' => $item['nama_barang'],
                 'link_barang' => $item['link_barang'],
                 'estimasi_kg' => $item['estimasi_kg'],
-                'estimasi_harga' => $item['estimasi_harga']
+                'estimasi_harga' => $item['estimasi_harga'],
+                'qty' => $item['quantity'],
+                'estimasi_diskon' => $item['diskon'],
+                'total_estimasi' => $item['total_estimasi'],
+                'asuransi' => $item['asuransi'],
+                'jasa' => $item['jasakg'],
+                'estimasi_notes' => $item['estimasi_notes'],
+
             ]);
         }
+
 
         // Commit transaction jika semua berhasil
         DB::commit();
@@ -281,8 +291,9 @@ public function updateEstimasi(Request $request, $id)
         'jumlah_transfer' => $request->jumlah_transfer,
         'dp' => $request->dp,
         'fullpayment' => $request->full_payment,
+        'kurang_bayar' => $request->kurang_bayar,
         'status_follow_up' => $request->status_follow_up,
-        'mutasi_check' => $request->mutasi_check == "true" ? "1" : "0"
+        'mutasi_check' => $request->mutasi_check
     ];
     if ($request->hasFile('bukti_transfer')) {
         $path = $request->file('bukti_transfer')->store('bukti_transfer', 'public');
@@ -322,7 +333,11 @@ public function updateHpp(Request $request, $id)
         'total_purchase' => $request->total_purchase,
         'status_purchase' => $request->status_purchase,
         'notes' => $request->notes,
-        'hpp_mutasi_check' => $request->hpp_mutasi_check == "true" ? "1" : "0"
+        'hpp_mutasi_check' => $request->hpp_mutasi_check,	
+        'pajak' => $request->pajak,
+        'diskon' => $request->diskon,
+        'pengiriman' => $request->pengiriman,
+        'harga_hpp' => $request->harga_barang
     ];
 
    if ($request->hasFile('bukti_pembelian')) {
@@ -364,7 +379,11 @@ public function updateOprasional(Request $request, $id)
         'fix_weight' => $request->fix_weight,
         'fix_price' => $request->fix_price,
         'status_barang_sampai' => $request->status_barang_sampai,
-        'status_on_check' => $request->wh_usa_mutasi_check == "true" ? "1" : "0"
+        'status_on_check' => $request->wh_usa_mutasi_check,
+        'sku' => $request->sku,
+        'no_box' => $request->nomor_box,
+        'kurir_lokal' => $request->kurir_lokal,
+        'pelunasan' => $request->pelunasan,
     ];
 
     if ($request->hasFile('wh_usa')) {
@@ -551,9 +570,17 @@ public function updateOprasional(Request $request, $id)
             'purchaseOrderDetail' => $purchaseOrderDetail,
             'customer' => $customers,
             'title' => 'Purchase Order #' . $purchase->id,
-            'date' => now()->format('d F Y')
+            'date' => now()->format('d F Y'),
+            'isPdf' => true
         ];
         $pdf = PDF::loadView('purchase.pdf_estimasi', $data);
+        //  return view('purchase.pdf_estimasi', [
+        //          'purchase' => $purchase,
+        //     'purchaseOrderDetail' => $purchaseOrderDetail,
+        //     'customer' => $customers,
+        //     'title' => 'Purchase Order #' . $purchase->id,
+        //     'date' => now()->format('d F Y')
+        //     ]);
         return $pdf->download('purchase-estimasi-'.$purchase->purchase_number.'.pdf');
     }
 

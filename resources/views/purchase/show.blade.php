@@ -29,11 +29,11 @@
                     <div class="col-md-12 col-12">
                         <div class="card">
                             <div class="card-header bg-light">
-                                @if ($purchaseOrderDetail->every->mutasi_check && App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_chat_input'))
+                                {{-- @if ($purchaseOrderDetail->every->mutasi_check && App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_chat_input')) --}}
                                 <a href="{{ route('purchase-estimasi.pdf', [$purchase->id]) }}" target="_blank" class="btn icon btn-info"> <i class="fas fa-file-pdf me-2"></i>
                                 Invoice Estimasi
                                 </a>
-                                @endif
+                                {{-- @endif --}}
                                 @if ($purchaseOrderDetail->every->hpp_mutasi_check && App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_purchase'))
 
                                  <a href="{{ route('purchase-hpp.pdf', [$purchase->id]) }}" target="_blank" class="btn icon btn-warning"> <i class="fas fa-file-pdf me-2"></i>
@@ -94,6 +94,14 @@
                                             </div>
                                         </div>
 
+                                          <div class="col-md-6 col-12">
+                                            <div class="form-group">
+                                                <label for="phone" class="form-label">Phone</label>
+                                                <input type="text" id="phone" class="form-control form-control-lg"
+                                                    value="{{ old('phone', $purchase->no_telp) }}" readonly name="phone">
+                                            </div>
+                                        </div>
+
                                         <div class="col-md-12 col-12">
                                             <div class="form-group">
                                                 <label for="address" class="form-label">Address</label>
@@ -117,7 +125,7 @@
                                 <h4 class="card-title">Customer PO</h4>
                                 <div class="row">
                                     <div class="col-12 col-md-6 order-md-1 order-first">
-                                        <h3>Purchase Order #{{ $purchase->purchase_number }}</h3>
+                                        <h3>Purchase Order #{{ $purchase->no_invoice }}</h3>
                                         <div class="summary-badges mt-2">
                                             <span class="badge bg-light-primary">
                                                 <i class="bi bi-box-seam"></i> {{ $total_items }} Items
@@ -135,7 +143,7 @@
                                     <div id="items-container">
                                         @foreach ($purchaseOrderDetail as $index => $item)
                                             <div class="item-row row mb-3 border p-3 rounded">
-                                                <div class="col-md-12 col-12">
+                                                <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label class="form-label">Customer Order</label>
                                                         <select class="choices form-select customer-order-select" disabled
@@ -148,29 +156,80 @@
                                                         </select>
                                                     </div>
                                                 </div>
+                                                <div class="col-md-3 col-12">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Quantity</label>
+                                                        <input type="text" class="form-control form-control-lg" readonly
+                                                            name="items[{{ $index }}][qty]"
+                                                            value="{{ old("items.$index.qty", $item->qty) }}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3 col-12">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Notes</label>
+                                                        <input type="text" class="form-control form-control-lg"
+                                                            name="items[{{ $index }}][estimasi_notes]" readonly
+                                                            value="{{ old("items.$index.estimasi_notes", $item->estimasi_notes) }}">
+                                                    </div>
+                                                </div>
+
                                                 <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label class="form-label">No. PO Customer</label>
-                                                        <input type="text" class="form-control"
+                                                        <input type="text" class="form-control form-control-lg"
                                                             name="items[{{ $index }}][no_po_customer]"
                                                             value="{{ old("items.$index.no_po_customer", $item->no_po) }}"
                                                             readonly>
                                                     </div>
                                                 </div>
+                                                  <div class="col-md-3 col-12">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Harga Barang</label>
+                                                        <input type="text" class="form-control form-control-lg"
+                                                            name="items[{{ $index }}][estimasi_harga]" readonly
+                                                            value="{{ old("items.$index.estimasi_harga", $item->estimasi_harga) }}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3 col-12">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Estimasi Kg</label>
+                                                        <input type="text" class="form-control form-control-lg" readonly
+                                                            name="items[{{ $index }}][estimasi_kg]"
+                                                            value="{{ old("items.$index.estimasi_kg", $item->estimasi_kg) }}">
+                                                    </div>
+                                                </div>
+                                               
                                                 <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label class="form-label">Nama Barang</label>
-                                                        <input type="text" class="form-control" readonly
+                                                        <input type="text" class="form-control form-control-lg" readonly
                                                             name="items[{{ $index }}][nama_barang]"
                                                             value="{{ old("items.$index.nama_barang", $item->nama_barang) }}">
                                                     </div>
                                                 </div>
+                                                <div class="col-md-3 col-12">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Asuransi 2%</label>
+                                                        <input type="text" class="form-control form-control-lg"
+                                                            name="items[{{ $index }}][asuransi]" readonly
+                                                            value="{{ old("items.$index.asuransi", $item->asuransi) }}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3 col-12">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Jasa Kg</label>
+                                                        <input type="text" class="form-control form-control-lg" readonly
+                                                            name="items[{{ $index }}][jasa]"
+                                                            value="{{ old("items.$index.jasa", $item->jasa) }}">
+                                                    </div>
+                                                </div>
+
                                                 <div class="col-md-6 col-12">
 
                                                     <div class="form-group">
                                                         <label class="form-label">Link Barang</label>
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control link-input" readonly
+                                                            <input type="text" class="form-control form-control-lg link-input" readonly
                                                                 value="{{ old("items.$index.link_barang", $item->link_barang) }}"
                                                                 name="items[{{ $index }}][link_barang]">
                                                             <button class="btn btn-outline-primary btn-open-link"
@@ -182,20 +241,22 @@
                                                 </div>
                                                 <div class="col-md-3 col-12">
                                                     <div class="form-group">
-                                                        <label class="form-label">Estimasi Kg</label>
-                                                        <input type="text" class="form-control" readonly
-                                                            name="items[{{ $index }}][estimasi_kg]"
-                                                            value="{{ old("items.$index.estimasi_kg", $item->estimasi_kg) }}">
+                                                        <label class="form-label">Dsikon</label>
+                                                        <input type="text" class="form-control form-control-lg"
+                                                            name="items[{{ $index }}][estimasi_diskon]" readonly
+                                                            value="{{ old("items.$index.estimasi_diskon", $item->estimasi_diskon) }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 col-12">
                                                     <div class="form-group">
-                                                        <label class="form-label">Estimasi Harga</label>
-                                                        <input type="text" class="form-control"
-                                                            name="items[{{ $index }}][estimasi_harga]" readonly
-                                                            value="{{ old("items.$index.estimasi_harga", $item->estimasi_harga) }}">
+                                                        <label class="form-label">Total Harga Estimasi</label>
+                                                        <input type="text" class="form-control form-control-lg" readonly
+                                                            name="items[{{ $index }}][total_estimasi]"
+                                                            value="{{ old("items.$index.total_estimasi", $item->total_estimasi) }}">
                                                     </div>
                                                 </div>
+                                                 
+                                                
                                                 <div class="col-md-12">
                                                     <div class="accordion mb-3" id="accordionExample{{ $index }}">
                                                         <!-- Estimasi -->
@@ -217,11 +278,12 @@
                                                                             data-item-id="{{ $item->id }}"
                                                                             data-nama-rek="{{ $item->nama_rek_transfer }}"
                                                                             data-jumlah-transfer="{{ $item->jumlah_transfer }}"
+                                                                            data-total-estimasi="{{ $item->total_estimasi }}"
                                                                             data-dp="{{ $item->dp }}"
                                                                             data-full-payment="{{ $item->fullpayment }}"
                                                                             data-foto-bukti="{{ $item->foto_bukti_tf }}"
                                                                             data-status-follow-up="{{ $item->status_follow_up }}"
-                                                                            data-mutasi-check="{{ $item->mutasi_check ? 'true' : 'false' }}">
+                                                                            data-mutasi-check="{{ $item->mutasi_check }}">
                                                                             <i class="bi bi-pencil"></i> Edit
                                                                         </button>
 
@@ -316,24 +378,35 @@
                                                                         </div>
 
                                                                         <!-- Foto Bukti Transfer -->
-                                                                        <div class="mb-3">
-                                                                            <small class="text-muted d-block">Foto Bukti
-                                                                                Transfer</small>
-                                                                            @if ($item->foto_bukti_tf ?? false)
-                                                                                <a href="{{ asset('storage/' . $item->foto_bukti_tf) }}"
-                                                                                    target="_blank"
-                                                                                    class="btn btn-sm btn-outline-primary mt-1">
-                                                                                    <i class="bi bi-eye"></i> Lihat Dokumen
-                                                                                </a>
-                                                                                <small class="text-muted d-block mt-1">
-                                                                                    {{ strtoupper(pathinfo($item->foto_bukti_tf, PATHINFO_EXTENSION)) }}
-                                                                                    •
-                                                                                    {{ round(filesize(public_path('storage/' . $item->foto_bukti_tf)) / 1024) }}
-                                                                                    KB
-                                                                                </small>
-                                                                            @else
-                                                                                <span class="text-muted">-</span>
-                                                                            @endif
+                                                                          <div class="row mb-3 border-bottom pb-2">
+                                                                             <div class="col-md-6">
+                                                                                <div class="mb-2">
+                                                                                    <small
+                                                                                        class="text-muted d-block">Kurang Bayar</small>
+                                                                                    <div class="fw-semibold">
+                                                                                        {{ number_format($item->kurang_bayar ?? 0, 0, ',', '.') }}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <small class="text-muted d-block">Foto Bukti
+                                                                                    Transfer</small>
+                                                                                @if ($item->foto_bukti_tf ?? false)
+                                                                                    <a href="{{ asset('storage/' . $item->foto_bukti_tf) }}"
+                                                                                        target="_blank"
+                                                                                        class="btn btn-sm btn-outline-primary mt-1">
+                                                                                        <i class="bi bi-eye"></i> Lihat Dokumen
+                                                                                    </a>
+                                                                                    <small class="text-muted d-block mt-1">
+                                                                                        {{ strtoupper(pathinfo($item->foto_bukti_tf, PATHINFO_EXTENSION)) }}
+                                                                                        •
+                                                                                        {{ round(filesize(public_path('storage/' . $item->foto_bukti_tf)) / 1024) }}
+                                                                                        KB
+                                                                                    </small>
+                                                                                @else
+                                                                                    <span class="text-muted">-</span>
+                                                                                @endif
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -363,7 +436,11 @@
                                                                         data-status-purchase="{{ $item->status_purchase }}"
                                                                         data-notes="{{ $item->notes }}"
                                                                         data-bukti-pembelian="{{ $item->bukti_pembelian_path }}"
-                                                                        data-hpp-mutasi-check="{{ $item->hpp_mutasi_check ? 'true' : 'false' }}">
+                                                                        data-harga-hpp="{{ $item->harga_hpp }}"
+                                                                        data-diskon="{{ $item->diskon }}"
+                                                                        data-pajak="{{ $item->pajak }}"
+                                                                        data-pengiriman="{{ $item->pengiriman }}"
+                                                                        data-hpp-mutasi-check="{{ $item->hpp_mutasi_check  }}">
                                                                         <i class="bi bi-pencil"></i> Edit
                                                                     </button>
                                                                     @else
@@ -404,6 +481,50 @@
                                                                             </div>
                                                                         </div>
 
+                                                                         <div class="row mb-3 border-bottom pb-2">
+                                                                            <div class="col-md-6">
+                                                                                <div class="mb-2">
+                                                                                    <small
+                                                                                        class="text-muted d-block">Pajak
+                                                                                        </small>
+                                                                                   <div class="fw-semibold">
+                                                                                        {{ number_format($item->pajak ?? 0, 0, ',', '.') }}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <div class="mb-2">
+                                                                                    <small class="text-muted d-block">Pengiriman
+                                                                                        </small>
+                                                                                    <div class="fw-semibold">
+                                                                                        {{ number_format($item->pengiriman ?? 0, 0, ',', '.') }}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="row mb-3 border-bottom pb-2">
+                                                                            <div class="col-md-6">
+                                                                                <div class="mb-2">
+                                                                                    <small
+                                                                                        class="text-muted d-block">Harga barang
+                                                                                        </small>
+                                                                                   <div class="fw-semibold">
+                                                                                        {{ number_format($item->harga_hpp ?? 0, 0, ',', '.') }}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <div class="mb-2">
+                                                                                    <small class="text-muted d-block">Diskon
+                                                                                        </small>
+                                                                                    <div class="fw-semibold">
+                                                                                        {{ number_format($item->diskon ?? 0, 0, ',', '.') }}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
                                                                         <!-- Baris Kedua -->
                                                                         <div class="row mb-3 border-bottom pb-2">
                                                                             <div class="col-md-6">
@@ -436,7 +557,29 @@
 
                                                                         <!-- Baris Ketiga -->
                                                                         <div class="row mb-3">
-                                                                            <div class="col-12">
+                                                                            <div class="col-md-6">
+ <!-- Foto Bukti Pembelian -->
+                                                                                <div class="mb-3">
+                                                                                    <small class="text-muted d-block">Foto Bukti
+                                                                                        Pembelian</small>
+                                                                                    @if ($item->foto_bukti_pembelian ?? false)
+                                                                                        <a href="{{ asset('storage/' . $item->foto_bukti_pembelian) }}"
+                                                                                            target="_blank"
+                                                                                            class="btn btn-sm btn-outline-primary mt-1">
+                                                                                            <i class="bi bi-eye"></i> Lihat Dokumen
+                                                                                        </a>
+                                                                                        <small class="text-muted d-block mt-1">
+                                                                                            {{ strtoupper(pathinfo($item->foto_bukti_pembelian, PATHINFO_EXTENSION)) }}
+                                                                                            •
+                                                                                            {{ round(filesize(public_path('storage/' . $item->foto_bukti_pembelian)) / 1024) }}
+                                                                                            KB
+                                                                                        </small>
+                                                                                    @else
+                                                                                        <span class="text-muted">-</span>
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-6">
                                                                                 <div class="mb-2">
                                                                                     <small
                                                                                         class="text-muted d-block">Notes</small>
@@ -446,26 +589,7 @@
                                                                             </div>
                                                                         </div>
 
-                                                                        <!-- Foto Bukti Pembelian -->
-                                                                        <div class="mb-3 border-top pt-2">
-                                                                            <small class="text-muted d-block">Foto Bukti
-                                                                                Pembelian</small>
-                                                                            @if ($item->foto_bukti_pembelian ?? false)
-                                                                                <a href="{{ asset('storage/' . $item->foto_bukti_pembelian) }}"
-                                                                                    target="_blank"
-                                                                                    class="btn btn-sm btn-outline-primary mt-1">
-                                                                                    <i class="bi bi-eye"></i> Lihat Dokumen
-                                                                                </a>
-                                                                                <small class="text-muted d-block mt-1">
-                                                                                    {{ strtoupper(pathinfo($item->foto_bukti_pembelian, PATHINFO_EXTENSION)) }}
-                                                                                    •
-                                                                                    {{ round(filesize(public_path('storage/' . $item->foto_bukti_pembelian)) / 1024) }}
-                                                                                    KB
-                                                                                </small>
-                                                                            @else
-                                                                                <span class="text-muted">-</span>
-                                                                            @endif
-                                                                        </div>
+                                                                       
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -489,11 +613,15 @@
                                                                         <button type="button"
                                                                             class="btn btn-outline-primary btn-sm edit-operasional-btn ms-2"
                                                                             data-item-id="{{ $item->id }}"
-                                                                            data-wh-usa-path="{{ $item->wh_usa_path }}"
-                                                                            data-wh-usa-mutasi-check="{{ $item->wh_usa_mutasi_check ? 'true' : 'false' }}"
-                                                                            data-wh-indonesia-path="{{ $item->wh_indonesia_path }}"
+                                                                            data-wh-usa-path="{{ $item->wh_usa }}"
+                                                                            data-wh-usa-mutasi-check="{{ $item->status_on_check }}"
+                                                                            data-wh-indonesia-path="{{ $item->wh_indo }}"
                                                                             data-fix-weight="{{ $item->fix_weight }}"
                                                                             data-fix-price="{{ $item->fix_price }}"
+                                                                            data-sku="{{ $item->sku }}"
+                                                                            data-no-box="{{ $item->no_box }}"
+                                                                            data-kurir-lokal="{{ $item->kurir_lokal }}"
+                                                                            data-pelunasan="{{ $item->pelunasan }}"
                                                                             data-status-barang-sampai="{{ $item->status_barang_sampai }}">
                                                                             <i class="bi bi-pencil"></i> Edit
                                                                         </button>
@@ -535,6 +663,50 @@
                                                                             </div>
 
                                                                         </div>
+
+                                                                           <div class="row mb-3 border-bottom pb-2">
+                                                                            <div class="col-md-6">
+                                                                                <div class="mb-2">
+                                                                                    <small class="text-muted d-block">Kurir Lokal
+                                                                                        </small>
+                                                                                    <div class="fw-semibold">
+                                                                                        {{ $item->kurir_lokal ? number_format($item->kurir_lokal, 0, ',', '.') : '-' }}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-6">
+                                                                                <div class="mb-2">
+                                                                                    <small class="text-muted d-block">Pelunasan</small>
+                                                                                    <div class="fw-semibold">
+                                                                                        {{ $item->pelunasan ? number_format($item->pelunasan, 0, ',', '.') : '-' }}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                         <div class="row mb-3 border-bottom pb-2">
+                                                                            <div class="col-md-6">
+                                                                                <div class="mb-2">
+                                                                                    <small class="text-muted d-block">SKU
+                                                                                        </small>
+                                                                                    <div class="fw-semibold">
+                                                                                        {{ $item->sku ? $item->sku : '-' }}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-6">
+                                                                                <div class="mb-2">
+                                                                                    <small class="text-muted d-block">Nomor Box</small>
+                                                                                    <div class="fw-semibold">
+                                                                                        {{ $item->no_box ? $item->no_box : '-' }}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
                                                                         <!-- Baris Ketiga -->
                                                                         <div class="row mb-3 border-bottom pb-2">
 
@@ -544,8 +716,8 @@
                                                                                         class="text-muted d-block">Status
                                                                                         WH USA</small>
                                                                                     <span
-                                                                                        class="badge {{ $item->wh_usa_mutasi_check ? 'bg-success' : 'bg-secondary' }}">
-                                                                                        {{ $item->wh_usa_mutasi_check ? 'Done' : 'Failed' }}
+                                                                                        class="badge {{ $item->status_on_check ? 'bg-success' : 'bg-secondary' }}">
+                                                                                        {{ $item->status_on_check ? 'Done' : 'Failed' }}
                                                                                     </span>
                                                                                 </div>
                                                                             </div>
@@ -668,7 +840,7 @@
                         <div class="col-md-6 col-12">
                             <div class="form-group mandatory">
                                 <label class="form-label">Jumlah Transfer</label>
-                                <input type="number" id="jumlah_transfer" class="form-control form-control-lg"
+                                <input type="number" id="jumlah_transfer" readonly class="form-control form-control-lg"
                                     name="jumlah_transfer">
                             </div>
                         </div>
@@ -686,14 +858,17 @@
                                     name="full_payment">
                             </div>
                         </div>
+                         <div class="col-md-6 col-12">
+                            <div class="form-group mandatory">
+                                <label class="form-label">Kurang Bayar</label>
+                                <input type="number" id="kurang_bayar" class="form-control form-control-lg"
+                                    name="kurang_bayar">
+                            </div>
+                        </div>
                         <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <label class="form-label">Status Follow Up</label>
-                                <select class="choices form-select" id="status_follow_up" name="status_follow_up">
-                                    <option value="">Press to select</option>
-                                    <option value="Scheduled">Scheduled</option>
-                                    <option value="Followed">Followed</option>
-                                    <option value="Unfollowed">Unfollowed</option>
+                                <select class="form-select" id="status_follow_up" name="status_follow_up">
                                 </select>
                             </div>
                         </div>
@@ -702,16 +877,20 @@
                                 <label class="form-label">Foto Bukti Transfer</label>
                                 <input type="file" id="bukti_transfer" class="form-control form-control-lg"
                                     name="bukti_transfer">
+
+                                    <div id="foto-preview" class="mt-3"></div>
+        
+                                    
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="form-group mandatory">
                                 <label class="form-label">Mutasi Check</label>
                                 <br>
-                                <input id="modal_btn_status" type="checkbox" data-onstyle="info" data-toggle="toggle"
-                                    data-on="Available" data-off="Not Available" data-offstyle="secondary"
+                                <input id="modal_btn_status" type="checkbox" data-onstyle="success" data-toggle="toggle"
+                                    data-on="Checked" data-off="Unchecked" data-offstyle="secondary"
                                     data-width="200" data-height="45">
-                                <input type="hidden" id="modal_status" name="mutasi_check" value="false">
+                                <input type="true" id="modal_status" name="mutasi_check" hidden>
                             </div>
                         </div>
                     </div>
@@ -751,22 +930,40 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
-                                <label class="form-label">Total Purchase</label>
-                                <input type="number" id="total_purchase" class="form-control form-control-lg"
-                                    name="total_purchase">
-                            </div>
-                        </div>
+                       
                         <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <label class="form-label">Status Purchase</label>
-                                <select class="choices form-select" id="status_purchase" name="status_purchase">
-                                    <option value="">Press to select</option>
-                                    <option value="Wait For Order">Wait For Order</option>
-                                    <option value="Ordered">Ordered</option>
-                                    <option value="Failed Order">Failed Order</option>
+                                <select class="form-select" id="status_purchase" name="status_purchase">
                                 </select>
+                            </div>
+                        </div>
+                         <div class="col-md-6 col-12">
+                            <div class="form-group mandatory">
+                                <label class="form-label">Harga Barang</label>
+                                <input type="number" id="harga_barang" class="form-control form-control-lg"
+                                    name="harga_barang">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-group mandatory">
+                                <label class="form-label">Pajak</label>
+                                <input type="number" id="pajak" class="form-control form-control-lg"
+                                    name="pajak">
+                            </div>
+                        </div>
+                         <div class="col-md-6 col-12">
+                            <div class="form-group mandatory">
+                                <label class="form-label">Diskon</label>
+                                <input type="number" id="diskon" class="form-control form-control-lg"
+                                    name="diskon">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-group mandatory">
+                                <label class="form-label">Pengiriman</label>
+                                <input type="number" id="pengiriman" class="form-control form-control-lg"
+                                    name="pengiriman">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
@@ -774,6 +971,13 @@
                                 <label class="form-label">Notes</label>
                                 <input type="text" id="notes" class="form-control form-control-lg"
                                     name="notes">
+                            </div>
+                        </div>
+                          <div class="col-md-6 col-12">
+                            <div class="form-group mandatory">
+                                <label class="form-label">Total Purchase</label>
+                                <input type="number" id="total_purchase" class="form-control form-control-lg"
+                                    name="total_purchase">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
@@ -794,6 +998,7 @@
                                 <input type="hidden" id="hpp_status" name="hpp_mutasi_check" value="false">
                             </div>
                         </div>
+                        
                     </div>
                 </form>
             </div>
@@ -834,15 +1039,42 @@
                                     name="fix_price">
                             </div>
                         </div>
+                          <div class="col-md-6 col-12">
+                            <div class="form-group mandatory">
+                                <label class="form-label">Nomor Box</label>
+                                <input type="text" id="nomor_box" class="form-control form-control-lg"
+                                    name="nomor_box">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-group mandatory">
+                                <label class="form-label">SKU</label>
+                                <input type="text" id="sku" class="form-control form-control-lg"
+                                    name="sku">
+                            </div>
+                        </div>
+
+                          <div class="col-md-6 col-12">
+                            <div class="form-group mandatory">
+                                <label class="form-label">Kurir Lokal</label>
+                                <input type="number" id="kurir_lokal" class="form-control form-control-lg"
+                                    name="kurir_lokal">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <div class="form-group mandatory">
+                                <label class="form-label">Pelunasan</label>
+                                <input type="number" id="pelunasan" class="form-control form-control-lg"
+                                    name="pelunasan">
+                            </div>
+                        </div>
+
                         <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <label class="form-label">Status Barang Sampai</label>
-                                <select class="choices form-select" id="status_barang_sampai"
+                                <select class="form-select" id="status_barang_sampai"
                                     name="status_barang_sampai">
-                                    <option value="">Press to select</option>
-                                    <option value="Waiting Courier">Waiting Courier</option>
-                                    <option value="Received">Received</option>
-                                    <option value="Cancel">Cancel</option>
+                                   
                                 </select>
                             </div>
                         </div>
@@ -904,22 +1136,101 @@
                 const itemId = $(this).data('item-id');
                 $('#item_id').val(itemId);
                 $('#nama_rek').val($(this).data('nama-rek'));
-                $('#jumlah_transfer').val($(this).data('jumlah-transfer'));
+                $('#jumlah_transfer').val($(this).data('total-estimasi'));
                 $('#dp').val($(this).data('dp'));
                 $('#full_payment').val($(this).data('full-payment'));
                 $('#status_follow_up').val($(this).data('status-follow-up'));
+                $('#foto-bukti').val($(this).data('foto-bukti'));
 
-                // Set toggle
-                const isChecked = $(this).data('mutasi-check') === 'true';
-                $('#modal_btn_status').prop('checked', isChecked).change();
+                 const fotoBukti = $(this).data('foto-bukti');
+                const fotoBuktiField = $('#bukti_transfer');
+                const fotoPreview = $('#foto-preview');
+                
+                // Reset file input
+                fotoBuktiField.val('');
+                
+                if (fotoBukti) {
+                    // Jika sudah ada foto bukti, tampilkan preview image yang bisa diklik
+                    fotoPreview.html(`
+                    <a href="/storage/${fotoBukti}"
+                        target="_blank"
+                        class="btn btn-sm btn-outline-primary mt-1">
+                        <i class="bi bi-eye"></i> Lihat Dokumen
+                    </a>
+                    `);
+                    
+                    // Buat field tidak required karena sudah ada foto
+                    fotoBuktiField.removeAttr('required');
+                } else {
+                    // Jika belum ada foto
+                    fotoPreview.html('');
+                    fotoBuktiField.attr('required', 'required');
+                }
+                
+               var statusFollowUp = $(this).data('status-follow-up');
+                console.log('Nilai status follow up:', statusFollowUp);
+
+                // Dapatkan instance Choices
+                var selectElement = document.getElementById('status_follow_up');
+
+                // Jika Choices.js terdeteksi
+                if (typeof Choices !== 'undefined') {
+                    // Destroy existing instance jika ada
+                    if (selectElement.choices) {
+                        selectElement.choices.destroy();
+                    }
+                    
+                    // Buat instance Choices baru dengan opsi yang benar
+                    var choicesInstance = new Choices(selectElement, {
+                        choices: [
+                            {value: '', label: 'Press to select', selected: true, disabled: true},
+                            {value: 'Scheduled', label: 'Scheduled'},
+                            {value: 'Followed', label: 'Followed'},
+                            {value: 'Unfollowed', label: 'Unfollowed'}
+                        ],
+                        searchEnabled: false,
+                        shouldSort: false,
+                        itemSelectText: ''
+                    });
+                    
+                    // Set nilai yang dipilih
+                    choicesInstance.setChoiceByValue(statusFollowUp);
+                } else {
+                    // Fallback traditional method
+                    $('#status_follow_up').html('\
+                        <option value="">Press to select</option>\
+                        <option value="Scheduled"' + (statusFollowUp === 'Scheduled' ? ' selected' : '') + '>Scheduled</option>\
+                        <option value="Followed"' + (statusFollowUp === 'Followed' ? ' selected' : '') + '>Followed</option>\
+                        <option value="Unfollowed"' + (statusFollowUp === 'Unfollowed' ? ' selected' : '') + '>Unfollowed</option>\
+                    ');
+                    $('#status_follow_up').trigger('change');
+                }
+                
+                // Set toggle dengan cara yang benar
+                const isChecked = $(this).data('mutasi-check');
+
+                // Atur nilai checkbox berdasarkan isChecked
+                // $('#modal_btn_status').prop('checked', true);
+                if (isChecked) {
+                    $('#modal_btn_status').bootstrapToggle('on');
+                } else {
+                    $('#modal_btn_status').bootstrapToggle('off');
+                }
                 $('#modal_status').val(isChecked);
 
-                // Inisialisasi Choices untuk select
-                new Choices('#status_follow_up', {
-                    searchEnabled: false,
-                    shouldSort: false,
-                    itemSelectText: ''
+                // Pastikan event handler untuk toggle berfungsi
+                $('#modal_btn_status').off('change').on('change', function() {
+                    const isChecked = $(this).is(':checked');
+                    $('#modal_status').val(isChecked ? 1 : 0);
+                    console.log('Toggle status:', isChecked ? 'Checked' : 'Unchecked');
                 });
+
+               
+                 // Add event listeners
+                    $('#jumlah_transfer, #dp, #full_payment').on('input', calculateKurangBayar);
+                    
+                    // Calculate initial value
+                    calculateKurangBayar();
                 // Tampilkan modal
                 estimasiModal.show();
             });
@@ -949,7 +1260,11 @@
                     {
                         id: '#bukti_transfer',
                         name: 'Bukti Transfer'
-                    }
+                    },
+                     {
+                        id: '#kurang_bayar',
+                        name: 'Kurang Bayar'
+                    },
                 ];
 
                 let isValid = true;
@@ -1112,6 +1427,10 @@
                 $('#total_purchase').val($(this).data('total-purchase'));
                 $('#status_purchase').val($(this).data('status-purchase'));
                 $('#notes').val($(this).data('notes'));
+                $('#pajak').val($(this).data('pajak'));
+                $('#diskon').val($(this).data('diskon'));
+                $('#pengiriman').val($(this).data('pengiriman'));
+                $('#harga_barang').val($(this).data('harga-hpp'));
 
                 // Tampilkan preview bukti pembelian jika ada
                 const buktiPembelianPath = $(this).data('bukti-pembelian');
@@ -1126,16 +1445,66 @@
                 }
 
                 // Set toggle
-                const isChecked = $(this).data('hpp-mutasi-check') === 'true';
-                $('#hpp_btn_status').prop('checked', isChecked).change();
-                $('#hpp_status').val(isChecked);
+              
 
+                 const isChecked = $(this).data('hpp-mutasi-check');
+
+                    // Atur nilai checkbox berdasarkan isChecked
+                    // $('#modal_btn_status').prop('checked', true);
+                    if (isChecked) {
+                        $('#hpp_btn_status').bootstrapToggle('on');
+                    } else {
+                        $('#hpp_btn_status').bootstrapToggle('off');
+                    }
+                    $('#hpp_status').val(isChecked);
+
+                    // Pastikan event handler untuk toggle berfungsi
+                    $('#hpp_btn_status').off('change').on('change', function() {
+                        const isChecked = $(this).is(':checked');
+                        $('#hpp_status').val(isChecked ? 1 : 0);
+                        console.log('Toggle status:', isChecked ? 'Checked' : 'Unchecked');
+                    });
                 // Inisialisasi Choices untuk select
-                new Choices('#status_purchase', {
-                    searchEnabled: false,
-                    shouldSort: false,
-                    itemSelectText: ''
-                });
+              
+                var statusFollowUp = $(this).data('status-purchase');
+                console.log('Nilai status follow up:', statusFollowUp);
+
+                // Dapatkan instance Choices
+                var selectElement = document.getElementById('status_purchase');
+
+                // Jika Choices.js terdeteksi
+                if (typeof Choices !== 'undefined') {
+                    // Destroy existing instance jika ada
+                    if (selectElement.choices) {
+                        selectElement.choices.destroy();
+                    }
+                    
+
+                    // Buat instance Choices baru dengan opsi yang benar
+                    var choicesInstance = new Choices(selectElement, {
+                        choices: [
+                            {value: '', label: 'Press to select', selected: true, disabled: true},
+                            {value: 'Wait For Order', label: 'Wait For Order'},
+                            {value: 'Ordered', label: 'Ordered'},
+                            {value: 'Failed Order', label: 'Failed Order'}
+                        ],
+                        searchEnabled: false,
+                        shouldSort: false,
+                        itemSelectText: ''
+                    });
+                    
+                    // Set nilai yang dipilih
+                    choicesInstance.setChoiceByValue(statusFollowUp);
+                } else {
+                    // Fallback traditional method
+                    $('#status_purchase').html('\
+                        <option value="">Press to select</option>\
+                        <option value="Wait For Order"' + (statusFollowUp === 'Wait For Order' ? ' selected' : '') + '>Wait For Order</option>\
+                        <option value="Ordered"' + (statusFollowUp === 'Ordered' ? ' selected' : '') + '>Ordered</option>\
+                        <option value="Failed Order"' + (statusFollowUp === 'Failed Order' ? ' selected' : '') + '>Failed Order</option>\
+                    ');
+                    $('#status_purchase').trigger('change');
+                }
 
                 // Tampilkan modal
                 hppModal.show();
@@ -1183,6 +1552,22 @@
                     {
                         id: '#notes',
                         name: 'Notes'
+                    },
+                    {
+                        id: '#pajak',
+                        name: 'Pajak'
+                    },
+                    {
+                        id: '#harga_barang',
+                        name: 'Harga Barang'
+                    },
+                    {
+                        id: '#diskon',
+                        name: 'Diskon'
+                    },
+                     {
+                        id: '#pengiriman',
+                        name: 'Pengiriman'
                     },
                     {
                         id: '#bukti_pembelian',
@@ -1335,8 +1720,7 @@
             $(document).on('click', '.edit-operasional-btn', function() {
                 // Ambil data dari tombol
                 const itemId = $(this).data('item-id');
-                const whUsaStatus = $(this).data('wh-usa-status') === 'true';
-                const statusBarang = $(this).data('status-barang');
+                const statusBarang = $(this).data('status-barang-sampai');
 
                 // Isi form modal
                 $('#operasional_item_id').val(itemId);
@@ -1344,14 +1728,69 @@
                 $('#fix_price').val($(this).data('fix-price'));
                 $('#status_barang_sampai').val(statusBarang);
 
-                // Set toggle switch
-                if (whUsaStatus) {
-                    $('#wh_usa_btn_status').bootstrapToggle('on');
-                    $('#wh_usa_status').val('true');
+                $('#nomor_box').val($(this).data('no-box'));
+                $('#sku').val($(this).data('sku'));
+                $('#kurir_lokal').val($(this).data('kurir-lokal'));
+                $('#pelunasan').val($(this).data('pelunasan'));
+
+
+                 var statusFollowUp = $(this).data('status-barang-sampai');
+                console.log('Nilai status follow up:', statusFollowUp);
+
+                // Dapatkan instance Choices
+                var selectElement = document.getElementById('status_barang_sampai');
+
+                // Jika Choices.js terdeteksi
+                if (typeof Choices !== 'undefined') {
+                    // Destroy existing instance jika ada
+                    if (selectElement.choices) {
+                        selectElement.choices.destroy();
+                    }
+
+                    // Buat instance Choices baru dengan opsi yang benar
+                    var choicesInstance = new Choices(selectElement, {
+                        choices: [
+                            {value: '', label: 'Press to select', selected: true, disabled: true},
+                            {value: 'Waiting Courier', label: 'Waiting Courier'},
+                            {value: 'Received', label: 'Received'},
+                            {value: 'Cancel', label: 'Cancel'}
+                        ],
+                        searchEnabled: false,
+                        shouldSort: false,
+                        itemSelectText: ''
+                    });
+                    
+                    // Set nilai yang dipilih
+                    choicesInstance.setChoiceByValue(statusFollowUp);
                 } else {
-                    $('#wh_usa_btn_status').bootstrapToggle('off');
-                    $('#wh_usa_status').val('false');
+                    // Fallback traditional method
+                    $('#status_barang_sampai').html('\
+                        <option value="">Press to select</option>\
+                        <option value="Waiting Courier"' + (statusFollowUp === 'Waiting Courier' ? ' selected' : '') + '>Waiting Courier</option>\
+                        <option value="Received"' + (statusFollowUp === 'Received' ? ' selected' : '') + '>Received</option>\
+                        <option value="Cancel"' + (statusFollowUp === 'Cancel' ? ' selected' : '') + '>Cancel</option>\
+                    ');
+                    $('#status_barang_sampai').trigger('change');
                 }
+
+                 const isChecked = $(this).data('wh-usa-mutasi-check');
+
+                    // Atur nilai checkbox berdasarkan isChecked
+                    // $('#modal_btn_status').prop('checked', true);
+                    if (isChecked) {
+                        $('#wh_usa_btn_status').bootstrapToggle('on');
+                    } else {
+                        $('#wh_usa_btn_status').bootstrapToggle('off');
+                    }
+                    $('#wh_usa_status').val(isChecked);
+
+                    // Pastikan event handler untuk toggle berfungsi
+                    $('#wh_usa_btn_status').off('change').on('change', function() {
+                        const isChecked = $(this).is(':checked');
+                        $('#wh_usa_status').val(isChecked ? 1 : 0);
+                        console.log('Toggle status:', isChecked ? 'Checked' : 'Unchecked');
+                    });
+
 
                 // Preview gambar jika ada
                 const whUsaImg = $(this).data('wh-usa-img');
@@ -1389,6 +1828,22 @@
                     {
                         id: '#fix_weight',
                         name: 'Fix Weight'
+                    },
+                     {
+                        id: '#kurir_lokal',
+                        name: 'Kurir Lokal'
+                    },
+                     {
+                        id: '#pelunasan',
+                        name: 'Pelunasan'
+                    },
+                     {
+                        id: '#sku',
+                        name: 'SKU'
+                    },
+                     {
+                        id: '#nomor_box',
+                        name: 'Nomor Box'
                     },
                     {
                         id: '#fix_price',
@@ -1553,5 +2008,48 @@
                 $(this).next('.btn-open-link').prop('disabled', !$(this).val().trim());
             });
         }
+
+        function calculateKurangBayar() {
+            const jumlahTransfer = parseFloat($('#jumlah_transfer').val()) || 0;
+            const dp = parseFloat($('#dp').val()) || 0;
+            const fullPayment = parseFloat($('#full_payment').val()) || 0;
+            
+            let kurangBayar = 0;
+            let fullPay = 0;
+            let dpPay = 0;
+            
+            // Kondisi 1: Jika ada DP dan full payment masih 0/kosong
+            if (dp > 0 && fullPayment === 0) {
+                kurangBayar = jumlahTransfer - dp;
+                fullPay = 0;
+            $('#full_payment').val(fullPay);
+            } 
+            // Kondisi 2: Jika full payment terisi
+            else if (fullPayment > 0) {
+                kurangBayar = fullPayment - jumlahTransfer;
+                dpPay = 0;
+                  $('#dp').val(dpPay);
+            }
+            
+            $('#kurang_bayar').val(kurangBayar);
+          
+            
+            // Update styling
+            $('#kurang_bayar').removeClass('is-valid is-invalid is-warning');
+            
+            if (kurangBayar > 0) {
+                $('#kurang_bayar').addClass('is-invalid');
+            } else if (kurangBayar < 0) {
+                $('#kurang_bayar').addClass('is-warning');
+            } else {
+                if($('#dp').val() || $('#full_payment').val()){
+                    $('#kurang_bayar').addClass('is-valid');
+                }else{
+                    $('#kurang_bayar').addClass('is-invalid');
+                }
+            }
+        }
+        
+       
     </script>
 @endsection
