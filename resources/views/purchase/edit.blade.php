@@ -30,46 +30,100 @@
                         <div class="card-content">
                             <div class="card-body">
                                 <h5 class="card-title">Customer Information</h5>
-                                <div class="row">
-                                    <div class="col-md-6 col-12">
-                                        <div class="form-group">
-                                            <label for="customer" class="form-label">Customer</label>
-                                            <select class="choices form-select" disabled id="customer" name="no_telp">
-                                                <option value="">Select customer</option>
-                                                @foreach($customers as $customer)
+                                     <div class="row">
+                                 <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                         <label for="tipe_order" class="form-label">Tipe Order</label>
+                                        <select class="required choices form-select" id="tipe_order" name="tipe_order">
+                                            
+                                            <option value="">Press to select</option>
+                                                <option value="01" {{ $purchase->tipe_order == '01' ? 'selected' : '' }}>Jasmin</option>
+                                                <option value="02" {{ $purchase->tipe_order == '02' ? 'selected' : '' }}>Jastip Order</option>
+                                                <option value="03" {{ $purchase->tipe_order == '03' ? 'selected' : '' }}>Jastip Only</option>
+                                                <option value="04" {{ $purchase->tipe_order == '04' ? 'selected' : '' }}>Jastip B2B</option>
+
+                                           
+                                        </select>
+                                    </div>
+                                    @error('publish_at')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                    @enderror
+                                </div>
+
+                                   <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                         <label for="customer" class="form-label">Customer</label>
+                                        <select class="required choices form-select" id="customer" name="no_telp">
+                                             <option value="custom">-- Custom / Buat Baru --</option>
+                                            
+                                            <option value="">Press to select</option>
+                                            @foreach($customers as $customer)
                                                 <option value="{{ $customer->whatsapp_number }}" 
                                                     {{ $purchase->no_telp === $customer->whatsapp_number ? 'selected' : '' }}>
                                                     {{ $customer->whatsapp_number }} - {{ $customer->display_name }}
                                                 </option>
                                                 @endforeach
-                                            </select>
-                                        </div>
+                                        </select>
                                     </div>
-
-                                    <div class="col-md-6 col-12">
-                                        <div class="form-group">
-                                            <label for="name" class="form-label">Name</label>
-                                            <input type="text" id="name" class="form-control form-control-lg" 
-                                                value="{{ old('nama', $purchase->nama) }}" name="nama">
-                                        </div>
+                                    @error('publish_at')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
                                     </div>
-
-                                    <div class="col-md-6 col-12">
-                                        <div class="form-group">
-                                            <label for="email" class="form-label">Email</label>
-                                            <input type="text" id="email" class="form-control form-control-lg" 
-                                                value="{{ old('email', $purchase->email) }}" name="email">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-12 col-12">
-                                        <div class="form-group">
-                                            <label for="address" class="form-label">Address</label>
-                                            <input type="text" id="address" class="form-control form-control-lg" 
-                                                value="{{ old('alamat', $purchase->alamat) }}" name="alamat">
-                                        </div>
-                                    </div>
+                                    @enderror
                                 </div>
+
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group mandatory">
+                                        <label for="name" class="form-label">Name</label>
+                                        <input type="text" id="name" class="form-control form-control-lg required"  value="{{ (isset($purchase->nama)? $purchase->nama:old('nama')) }}"  name="nama">
+                                    </div>
+                                    @error('name')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group mandatory">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="text" id="email" class="form-control form-control-lg required"  value="{{ (isset($purchase->email)? $purchase->email:old('email')) }}"  name="email">
+                                    </div>
+                                    @error('email')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                    @enderror
+                                </div>
+
+                                 <div class="col-md-6 col-12">
+                                    <div class="form-group mandatory">
+                                        <label for="no_telp" class="form-label">Phone</label>
+                                        <input type="text" id="no_telp" class="form-control form-control-lg required"  value="{{ (isset($purchase->no_telp)? $purchase->no_telp:old('no_telp')) }}"  name="phone">
+                                    </div>
+                                    @error('no_telp')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                    @enderror
+                                </div>
+
+                                  <div class="col-md-6 col-12">
+                                    <div class="form-group mandatory">
+                                        <label for="name" class="form-label">Alamat</label>
+                                        <input type="text" id="address" class="form-control form-control-lg required"  value="{{ (isset($purchase->alamat)? $purchase->alamat:old('alamat')) }}"  name="alamat">
+                                    </div>
+                                    @error('name')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                        
                             </div>
                         </div>
                     </div>
@@ -91,6 +145,102 @@
                                 <div id="items-container">
                                     @foreach($purchaseOrderDetail as $index => $item)
                                     <div class="item-row row mb-3 border p-3 rounded">
+                                  <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Customer Order</label>
+                                          
+                                            <select class="choices form-select customer-order-select" disabled
+                                                    name="items[{{ $index }}][customer_order_id]" 
+                                                    data-index="{{ $index }}"
+                                                    data-selected="{{ $item->no_po }}">
+                                                    <option value="">Select Customer Order</option>
+                                                    <option value="{{ $item->no_po }}" selected>{{ $item->no_po }}</option>
+                                                </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Quantity</label>
+                                            <input type="text" readonly  value="{{ old("items.$index.quantity", $item->qty) }}" class="form-control form-control-lg required" name="items[0][quantity]">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Notes</label>
+                                            <input type="text" readonly  value="{{ old("items.$index.estimasi_notes", $item->estimasi_notes) }}" class="form-control form-control-lg required" name="items[0][estimasi_notes]">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label class="form-label">No. PO Customer</label>
+                                            <input type="text"  value="{{ old("items.$index.no_po_customer", $item->no_po) }}" readonly class="form-control form-control-lg required" name="items[0][no_po_customer]">
+                                        </div>
+                                    </div>
+                                      <div class="col-md-3 col-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Harga Barang</label>
+                                            <input type="text" class="form-control form-control-lg required" readonly  value="{{ old("items.$index.estimasi_harga", $item->estimasi_harga) }}" name="items[0][estimasi_harga]">
+                                        </div>
+                                    </div>
+                                     <div class="col-md-3 col-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Estimasi Kg</label>
+                                            <input type="text" class="form-control form-control-lg required" readonly  value="{{ old("items.$index.estimasi_kg", $item->estimasi_kg) }}" name="items[0][estimasi_kg]">
+                                        </div>
+                                    </div>
+                                  
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Nama Barang</label>
+                                            <input type="text" class="form-control form-control-lg required" name="items[0][nama_barang]"  readonly  value="{{ old("items.$index.nama_barang", $item->nama_barang) }}">
+                                        </div>
+                                    </div>
+                                     <div class="col-md-3 col-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Asuransi 2%</label>
+                                            <input type="text" readonly class="form-control form-control-lg required" name="items[0][asuransi]" readonly  value="{{ old("items.$index.asuransi", $item->asuransi) }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Jasa Kg</label>
+                                            <input type="text" class="form-control form-control-lg required" name="items[0][jasakg]" readonly  value="{{ old("items.$index.jasakg", $item->jasakg) }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        
+                                         <div class="form-group">
+                                            <label class="form-label">Link Barang</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control form-control-lg required link-input"
+                                                    name="items[0][link_barang]" readonly  value="{{ old("items.$index.link_barang", $item->link_barang) }}">
+                                                <button class="btn btn-outline-primary btn-open-link"
+                                                    type="button">
+                                                    <i class="bi bi-box-arrow-up-right"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Diskon</label>
+                                            <input type="text" class="form-control form-control-lg required"  readonly  value="{{ old("items.$index.diskon", $item->diskon) }}" name="items[0][diskon]">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Total Estimasi</label>
+                                            <input type="text" class="form-control form-control-lg required" name="items[0][total_estimasi]" readonly  value="{{ old("items.$index.total_estimasi", $item->total_estimasi) }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 col-12 text-end">
+                                        <button type="button" class="btn btn-danger btn-sm remove-item-btn">
+                                            <i class="bi bi-trash"></i> Remove Item
+                                        </button>
+                                    </div>
+                                </div>
+
+                                    {{-- <div class="item-row row mb-3 border p-3 rounded">
                                         <div class="col-md-12 col-12">
                                             <div class="form-group">
                                                 <label class="form-label">Customer Order</label>
@@ -148,7 +298,7 @@
                                                 <i class="bi bi-trash"></i> Remove Item
                                             </button>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     @endforeach
                                 </div>
                             </div>
@@ -190,6 +340,11 @@ $(document).ready(function() {
     let choicesInstances = [];
     let itemCounter = $('#items-container .item-row').length;
 
+     $('.item-row').each(function() {
+        const index = $(this).find('.customer-order-select').data('index');
+        initItemEvents(index);
+        initializeChoices($(this).find('.customer-order-select')[0], index);
+    });
     // Fungsi untuk mengisi data customer
     $('#customer').change(function() {
         const customerId = $(this).val();
@@ -237,11 +392,14 @@ $(document).ready(function() {
         if (!order) return;
 
         const itemRow = $(`.item-row [data-index="${index}"]`).closest('.item-row');
-        itemRow.find(`input[name="items[${index}][no_po_customer]"]`).val(order.customProperties.po_number);
-        itemRow.find(`input[name="items[${index}][nama_barang]"]`).val(order.customProperties.nama_barang);
-        itemRow.find(`input[name="items[${index}][link_barang]"]`).val(order.customProperties.link_product);
-        itemRow.find(`input[name="items[${index}][estimasi_kg]"]`).val(order.customProperties.jumlah_berat);
-        itemRow.find(`input[name="items[${index}][estimasi_harga]"]`).val(order.customProperties.total_harga);
+        itemRow.find(`input[name="items[${index}][no_po_customer]"]`).val(order.customProperties.po_number || '');
+        itemRow.find(`input[name="items[${index}][nama_barang]"]`).val(order.customProperties.nama_barang || '');
+        itemRow.find(`input[name="items[${index}][link_barang]"]`).val(order.customProperties.link_product || '');
+        itemRow.find(`input[name="items[${index}][estimasi_notes]"]`).val(order.customProperties.jumlah_berat || '');
+        itemRow.find(`input[name="items[${index}][estimasi_harga]"]`).val(order.customProperties.total_harga || '');
+        itemRow.find(`input[name="items[${index}][quantity]"]`).val('1');
+
+        calculateTotals(index);
     }
 
     // Inisialisasi Choices untuk select yang sudah ada
@@ -258,44 +416,85 @@ $(document).ready(function() {
 
     // Tambah item baru
     $('#add-item-btn').click(function() {
-        const newItemHtml = `
+          const newItemHtml = `
             <div class="item-row row mb-3 border p-3 rounded">
-                <div class="col-md-12 col-12">
+                <div class="col-md-6 col-12">
                     <div class="form-group">
                         <label class="form-label">Customer Order</label>
-                        <select class="form-select customer-order-select" name="items[${itemCounter}][customer_order_id]" data-index="${itemCounter}">
+                        <select class="form-select customer-order-select required" name="items[${itemCounter}][customer_order_id]" data-index="${itemCounter}">
                             <option value="">Select Customer Order</option>
                         </select>
+                    </div>
+                </div>
+                <div class="col-md-3 col-12">
+                    <div class="form-group">
+                        <label class="form-label">Quantity</label>
+                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][quantity]">
+                    </div>
+                </div>
+                <div class="col-md-3 col-12">
+                    <div class="form-group">
+                        <label class="form-label">Notes</label>
+                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][estimasi_notes]">
                     </div>
                 </div>
                 <div class="col-md-6 col-12">
                     <div class="form-group">
                         <label class="form-label">No. PO Customer</label>
-                        <input type="text" class="form-control" name="items[${itemCounter}][no_po_customer]" readonly>
+                        <input type="text" readonly class="form-control form-control-lg required" name="items[${itemCounter}][no_po_customer]">
                     </div>
                 </div>
-                <div class="col-md-6 col-12">
+                <div class="col-md-3 col-12">
                     <div class="form-group">
-                        <label class="form-label">Nama Barang</label>
-                        <input type="text" class="form-control" name="items[${itemCounter}][nama_barang]">
-                    </div>
-                </div>
-                <div class="col-md-6 col-12">
-                    <div class="form-group">
-                        <label class="form-label">Link Barang</label>
-                        <input type="text" class="form-control" name="items[${itemCounter}][link_barang]">
+                        <label class="form-label">Harga Barang</label>
+                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][estimasi_harga]">
                     </div>
                 </div>
                 <div class="col-md-3 col-12">
                     <div class="form-group">
                         <label class="form-label">Estimasi Kg</label>
-                        <input type="text" class="form-control" name="items[${itemCounter}][estimasi_kg]">
+                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][estimasi_kg]">
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="form-group">
+                        <label class="form-label">Nama Barang</label>
+                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][nama_barang]">
                     </div>
                 </div>
                 <div class="col-md-3 col-12">
                     <div class="form-group">
-                        <label class="form-label">Estimasi Harga</label>
-                        <input type="text" class="form-control" name="items[${itemCounter}][estimasi_harga]">
+                        <label class="form-label">Asuransi 2%</label>
+                        <input type="text" readonly class="form-control form-control-lg required" name="items[${itemCounter}][asuransi]">
+                    </div>
+                </div>
+                <div class="col-md-3 col-12">
+                    <div class="form-group">
+                        <label class="form-label">Jasa Kg</label>
+                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][jasakg]">
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="form-group">
+                        <label class="form-label">Link Barang</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-lg required link-input" name="items[${itemCounter}][link_barang]">
+                            <button class="btn btn-outline-primary btn-open-link" type="button">
+                                <i class="bi bi-box-arrow-up-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-12">
+                    <div class="form-group">
+                        <label class="form-label">Diskon</label>
+                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][diskon]">
+                    </div>
+                </div>
+                <div class="col-md-3 col-12">
+                    <div class="form-group">
+                        <label class="form-label">Total Estimasi</label>
+                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][total_estimasi]">
                     </div>
                 </div>
                 <div class="col-md-12 col-12 text-end">
@@ -309,6 +508,8 @@ $(document).ready(function() {
         $('#items-container').append(newItemHtml);
         const newSelect = $(`[data-index="${itemCounter}"]`)[0];
         initializeChoices(newSelect, itemCounter);
+        initItemEvents(itemCounter);
+
         itemCounter++;
     });
 
@@ -354,6 +555,49 @@ $(document).ready(function() {
         });
         
         itemCounter = newIndex;
+    }
+
+     function calculateTotals(index) {
+        const itemRow = $(`[data-index="${index}"]`).closest('.item-row');
+        const harga = parseFloat(itemRow.find('input[name="items[' + index + '][estimasi_harga]"]').val().replace(/[^\d.]/g, '')) || 0;
+        const jasa = parseFloat(itemRow.find('input[name="items[' + index + '][jasakg]"]').val().replace(/[^\d.]/g, '')) || 0;
+        const diskon = parseFloat(itemRow.find('input[name="items[' + index + '][diskon]"]').val().replace(/[^\d.]/g, '')) || 0;
+        const qty = parseFloat(itemRow.find('input[name="items[' + index + '][quantity]"]').val().replace(/[^\d.]/g, '')) || 0;
+        
+        // Hitung asuransi (2% dari harga)
+        const asuransi = harga * 0.02;
+        itemRow.find('input[name="items[' + index + '][asuransi]"]').val(asuransi);
+        
+        // Hitung total
+        const total = (harga * qty) + jasa + asuransi - diskon;
+        itemRow.find('input[name="items[' + index + '][total_estimasi]"]').val(total);
+    }
+
+     function initItemEvents(index) {
+        const itemRow = $(`[data-index="${index}"]`).closest('.item-row');
+        
+        // Hitung total ketika harga, jasa, atau diskon berubah
+        itemRow.find('input[name="items[' + index + '][estimasi_harga]"], input[name="items[' + index + '][jasakg]"], input[name="items[' + index + '][diskon]"],  input[name="items[' + index + '][quantity]"]').on('input', function() {
+            calculateTotals(index);
+        });
+        
+        // Link button enable/disable
+        itemRow.find('.link-input').on('input', function() {
+            const btn = $(this).closest('.input-group').find('.btn-open-link');
+            btn.prop('disabled', !$(this).val().trim());
+        });
+        
+        // Open link button
+        itemRow.find('.btn-open-link').click(function() {
+            const url = $(this).closest('.input-group').find('.link-input').val().trim();
+            if (url) {
+                let finalUrl = url;
+                if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                    finalUrl = 'https://' + url;
+                }
+                window.open(finalUrl, '_blank');
+            }
+        });
     }
 });
 </script>

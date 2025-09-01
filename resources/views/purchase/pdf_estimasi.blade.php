@@ -138,7 +138,7 @@
             @foreach($purchaseOrderDetail as $item)
             <tr>
                 <td>{{ $item->nama_barang }}</td>  <!-- Product Name -->
-                <td>1</td>  <!-- Quantity (using estimasi_kg) -->
+                <td>{{ $item->qty }}</td>  <!-- Quantity (using estimasi_kg) -->
                 <td>{{ number_format($item->estimasi_harga ?? 0, 0, ',', '.') }}</td>  
             </tr>
             @endforeach
