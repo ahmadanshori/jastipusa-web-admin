@@ -5,36 +5,36 @@ $("#show-table").DataTable({
     language: {
         paginate: {
             previous: "<i class='fas fa-angle-left'>",
-            next: "<i class='fas fa-angle-right'>"
-        }
+            next: "<i class='fas fa-angle-right'>",
+        },
     },
     order: [[0, "desc"]],
     ajax: {
         url: "/ajax-purchase",
         dataType: "json",
-        type: "GET"
+        type: "GET",
     },
     columns: [
         {
-            data: "id"
+            data: "no_invoice",
         },
         {
-            data: "nama"
+            data: "nama",
         },
         {
-            data: "no_telp"
-        },
-         {
-            data: "alamat"
+            data: "no_telp",
         },
         {
-            data: "email"
+            data: "alamat",
+        },
+        {
+            data: "email",
         },
         {
             data: "actions",
             name: "actions",
             orderable: false,
-            searchable: false
-        }
-    ]
+            searchable: false,
+        },
+    ],
 });

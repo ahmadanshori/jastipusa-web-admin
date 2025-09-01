@@ -68,7 +68,7 @@
                                                 <select class="choices form-select" disabled id="customer"
                                                     name="no_telp">
                                                     <option value="">{{$purchase->no_telp}} - {{$purchase->nama}}</option>
-                                                    
+
                                                 </select>
                                             </div>
                                         </div>
@@ -193,7 +193,7 @@
                                                             value="{{ old("items.$index.estimasi_kg", $item->estimasi_kg) }}">
                                                     </div>
                                                 </div>
-                                               
+
                                                 <div class="col-md-6 col-12">
                                                     <div class="form-group">
                                                         <label class="form-label">Nama Barang</label>
@@ -250,8 +250,8 @@
                                                             value="{{ old("items.$index.total_estimasi", $item->total_estimasi) }}">
                                                     </div>
                                                 </div>
-                                                 
-                                                
+
+
                                                 <div class="col-md-12">
                                                     <div class="accordion mb-3" id="accordionExample{{ $index }}">
                                                         <!-- Estimasi -->
@@ -283,7 +283,7 @@
                                                                         </button>
 
                                                                         @else
-                                                                            <button type="button" 
+                                                                            <button type="button"
                                                                                 class="btn btn-outline-primary btn-sm edit-estimasi-btn ms-2" disabled style="background: #ccc">
                                                                                 <i class="bi bi-pencil"></i> Edit
                                                                             </button>
@@ -350,7 +350,7 @@
                                                                                         class="text-muted d-block">Status
                                                                                         Follow Up</small>
                                                                                     <span
-                                                                                        class="badge 
+                                                                                        class="badge
                                                                                             @if ($item->status_follow_up == 'Scheduled') bg-warning text-dark
                                                                                             @elseif($item->status_follow_up == 'Followed') bg-success
                                                                                             @elseif($item->status_follow_up == 'Unfollowed') bg-danger
@@ -528,7 +528,7 @@
                                                                                         class="text-muted d-block">Status
                                                                                         Purchase</small>
                                                                                     <span
-                                                                                        class="badge 
+                                                                                        class="badge
                                                                                         @if ($item->status_purchase == 'Wait For Order') bg-warning text-dark
                                                                                         @elseif($item->status_purchase == 'Ordered') bg-success
                                                                                         @elseif($item->status_purchase == 'Failed Order') bg-danger
@@ -584,7 +584,7 @@
                                                                             </div>
                                                                         </div>
 
-                                                                       
+
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -722,7 +722,7 @@
                                                                                         class="text-muted d-block">Status
                                                                                         Barang</small>
                                                                                     <span
-                                                                                        class="badge 
+                                                                                        class="badge
                                                                                             @if ($item->status_barang_sampai == 'Waiting Courier') bg-warning text-dark
                                                                                             @elseif($item->status_barang_sampai == 'Received') bg-success
                                                                                             @elseif($item->status_barang_sampai == 'Cancel') bg-danger
@@ -789,7 +789,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                               
+
 
                                                 </div>
                                                 <div class="col-md-12 col-12 text-end">
@@ -874,8 +874,8 @@
                                     name="bukti_transfer">
 
                                     <div id="foto-preview" class="mt-3"></div>
-        
-                                    
+
+
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
@@ -918,14 +918,14 @@
 
                                 <select class="choices form-select" id="payment_method" name="payment_method">
                                     <option value="">Press to select</option>
-                                  
+
                                         @foreach($paymentMethod as $paymentMethods)
                                         <option value="{{ $paymentMethods->name. '-' . $paymentMethods->number }}" >{{$paymentMethods->name. '-' . $paymentMethods->number}}</option>
                                         @endforeach
                                 </select>
                             </div>
                         </div>
-                       
+
                         <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <label class="form-label">Status Purchase</label>
@@ -937,42 +937,42 @@
                             <div class="form-group mandatory">
                                 <label class="form-label">Harga Barang</label>
                                 <input type="number" id="harga_barang" class="form-control form-control-lg"
-                                    name="harga_barang">
+                                    name="harga_barang" placeholder="$">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="form-group mandatory">
                                 <label class="form-label">Pajak</label>
                                 <input type="number" id="pajak" class="form-control form-control-lg"
-                                    name="pajak">
+                                    name="pajak" placeholder="$">
                             </div>
                         </div>
                          <div class="col-md-6 col-12">
                             <div class="form-group mandatory">
                                 <label class="form-label">Diskon</label>
                                 <input type="number" id="diskon" class="form-control form-control-lg"
-                                    name="diskon">
+                                    name="diskon" placeholder="$">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="form-group mandatory">
                                 <label class="form-label">Pengiriman</label>
                                 <input type="number" id="pengiriman" class="form-control form-control-lg"
-                                    name="pengiriman">
+                                    name="pengiriman" placeholder="$">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="form-group mandatory">
                                 <label class="form-label">Notes</label>
                                 <input type="text" id="notes" class="form-control form-control-lg"
-                                    name="notes">
+                                    name="notes" placeholder="Color, Size, Etc">
                             </div>
                         </div>
                           <div class="col-md-6 col-12">
                             <div class="form-group mandatory">
                                 <label class="form-label">Total Purchase</label>
                                 <input type="number" id="total_purchase" class="form-control form-control-lg"
-                                    name="total_purchase">
+                                    name="total_purchase" placeholder="$">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
@@ -993,7 +993,7 @@
                                 <input type="hidden" id="hpp_status" name="hpp_mutasi_check" value="false">
                             </div>
                         </div>
-                        
+
                     </div>
                 </form>
             </div>
@@ -1024,28 +1024,28 @@
                             <div class="form-group mandatory">
                                 <label class="form-label">Fix Weight (kg)</label>
                                 <input type="number" step="0.01" id="fix_weight"
-                                    class="form-control form-control-lg" name="fix_weight">
+                                    class="form-control form-control-lg" name="fix_weight" placeholder="Kg">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="form-group mandatory">
                                 <label class="form-label">Fix Price</label>
                                 <input type="number" id="fix_price" class="form-control form-control-lg"
-                                    name="fix_price">
+                                    name="fix_price" placeholder="Rp">
                             </div>
                         </div>
                           <div class="col-md-6 col-12">
                             <div class="form-group mandatory">
                                 <label class="form-label">Nomor Box</label>
                                 <input type="text" id="nomor_box" class="form-control form-control-lg"
-                                    name="nomor_box">
+                                    name="nomor_box" placeholder="T2110">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="form-group mandatory">
                                 <label class="form-label">SKU</label>
                                 <input type="text" id="sku" class="form-control form-control-lg"
-                                    name="sku">
+                                    name="sku" placeholder="Nomor SKU">
                             </div>
                         </div>
 
@@ -1053,14 +1053,14 @@
                             <div class="form-group mandatory">
                                 <label class="form-label">Kurir Lokal</label>
                                 <input type="number" id="kurir_lokal" class="form-control form-control-lg"
-                                    name="kurir_lokal">
+                                    name="kurir_lokal" placeholder="JNE, JNT, Gojek, Grab">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="form-group mandatory">
                                 <label class="form-label">Pelunasan</label>
                                 <input type="number" id="pelunasan" class="form-control form-control-lg"
-                                    name="pelunasan">
+                                    name="pelunasan" placeholder="Rp">
                             </div>
                         </div>
 
@@ -1069,7 +1069,7 @@
                                 <label class="form-label">Status Barang Sampai</label>
                                 <select class="form-select" id="status_barang_sampai"
                                     name="status_barang_sampai">
-                                   
+
                                 </select>
                             </div>
                         </div>
@@ -1140,10 +1140,10 @@
                  const fotoBukti = $(this).data('foto-bukti');
                 const fotoBuktiField = $('#bukti_transfer');
                 const fotoPreview = $('#foto-preview');
-                
+
                 // Reset file input
                 fotoBuktiField.val('');
-                
+
                 if (fotoBukti) {
                     // Jika sudah ada foto bukti, tampilkan preview image yang bisa diklik
                     fotoPreview.html(`
@@ -1153,7 +1153,7 @@
                         <i class="bi bi-eye"></i> Lihat Dokumen
                     </a>
                     `);
-                    
+
                     // Buat field tidak required karena sudah ada foto
                     fotoBuktiField.removeAttr('required');
                 } else {
@@ -1161,7 +1161,7 @@
                     fotoPreview.html('');
                     fotoBuktiField.attr('required', 'required');
                 }
-                
+
                var statusFollowUp = $(this).data('status-follow-up');
                 console.log('Nilai status follow up:', statusFollowUp);
 
@@ -1174,7 +1174,7 @@
                     if (selectElement.choices) {
                         selectElement.choices.destroy();
                     }
-                    
+
                     // Buat instance Choices baru dengan opsi yang benar
                     var choicesInstance = new Choices(selectElement, {
                         choices: [
@@ -1187,7 +1187,7 @@
                         shouldSort: false,
                         itemSelectText: ''
                     });
-                    
+
                     // Set nilai yang dipilih
                     choicesInstance.setChoiceByValue(statusFollowUp);
                 } else {
@@ -1200,7 +1200,7 @@
                     ');
                     $('#status_follow_up').trigger('change');
                 }
-                
+
                 // Set toggle dengan cara yang benar
                 const isChecked = $(this).data('mutasi-check');
 
@@ -1220,10 +1220,10 @@
                     console.log('Toggle status:', isChecked ? 'Checked' : 'Unchecked');
                 });
 
-               
+
                  // Add event listeners
                     $('#jumlah_transfer, #dp, #full_payment').on('input', calculateKurangBayar);
-                    
+
                     // Calculate initial value
                     calculateKurangBayar();
                 // Tampilkan modal
@@ -1440,7 +1440,7 @@
                 }
 
                 // Set toggle
-              
+
 
                  const isChecked = $(this).data('hpp-mutasi-check');
 
@@ -1460,7 +1460,7 @@
                         console.log('Toggle status:', isChecked ? 'Checked' : 'Unchecked');
                     });
                 // Inisialisasi Choices untuk select
-              
+
                 var statusFollowUp = $(this).data('status-purchase');
                 console.log('Nilai status follow up:', statusFollowUp);
 
@@ -1473,7 +1473,7 @@
                     if (selectElement.choices) {
                         selectElement.choices.destroy();
                     }
-                    
+
 
                     // Buat instance Choices baru dengan opsi yang benar
                     var choicesInstance = new Choices(selectElement, {
@@ -1487,7 +1487,7 @@
                         shouldSort: false,
                         itemSelectText: ''
                     });
-                    
+
                     // Set nilai yang dipilih
                     choicesInstance.setChoiceByValue(statusFollowUp);
                 } else {
@@ -1754,7 +1754,7 @@
                         shouldSort: false,
                         itemSelectText: ''
                     });
-                    
+
                     // Set nilai yang dipilih
                     choicesInstance.setChoiceByValue(statusFollowUp);
                 } else {
@@ -2008,30 +2008,30 @@
             const jumlahTransfer = parseFloat($('#jumlah_transfer').val()) || 0;
             const dp = parseFloat($('#dp').val()) || 0;
             const fullPayment = parseFloat($('#full_payment').val()) || 0;
-            
+
             let kurangBayar = 0;
             let fullPay = 0;
             let dpPay = 0;
-            
+
             // Kondisi 1: Jika ada DP dan full payment masih 0/kosong
             if (dp > 0 && fullPayment === 0) {
                 kurangBayar = jumlahTransfer - dp;
                 fullPay = 0;
             $('#full_payment').val(fullPay);
-            } 
+            }
             // Kondisi 2: Jika full payment terisi
             else if (fullPayment > 0) {
                 kurangBayar = fullPayment - jumlahTransfer;
                 dpPay = 0;
                   $('#dp').val(dpPay);
             }
-            
+
             $('#kurang_bayar').val(kurangBayar);
-          
-            
+
+
             // Update styling
             $('#kurang_bayar').removeClass('is-valid is-invalid is-warning');
-            
+
             if (kurangBayar > 0) {
                 $('#kurang_bayar').addClass('is-invalid');
             } else if (kurangBayar < 0) {
@@ -2044,7 +2044,7 @@
                 }
             }
         }
-        
-       
+
+
     </script>
 @endsection
