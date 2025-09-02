@@ -43,6 +43,15 @@
         </a>
     </li>
     @endif
+
+      @if (App\Models\User::checkRole('master_admin'))
+    <li class="sidebar-item {{ (request()->is('exchange*')) ? 'active' : '' }}">
+        <a href="{{ route('exchange.index') }}" class='sidebar-link'>
+            <i class="bi bi-currency-dollar"></i>
+            <span>Exchange</span>
+        </a>
+    </li>
+    @endif
  
 
    

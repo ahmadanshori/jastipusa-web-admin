@@ -94,6 +94,9 @@
                                                 <label for="phone" class="form-label">Phone</label>
                                                 <input type="text" id="phone" class="form-control form-control-lg"
                                                     value="{{ old('phone', $purchase->no_telp) }}" readonly name="phone">
+
+                                                     <input type="hidden" id="exchange"
+                                                    value="{{ $exchange }}" readonly name="exchange">
                                             </div>
                                         </div>
 
@@ -826,35 +829,35 @@
                     <input type="hidden" id="item_id" name="item_id">
                     <div class="row">
                         <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">Nama Rek Transfer</label>
                                 <input type="text" id="nama_rek" class="form-control form-control-lg"
                                     name="nama_rek">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">Jumlah Transfer</label>
                                 <input type="number" id="jumlah_transfer" readonly class="form-control form-control-lg"
                                     name="jumlah_transfer">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">DP</label>
                                 <input type="number" id="dp" class="form-control form-control-lg"
                                     name="dp">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">Full Payment</label>
                                 <input type="number" id="full_payment" class="form-control form-control-lg"
                                     name="full_payment">
                             </div>
                         </div>
                          <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">Kurang Bayar</label>
                                 <input type="number" id="kurang_bayar" class="form-control form-control-lg"
                                     name="kurang_bayar">
@@ -868,7 +871,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">Foto Bukti Transfer</label>
                                 <input type="file" id="bukti_transfer" class="form-control form-control-lg"
                                     name="bukti_transfer">
@@ -879,7 +882,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">Mutasi Check</label>
                                 <br>
                                 <input id="modal_btn_status" type="checkbox" data-onstyle="success" data-toggle="toggle"
@@ -913,7 +916,7 @@
                     <input type="hidden" id="hpp_item_id" name="item_id">
                     <div class="row">
                         <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">Payment Method</label>
 
                                 <select class="choices form-select" id="payment_method" name="payment_method">
@@ -934,49 +937,52 @@
                             </div>
                         </div>
                          <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">Harga Barang</label>
                                 <input type="number" id="harga_barang" class="form-control form-control-lg"
                                     name="harga_barang" placeholder="$">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">Pajak</label>
                                 <input type="number" id="pajak" class="form-control form-control-lg"
                                     name="pajak" placeholder="$">
                             </div>
                         </div>
                          <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">Diskon</label>
                                 <input type="number" id="diskon" class="form-control form-control-lg"
                                     name="diskon" placeholder="$">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">Pengiriman</label>
                                 <input type="number" id="pengiriman" class="form-control form-control-lg"
                                     name="pengiriman" placeholder="$">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">Notes</label>
                                 <input type="text" id="notes" class="form-control form-control-lg"
                                     name="notes" placeholder="Color, Size, Etc">
                             </div>
                         </div>
                           <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">Total Purchase</label>
-                                <input type="number" id="total_purchase" class="form-control form-control-lg"
+                                <input type="number" id="total_purchase" readonly class="form-control form-control-lg"
                                     name="total_purchase" placeholder="$">
+                                      <span id="show_total_purchase" class="invalid-feedback" style="display: block">
+                                      
+                                      </span>
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">Foto Bukti Pembelian</label>
                                 <input type="file" id="bukti_pembelian" class="form-control form-control-lg"
                                     name="bukti_pembelian">
@@ -984,7 +990,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">Mutasi Check</label>
                                 <br>
                                 <input id="hpp_btn_status" type="checkbox" data-onstyle="info" data-toggle="toggle"
@@ -1021,28 +1027,28 @@
                     <input type="hidden" id="operasional_item_id" name="item_id">
                     <div class="row">
                         <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">Fix Weight (kg)</label>
                                 <input type="number" step="0.01" id="fix_weight"
                                     class="form-control form-control-lg" name="fix_weight" placeholder="Kg">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">Fix Price</label>
                                 <input type="number" id="fix_price" class="form-control form-control-lg"
                                     name="fix_price" placeholder="Rp">
                             </div>
                         </div>
                           <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">Nomor Box</label>
                                 <input type="text" id="nomor_box" class="form-control form-control-lg"
                                     name="nomor_box" placeholder="T2110">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">SKU</label>
                                 <input type="text" id="sku" class="form-control form-control-lg"
                                     name="sku" placeholder="Nomor SKU">
@@ -1050,14 +1056,14 @@
                         </div>
 
                           <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">Kurir Lokal</label>
                                 <input type="number" id="kurir_lokal" class="form-control form-control-lg"
                                     name="kurir_lokal" placeholder="JNE, JNT, Gojek, Grab">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">Pelunasan</label>
                                 <input type="number" id="pelunasan" class="form-control form-control-lg"
                                     name="pelunasan" placeholder="Rp">
@@ -1074,7 +1080,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">Status On Check</label>
                                 <br>
                                 <input id="wh_usa_btn_status" type="checkbox" data-onstyle="info"
@@ -1084,7 +1090,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">WH USA</label>
                                 <input type="file" id="wh_usa" class="form-control form-control-lg"
                                     name="wh_usa">
@@ -1092,7 +1098,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
-                            <div class="form-group mandatory">
+                            <div class="form-group">
                                 <label class="form-label">WH Indo</label>
                                 <input type="file" id="wh_indonesia" class="form-control form-control-lg"
                                     name="wh_indonesia">
@@ -1413,6 +1419,13 @@
                 $('#hpp_status').val($(this).prop('checked'));
             });
 
+             $('#harga_barang, #pajak, #diskon, #pengiriman').on('input', hitungTotalPurchase);
+
+            // Fungsi untuk mereset form
+            $('#resetBtn').click(function() {
+                $('#harga_barang, #pajak, #diskon, #pengiriman').val(0);
+                hitungTotalPurchase();
+            });
             $(document).on('click', '.edit-hpp-btn', function() {
                 const itemId = $(this).data('item-id');
 
@@ -1427,6 +1440,7 @@
                 $('#pengiriman').val($(this).data('pengiriman'));
                 $('#harga_barang').val($(this).data('harga-hpp'));
 
+                   hitungTotalPurchase();
                 // Tampilkan preview bukti pembelian jika ada
                 const buktiPembelianPath = $(this).data('bukti-pembelian');
                 const previewDiv = $('#bukti_pembelian_preview');
@@ -2045,6 +2059,28 @@
             }
         }
 
+        function hitungTotalPurchase() {
+            // Ambil nilai dari input
+            const hargaBarang = parseFloat($('#harga_barang').val()) || 0;
+            const pajak = parseFloat($('#pajak').val()) || 0;
+            const diskon = parseFloat($('#diskon').val()) || 0;
+            const pengiriman = parseFloat($('#pengiriman').val()) || 0;
+            const exchange = parseFloat($('#exchange').val()) || 0;
+
+            
+            // Hitung total
+            const total = hargaBarang + pajak + pengiriman - diskon;
+            
+            // Tampilkan hasil (pastikan tidak negatif)
+            $('#total_purchase').val(total >= 0 ? total : 0);
+            const showTotal = parseFloat(total * exchange);
+            const formattedTotal = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(showTotal);
+            $('#show_total_purchase').html(formattedTotal)
+        }
 
     </script>
 @endsection

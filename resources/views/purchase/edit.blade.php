@@ -75,7 +75,7 @@
                                 </div>
 
                                 <div class="col-md-6 col-12">
-                                    <div class="form-group mandatory">
+                                    <div class="form-group">
                                         <label for="name" class="form-label">Name</label>
                                         <input type="text" id="name" class="form-control form-control-lg required"  value="{{ (isset($purchase->nama)? $purchase->nama:old('nama')) }}"  name="nama">
                                     </div>
@@ -87,7 +87,7 @@
                                 </div>
 
                                 <div class="col-md-6 col-12">
-                                    <div class="form-group mandatory">
+                                    <div class="form-group">
                                         <label for="email" class="form-label">Email</label>
                                         <input type="text" id="email" class="form-control form-control-lg required"  value="{{ (isset($purchase->email)? $purchase->email:old('email')) }}"  name="email">
                                     </div>
@@ -99,7 +99,7 @@
                                 </div>
 
                                  <div class="col-md-6 col-12">
-                                    <div class="form-group mandatory">
+                                    <div class="form-group">
                                         <label for="no_telp" class="form-label">Phone</label>
                                         <input type="text" id="no_telp" class="form-control form-control-lg required"  value="{{ (isset($purchase->no_telp)? $purchase->no_telp:old('no_telp')) }}"  name="phone">
                                     </div>
@@ -111,7 +111,7 @@
                                 </div>
 
                                   <div class="col-md-6 col-12">
-                                    <div class="form-group mandatory">
+                                    <div class="form-group">
                                         <label for="name" class="form-label">Alamat</label>
                                         <input type="text" id="address" class="form-control form-control-lg required"  value="{{ (isset($purchase->alamat)? $purchase->alamat:old('alamat')) }}"  name="alamat">
                                     </div>

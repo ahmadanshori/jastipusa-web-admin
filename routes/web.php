@@ -7,6 +7,7 @@ use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\PaymentMethodController;
+use App\Http\Controllers\ExchangeController;
 use App\Http\Middleware\CheckRole;
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -16,6 +17,8 @@ Auth::routes();
 
 Route::resource('user', UserController::class)->middleware(['auth',CheckRole::class]);
 Route::resource('payment-method', PaymentMethodController::class)->middleware(['auth',CheckRole::class]);
+Route::resource('exchange', ExchangeController::class)->middleware(['auth',CheckRole::class]);
+
 Route::put('/change-password/{id}', [UserController::class, 'changePassword'])->middleware('auth')->name('user.change-password');
 
 Route::resource('purchase', PurchaseOrderController::class)->middleware('auth');
@@ -28,6 +31,7 @@ Route::get('/ajax-purchase',[PurchaseOrderController::class, 'ajax']);
 Route::get('/ajax-customer',[CustomerController::class, 'ajax']);
 Route::get('/ajax-order-detail/{id}',[CustomerController::class, 'ajaxOrderDetail']);
 Route::get('/ajax-payment-method',[PaymentMethodController::class, 'ajax']);
+Route::get('/ajax-exchange',[ExchangeController::class, 'ajax']);
 Route::get('/ajax-tracking',[TrackingController::class, 'ajax']);
 
 Route::resource('tracking', TrackingController::class)->middleware('auth');

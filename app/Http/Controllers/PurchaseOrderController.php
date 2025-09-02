@@ -8,6 +8,7 @@ use App\Models\CustomerOrder;
 use App\Models\Customer;
 use App\Models\User;
 use App\Models\PaymentMethod;
+use App\Models\Exchange;
 use Auth;
 use Illuminate\Http\Request;
 use DataTables;
@@ -24,7 +25,7 @@ class PurchaseOrderController extends Controller
 
 {
 
-    public function __construct(PurchaseOrder $purchaseOrder, CustomerOrder $customerOrder, Customer $customer, PaymentMethod $paymentMethod, User $user, PurchaseOrderDetail $purchaseOrderDetail)
+    public function __construct(PurchaseOrder $purchaseOrder, CustomerOrder $customerOrder, Customer $customer, PaymentMethod $paymentMethod, User $user, PurchaseOrderDetail $purchaseOrderDetail, Exchange $exchange)
     {
         $this->purchase = $purchaseOrder;
         $this->customerOrder = $customerOrder;
@@ -32,6 +33,8 @@ class PurchaseOrderController extends Controller
         $this->user = $user;
         $this->purchaseOrderDetail = $purchaseOrderDetail;
         $this->paymentMethod = $paymentMethod;
+        $this->exchange = $exchange;
+
 
     }
 
@@ -253,10 +256,17 @@ class PurchaseOrderController extends Controller
              $this->purchaseOrderDetail->create([
                 'purchase_order_id' => $purchase->id,
                 'no_po' => $item['no_po_customer'],
+
                 'nama_barang' => $item['nama_barang'],
                 'link_barang' => $item['link_barang'],
                 'estimasi_kg' => $item['estimasi_kg'],
-                'estimasi_harga' => $item['estimasi_harga']
+                'estimasi_harga' => $item['estimasi_harga'],
+                'qty' => $item['quantity'],
+                'estimasi_diskon' => $item['diskon'],
+                'total_estimasi' => $item['total_estimasi'],
+                'asuransi' => $item['asuransi'],
+                'jasa' => $item['jasakg'],
+                'estimasi_notes' => $item['estimasi_notes'],
             ]);
         }
 
@@ -422,6 +432,8 @@ public function updateOprasional(Request $request, $id)
      $customers = $this->customer->get();
      $paymentMethod = $this->paymentMethod->get();
 
+    $exchange = $this->exchange->first()->value;
+
     // Ambil data customer order untuk dropdown items
     $customerOrders = $this->customerOrder->whereNotNull('po_number')
         ->get()
@@ -448,6 +460,7 @@ public function updateOprasional(Request $request, $id)
                 'customerOrdersJson' => $customerOrders->toJson(),
                 'total_items' => $purchaseOrderDetail->count(),
                 'total_estimasi_harga' => $purchaseOrderDetail->sum('estimasi_harga'),
+                'exchange' => $exchange
             ]);
     }else{
          return view('purchase.show', [
@@ -459,6 +472,7 @@ public function updateOprasional(Request $request, $id)
         'customerOrdersJson' => $customerOrders->toJson(),
          'total_items' => $purchaseOrderDetail->count(),
         'total_estimasi_harga' => $purchaseOrderDetail->sum('estimasi_harga'),
+        'exchange' => $exchange
     ]);
     }
    
