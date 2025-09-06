@@ -21,7 +21,7 @@ class ExchangeController extends Controller
 
     protected $rulesValidation = [
         'name' => 'required',
-        'number' => 'required'
+        'value' => 'required'
     ];
 
     public function index()
@@ -39,14 +39,14 @@ class ExchangeController extends Controller
 
         $validation = Validator::make($request->all(), [
             'name' => 'required|max:255',
-            'number' => 'required',
+            'value' => 'required',
         ]);
 
 
         if ($validation->passes()) {
             $data = [
                 'name' => $request->name,
-                'number' => $request->number,
+                'value' => $request->value,
             ];
             $this->exchange->create($data);
 

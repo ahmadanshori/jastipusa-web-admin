@@ -8,7 +8,7 @@ $("#show-table").DataTable({
             next: "<i class='fas fa-angle-right'>",
         },
     },
-    order: [[0, "desc"]],
+    order: [],
     ajax: {
         url: "/ajax-purchase",
         dataType: "json",

@@ -2,7 +2,7 @@
     <li class="sidebar-item {{ (request()->is('/')) || ( request()->is('home*')) ? 'active' : '' }}">
         <a href="/" class='sidebar-link'>
             <i class="bi bi-grid-fill"></i>
-            <span>Dashboard Analytic</span>
+            <span>Dashboard Analytics</span>
         </a>
     </li>
 
@@ -52,10 +52,10 @@
         </a>
     </li>
     @endif
- 
 
-   
 
-    
-    
+
+
+
+
 </ul>

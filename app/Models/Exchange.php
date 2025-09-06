@@ -13,7 +13,7 @@ class Exchange extends Model
 
 
     protected $fillable = [
-        'id', 'name', 'value'
+        'id', 'name', 'value', 'number'
     ];
-  
+
 }

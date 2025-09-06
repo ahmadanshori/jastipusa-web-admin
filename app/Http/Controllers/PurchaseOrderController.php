@@ -343,7 +343,7 @@ public function updateHpp(Request $request, $id)
         'total_purchase' => $request->total_purchase,
         'status_purchase' => $request->status_purchase,
         'notes' => $request->notes,
-        'hpp_mutasi_check' => $request->hpp_mutasi_check,	
+        'hpp_mutasi_check' => $request->hpp_mutasi_check,
         'pajak' => $request->pajak,
         'diskon' => $request->diskon,
         'pengiriman' => $request->pengiriman,
@@ -475,7 +475,7 @@ public function updateOprasional(Request $request, $id)
         'exchange' => $exchange
     ]);
     }
-   
+
 }
 
 //     public function update(Request $request, $id)
@@ -524,6 +524,11 @@ public function updateOprasional(Request $request, $id)
     public function ajax(Request $request)
     {
         $purchaseOrders = $this->purchase->latest()->get();
+        // $purchaseOrders = $this->purchase
+        //     ->leftJoin('purchase_order_detail', 'purchase_order.id', '=', 'purchase_order_detail.purchase_order_id')
+        //     ->select('purchase_order.*')
+        //     ->orderBy('purchase_order_detail.updated_at', 'desc')
+        //     ->get();
 
         return Datatables::of($purchaseOrders)
             ->addColumn('actions', function ($purchaseOrders) {

@@ -21,7 +21,7 @@
     <section class="section">
         <div class="col-md-12 col-12">
             <div class="card">
-               
+
                 <div class="card-content">
                     <div class="card-body">
                         @if(isset($exchange))
@@ -31,7 +31,7 @@
                         @else
                         <form class="form" method="POST" action="{{route('exchange.store')}}" enctype="multipart/form-data">
                         @endif
-                        
+
                         @csrf
                             <div class="row">
                                 <div class="col-md-6 col-12">
@@ -48,8 +48,8 @@
 
                                 <div class="col-md-6 col-12">
                                     <div class="form-group mandatory">
-                                        <label for="number" class="form-label">Value</label>
-                                        <input type="number" id="number" class="form-control form-control-lg"  value="{{ (isset($exchange->value)? $exchange->value:old('value')) }}"  name="value">
+                                        <label for="value" class="form-label">Value</label>
+                                        <input type="number" id="value" class="form-control form-control-lg"  value="{{ (isset($exchange->value)? $exchange->value:old('value')) }}"  name="value">
                                     </div>
                                     @error('value')
                                     <div class="invalid-feedback">
@@ -57,8 +57,8 @@
                                     </div>
                                     @enderror
                                 </div>
-                                
-                        
+
+
                             <div class="row">
                                 <div class="col-12 d-flex justify-content-end">
                                     <button type="submit" class="btn btn-primary me-1 mb-1">Submit</button>
