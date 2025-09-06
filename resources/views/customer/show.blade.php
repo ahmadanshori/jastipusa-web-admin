@@ -8,8 +8,8 @@
                     <h3>Customer</h3>
                     <p class="text-subtitle text-muted">{{ isset($customer) ? 'Detail Customer' : 'Add Customer' }}</p>
                 </div>
-              
-                
+
+
 
             </div>
         </div>
@@ -59,7 +59,7 @@
                         </div>
                     </div>
 
-                
+
 
                     <!-- Timeline Section -->
                     <div class="card">
@@ -79,7 +79,7 @@
                                           <th>DP</th>
                                       </tr>
                                   </thead>
-                                
+
                               </table>
                               </div>
                         </div>
@@ -110,5 +110,6 @@
     </div>
 @endsection
 @section('scripts')
+<script src="{{ asset('js/utils/currency.js') }}"></script>
 <script src="{{ asset('js/index/order-detail.js') }}"></script>
 @endsection

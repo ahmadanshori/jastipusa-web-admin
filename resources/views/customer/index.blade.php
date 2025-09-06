@@ -17,7 +17,7 @@
     </div>
     <section class="section">
         <div class="card">
-            
+
             <div class="card-body">
                 <div class="table-responsive">
                 <table class="table" id="show-table">
@@ -27,12 +27,12 @@
                             <th>Phone</th>
                             <th>Address</th>
                             <th>Email</th>
-                            <th>Jumlah</th>
-                            <th>Total</th>
+                            <th>Total Order</th>
+                            <th>Total Belanja</th>
                             <th>Action</th>
                         </tr>
                     </thead>
-                  
+
                 </table>
                 </div>
             </div>
@@ -42,5 +42,6 @@
 
 @endsection
 @section('scripts')
+<script src="{{ asset('js/utils/currency.js') }}"></script>
 <script src="{{ asset('js/index/customer.js') }}"></script>
 @endsection

@@ -130,7 +130,7 @@
                                             </span>
                                             <span class="badge bg-light-success">
                                                 <i class="bi bi-cash-stack"></i>
-                                                {{ number_format($total_estimasi_harga, 0, ',', '.') }}
+                                                <span data-currency="{{ $total_estimasi_harga }}"></span>
                                             </span>
                                         </div>
                                     </div>
@@ -317,7 +317,7 @@
                                                                                         class="text-muted d-block">Jumlah
                                                                                         Transfer</small>
                                                                                     <div class="fw-semibold">
-                                                                                        {{ number_format($item->jumlah_transfer ?? 0, 0, ',', '.') }}
+                                                                                        <span data-currency="{{ $item->jumlah_transfer ?? 0 }}"></span>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -330,7 +330,7 @@
                                                                                     <small
                                                                                         class="text-muted d-block">DP</small>
                                                                                     <div class="fw-semibold">
-                                                                                        {{ number_format($item->dp ?? 0, 0, ',', '.') }}
+                                                                                        <span data-currency="{{ $item->dp ?? 0 }}"></span>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -339,7 +339,7 @@
                                                                                     <small class="text-muted d-block">Full
                                                                                         Payment</small>
                                                                                     <div class="fw-semibold">
-                                                                                        {{ number_format($item->fullpayment ?? 0, 0, ',', '.') }}
+                                                                                        <span data-currency="{{ $item->fullpayment ?? 0 }}"></span>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -382,7 +382,7 @@
                                                                                     <small
                                                                                         class="text-muted d-block">Kurang Bayar</small>
                                                                                     <div class="fw-semibold">
-                                                                                        {{ number_format($item->kurang_bayar ?? 0, 0, ',', '.') }}
+                                                                                        <span data-currency="{{ $item->kurang_bayar ?? 0 }}"></span>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -472,8 +472,8 @@
                                                                                 <div class="mb-2">
                                                                                     <small class="text-muted d-block">Total
                                                                                         Purchase</small>
-                                                                                    <div class="fw-semibold">
-                                                                                        {{ number_format($item->total_purchase ?? 0, 0, ',', '.') }}
+                                                                                    <div class="fw-semibold currency-format" data-amount="{{ $item->total_purchase ?? 0 }}">
+                                                                                        {{ $item->total_purchase ?? 0 }}
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -485,8 +485,8 @@
                                                                                     <small
                                                                                         class="text-muted d-block">Pajak
                                                                                         </small>
-                                                                                   <div class="fw-semibold">
-                                                                                        {{ number_format($item->pajak ?? 0, 0, ',', '.') }}
+                                                                                   <div class="fw-semibold currency-format" data-amount="{{ $item->pajak ?? 0 }}">
+                                                                                        {{ $item->pajak ?? 0 }}
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -494,8 +494,8 @@
                                                                                 <div class="mb-2">
                                                                                     <small class="text-muted d-block">Pengiriman
                                                                                         </small>
-                                                                                    <div class="fw-semibold">
-                                                                                        {{ number_format($item->pengiriman ?? 0, 0, ',', '.') }}
+                                                                                    <div class="fw-semibold currency-format" data-amount="{{ $item->pengiriman ?? 0 }}">
+                                                                                        {{ $item->pengiriman ?? 0 }}
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -507,8 +507,8 @@
                                                                                     <small
                                                                                         class="text-muted d-block">Harga barang
                                                                                         </small>
-                                                                                   <div class="fw-semibold">
-                                                                                        {{ number_format($item->harga_hpp ?? 0, 0, ',', '.') }}
+                                                                                   <div class="fw-semibold currency-format" data-amount="{{ $item->harga_hpp ?? 0 }}">
+                                                                                        {{ $item->harga_hpp ?? 0 }}
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -516,8 +516,8 @@
                                                                                 <div class="mb-2">
                                                                                     <small class="text-muted d-block">Diskon
                                                                                         </small>
-                                                                                    <div class="fw-semibold">
-                                                                                        {{ number_format($item->diskon ?? 0, 0, ',', '.') }}
+                                                                                    <div class="fw-semibold currency-format" data-amount="{{ $item->diskon ?? 0 }}">
+                                                                                        {{ $item->diskon ?? 0 }}
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -645,7 +645,11 @@
                                                                                     <small class="text-muted d-block">Fix
                                                                                         Price</small>
                                                                                     <div class="fw-semibold">
-                                                                                        {{ $item->fix_price ? number_format($item->fix_price, 0, ',', '.') : '-' }}
+                                                                                        @if($item->fix_price)
+                                                                                            <span data-currency="{{ $item->fix_price }}"></span>
+                                                                                        @else
+                                                                                            -
+                                                                                        @endif
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -668,7 +672,11 @@
                                                                                     <small class="text-muted d-block">Kurir Lokal
                                                                                         </small>
                                                                                     <div class="fw-semibold">
-                                                                                        {{ $item->kurir_lokal ? number_format($item->kurir_lokal, 0, ',', '.') : '-' }}
+                                                                                        @if($item->kurir_lokal)
+                                                                                            <span data-currency="{{ $item->kurir_lokal }}"></span>
+                                                                                        @else
+                                                                                            -
+                                                                                        @endif
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -677,7 +685,11 @@
                                                                                 <div class="mb-2">
                                                                                     <small class="text-muted d-block">Pelunasan</small>
                                                                                     <div class="fw-semibold">
-                                                                                        {{ $item->pelunasan ? number_format($item->pelunasan, 0, ',', '.') : '-' }}
+                                                                                        @if($item->pelunasan)
+                                                                                            <span data-currency="{{ $item->pelunasan }}"></span>
+                                                                                        @else
+                                                                                            -
+                                                                                        @endif
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -832,35 +844,35 @@
                             <div class="form-group">
                                 <label class="form-label">Nama Rek Transfer</label>
                                 <input type="text" id="nama_rek" class="form-control form-control-lg"
-                                    name="nama_rek">
+                                    name="nama_rek" placeholder="jasmin">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <label class="form-label">Jumlah Transfer</label>
                                 <input type="number" id="jumlah_transfer" readonly class="form-control form-control-lg"
-                                    name="jumlah_transfer">
+                                    name="jumlah_transfer" placeholder="Rp">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <label class="form-label">DP</label>
                                 <input type="number" id="dp" class="form-control form-control-lg"
-                                    name="dp">
+                                    name="dp" placeholder="Rp">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <label class="form-label">Full Payment</label>
                                 <input type="number" id="full_payment" class="form-control form-control-lg"
-                                    name="full_payment">
+                                    name="full_payment" placeholder="Rp">
                             </div>
                         </div>
                          <div class="col-md-6 col-12">
                             <div class="form-group">
                                 <label class="form-label">Kurang Bayar</label>
                                 <input type="number" id="kurang_bayar" class="form-control form-control-lg"
-                                    name="kurang_bayar">
+                                    name="kurang_bayar" placeholder="Rp">
                             </div>
                         </div>
                         <div class="col-md-6 col-12">
@@ -977,7 +989,7 @@
                                 <input type="number" id="total_purchase" readonly class="form-control form-control-lg"
                                     name="total_purchase" placeholder="$">
                                       <span id="show_total_purchase" class="invalid-feedback" style="display: block">
-                                      
+
                                       </span>
                             </div>
                         </div>
@@ -1120,8 +1132,16 @@
 @endsection
 
 @section('scripts')
+    <script src="{{ asset('js/utils/currency.js') }}"></script>
     <script>
         $(document).ready(function() {
+            // Format all currency elements using formatDollar
+            $('.currency-format').each(function() {
+                const amount = $(this).data('amount');
+                const formatted = formatDollar(amount, { showDecimals: false });
+                $(this).text(formatted);
+            });
+
             // Inisialisasi data customer order dari controller
             const estimasiModal = new bootstrap.Modal(document.getElementById('estimasiModal'));
             initLinkButtons();
@@ -2067,10 +2087,10 @@
             const pengiriman = parseFloat($('#pengiriman').val()) || 0;
             const exchange = parseFloat($('#exchange').val()) || 0;
 
-            
+
             // Hitung total
             const total = hargaBarang + pajak + pengiriman - diskon;
-            
+
             // Tampilkan hasil (pastikan tidak negatif)
             $('#total_purchase').val(total >= 0 ? total : 0);
             const showTotal = parseFloat(total * exchange);
@@ -2081,6 +2101,20 @@
             }).format(showTotal);
             $('#show_total_purchase').html(formattedTotal)
         }
+
+        // Function to format all currency elements on page load
+        function formatAllCurrencyElements() {
+            // Format elements with data-currency attribute
+            $('[data-currency]').each(function() {
+                const $element = $(this);
+                const value = $element.data('currency');
+                const formatted = CurrencyUtils.formatRupiah(value);
+                $element.text(formatted);
+            });
+        }
+
+        // Format currency elements when page loads
+        formatAllCurrencyElements();
 
     </script>
 @endsection

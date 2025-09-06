@@ -23,13 +23,13 @@
         flex-grow: 1;
         text-align: left;
     }
-    
+
     /* Menghilangkan background saat aktif */
     .accordion-button:not(.collapsed) {
         background-color: transparent;
         box-shadow: none;
     }
-    
+
     /* Style untuk tombol edit */
     .edit-estimasi-btn {
         white-space: nowrap;
@@ -38,13 +38,13 @@
         border-radius: 4px;
         z-index: 1; /* Agar tombol tetap di atas */
     }
-    
+
     /* Hover effect untuk tombol edit */
     .edit-estimasi-btn:hover {
         background-color: #0d6efd;
         color: white;
     }
-    
+
     .edit-hpp-btn {
         white-space: nowrap;
         padding: 0.25rem 0.5rem;
@@ -52,13 +52,13 @@
         border-radius: 4px;
         z-index: 1; /* Agar tombol tetap di atas */
     }
-    
+
     /* Hover effect untuk tombol edit */
     .edit-hpp-btn:hover {
         background-color: #0d6efd;
         color: white;
     }
-    
+
      .edit-operasional-btn {
         white-space: nowrap;
         padding: 0.25rem 0.5rem;
@@ -66,7 +66,7 @@
         border-radius: 4px;
         z-index: 1; /* Agar tombol tetap di atas */
     }
-    
+
     /* Hover effect untuk tombol edit */
     .edit-operasional-btn:hover {
         background-color: #0d6efd;
@@ -83,7 +83,7 @@
     border-radius: 8px;
     color: #607081 !important
 }
-    
+
 .estimasi-simple .badge {
     font-weight: 500;
     padding: 5px 10px;
@@ -101,7 +101,7 @@
     border-radius: 8px;
     color: #607081 !important
 }
-    
+
 .hpp-simple .badge {
     font-weight: 500;
     padding: 5px 10px;
@@ -119,7 +119,7 @@
     border-radius: 8px;
     color: #607081 !important
 }
-   
+
 .operasional-simple .badge {
     font-weight: 500;
     padding: 5px 10px;
@@ -225,7 +225,7 @@
 }
 
 
-.modal-confirm {		
+.modal-confirm {
 	color: #636363;
 	width: 400px;
 }
@@ -237,7 +237,7 @@
 	font-size: 14px;
 }
 .modal-confirm .modal-header {
-	border-bottom: none;   
+	border-bottom: none;
 	position: relative;
 }
 .modal-confirm h4 {
@@ -256,14 +256,14 @@
 }
 .modal-confirm .modal-footer {
 	border: none;
-	text-align: center;		
+	text-align: center;
 	border-radius: 5px;
 	font-size: 13px;
 	padding: 10px 15px 25px;
 }
 .modal-confirm .modal-footer a {
 	color: #999;
-}		
+}
 .modal-confirm .icon-box {
 
 	margin: 0 auto;
@@ -1184,4 +1184,29 @@ div[role=tablist]{
     .order-last{
         text-align: left;
     }
+}
+
+/* Currency formatting utilities */
+.currency {
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+    font-weight: 600;
+    color: #059669;
+}
+
+.currency-large {
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+
+.currency-small {
+    font-size: 0.875rem;
+}
+
+.text-currency {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.text-center .currency {
+    display: inline-block;
 }

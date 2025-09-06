@@ -1,4 +1,4 @@
- const customerId = window.location.pathname.split('/').pop();
+const customerId = window.location.pathname.split("/").pop();
 $("#show-table").DataTable({
     pageLength: 25,
     processing: true,
@@ -6,33 +6,42 @@ $("#show-table").DataTable({
     language: {
         paginate: {
             previous: "<i class='fas fa-angle-left'>",
-            next: "<i class='fas fa-angle-right'>"
-        }
+            next: "<i class='fas fa-angle-right'>",
+        },
     },
     order: [[0, "desc"]],
     ajax: {
         url: `/ajax-order-detail/${customerId}`,
         dataType: "json",
-        type: "GET"
+        type: "GET",
     },
     columns: [
         {
-            data: "no_po"
+            data: "no_po",
         },
         {
-            data: "nama_barang"
+            data: "nama_barang",
         },
         {
-            data: "estimasi_kg"
-        },
-         {
-            data: "estimasi_harga"
+            data: "estimasi_kg",
         },
         {
-            data: "jumlah_transfer"
+            data: "estimasi_harga",
+            render: function (data, type, row) {
+                return CurrencyUtils.formatRupiahForDataTable(data, type, row);
+            },
         },
-         {
-            data: "dp"
+        {
+            data: "jumlah_transfer",
+            render: function (data, type, row) {
+                return CurrencyUtils.formatRupiahForDataTable(data, type, row);
+            },
         },
-    ]
+        {
+            data: "dp",
+            render: function (data, type, row) {
+                return CurrencyUtils.formatRupiahForDataTable(data, type, row);
+            },
+        },
+    ],
 });
