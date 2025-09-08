@@ -29,30 +29,36 @@
                     <div class="col-md-12 col-12">
                         <div class="card">
                             <div class="card-header bg-light">
-                                {{-- @if ($purchaseOrderDetail->every->mutasi_check && App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_chat_input')) --}}
-                                <a href="{{ route('purchase-estimasi.pdf', [$purchase->id]) }}" target="_blank" class="btn icon btn-info"> <i class="fas fa-file-pdf me-2"></i>
-                                Invoice Estimasi
+                                {{-- @if ($purchaseOrderDetail->every->mutasi_check &&
+                                App\Models\User::checkRole('master_admin') ||
+                                App\Models\User::checkRole('admin_chat_input')) --}}
+                                <a href="{{ route('purchase-estimasi.pdf', [$purchase->id]) }}" target="_blank"
+                                    class="btn icon btn-info"> <i class="fas fa-file-pdf me-2"></i>
+                                    Invoice Estimasi
                                 </a>
                                 {{-- @endif --}}
                                 @if ($purchaseOrderDetail->every->hpp_mutasi_check && App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_purchase'))
 
-                                 <a href="{{ route('purchase-hpp.pdf', [$purchase->id]) }}" target="_blank" class="btn icon btn-warning"> <i class="fas fa-file-pdf me-2"></i>
-                                Invoice HPP
-                                </a>
+                                    <a href="{{ route('purchase-hpp.pdf', [$purchase->id]) }}" target="_blank"
+                                        class="btn icon btn-warning"> <i class="fas fa-file-pdf me-2"></i>
+                                        Invoice HPP
+                                    </a>
                                 @endif
 
                                 @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('operasional'))
 
-                                <a href="{{ route('purchase-operasional.pdf', [$purchase->id]) }}" target="_blank" class="btn icon btn-danger"> <i class="fas fa-file-pdf me-2"></i>
-                                Invoice Oprasional
-                                </a>
+                                    <a href="{{ route('purchase-operasional.pdf', [$purchase->id]) }}" target="_blank"
+                                        class="btn icon btn-danger"> <i class="fas fa-file-pdf me-2"></i>
+                                        Invoice Oprasional
+                                    </a>
                                 @endif
 
                                 @if (App\Models\User::checkRole('master_admin'))
 
-                                 <a href="{{ route('purchase-received.pdf', [$purchase->id]) }}" target="_blank" class="btn icon btn-primary"> <i class="fas fa-file-pdf me-2"></i>
-                                Invoice Received
-                                </a>
+                                    <a href="{{ route('purchase-received.pdf', [$purchase->id]) }}" target="_blank"
+                                        class="btn icon btn-primary"> <i class="fas fa-file-pdf me-2"></i>
+                                        Invoice Received
+                                    </a>
                                 @endif
 
                             </div>
@@ -65,8 +71,7 @@
                                         <div class="col-md-6 col-12">
                                             <div class="form-group">
                                                 <label for="customer" class="form-label">Customer</label>
-                                                <select class="choices form-select" disabled id="customer"
-                                                    name="no_telp">
+                                                <select class="choices form-select" disabled id="customer" name="no_telp">
                                                     <option value="">{{$purchase->no_telp}} - {{$purchase->nama}}</option>
 
                                                 </select>
@@ -89,14 +94,14 @@
                                             </div>
                                         </div>
 
-                                          <div class="col-md-6 col-12">
+                                        <div class="col-md-6 col-12">
                                             <div class="form-group">
                                                 <label for="phone" class="form-label">Phone</label>
                                                 <input type="text" id="phone" class="form-control form-control-lg"
                                                     value="{{ old('phone', $purchase->no_telp) }}" readonly name="phone">
 
-                                                     <input type="hidden" id="exchange"
-                                                    value="{{ $exchange }}" readonly name="exchange">
+                                                <input type="hidden" id="exchange" value="{{ $exchange }}" readonly
+                                                    name="exchange">
                                             </div>
                                         </div>
 
@@ -104,8 +109,7 @@
                                             <div class="form-group">
                                                 <label for="address" class="form-label">Address</label>
                                                 <input type="text" id="address" class="form-control form-control-lg"
-                                                    value="{{ old('alamat', $purchase->alamat) }}" readonly
-                                                    name="alamat">
+                                                    value="{{ old('alamat', $purchase->alamat) }}" readonly name="alamat">
                                             </div>
                                         </div>
                                     </div>
@@ -146,11 +150,11 @@
                                                         <label class="form-label">Customer Order</label>
                                                         <select class="choices form-select customer-order-select" disabled
                                                             name="items[{{ $index }}][customer_order_id]"
-                                                            data-index="{{ $index }}"
-                                                            data-selected="{{ $item->no_po }}">
+                                                            data-index="{{ $index }}" data-selected="{{ $item->no_po }}">
                                                             <option value="">Select Customer Order</option>
                                                             <option value="{{ $item->no_po }}" selected>
-                                                                {{ $item->no_po }}</option>
+                                                                {{ $item->no_po }}
+                                                            </option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -180,7 +184,7 @@
                                                             readonly>
                                                     </div>
                                                 </div>
-                                                  <div class="col-md-3 col-12">
+                                                <div class="col-md-3 col-12">
                                                     <div class="form-group">
                                                         <label class="form-label">Harga Barang</label>
                                                         <input type="text" class="form-control form-control-lg"
@@ -227,11 +231,12 @@
                                                     <div class="form-group">
                                                         <label class="form-label">Link Barang</label>
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control form-control-lg link-input" readonly
+                                                            <input type="text" class="form-control form-control-lg link-input"
+                                                                readonly
                                                                 value="{{ old("items.$index.link_barang", $item->link_barang) }}"
                                                                 name="items[{{ $index }}][link_barang]">
-                                                            <button class="btn btn-outline-primary btn-open-link"
-                                                                type="button" disabled>
+                                                            <button class="btn btn-outline-primary btn-open-link" type="button"
+                                                                disabled>
                                                                 <i class="bi bi-box-arrow-up-right"></i>
                                                             </button>
                                                         </div>
@@ -259,8 +264,7 @@
                                                     <div class="accordion mb-3" id="accordionExample{{ $index }}">
                                                         <!-- Estimasi -->
                                                         <div class="accordion-item">
-                                                            <h2 class="accordion-header"
-                                                                id="headingEstimasi{{ $index }}">
+                                                            <h2 class="accordion-header" id="headingEstimasi{{ $index }}">
                                                                 <div
                                                                     class="d-flex justify-content-between align-items-center w-100 pe-2">
                                                                     <button class="accordion-button flex-grow-1 text-start"
@@ -270,7 +274,7 @@
                                                                         aria-controls="collapseEstimasi{{ $index }}">
                                                                         Estimasi
                                                                     </button>
-                                                                       @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_chat_input') || App\Models\User::checkRole('accounting'))
+                                                                    @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_chat_input') || App\Models\User::checkRole('accounting'))
                                                                         <button type="button"
                                                                             class="btn btn-outline-primary btn-sm edit-estimasi-btn ms-2"
                                                                             data-item-id="{{ $item->id }}"
@@ -285,12 +289,13 @@
                                                                             <i class="bi bi-pencil"></i> Edit
                                                                         </button>
 
-                                                                        @else
-                                                                            <button type="button"
-                                                                                class="btn btn-outline-primary btn-sm edit-estimasi-btn ms-2" disabled style="background: #ccc">
-                                                                                <i class="bi bi-pencil"></i> Edit
-                                                                            </button>
-                                                                        @endif
+                                                                    @else
+                                                                        <button type="button"
+                                                                            class="btn btn-outline-primary btn-sm edit-estimasi-btn ms-2"
+                                                                            disabled style="background: #ccc">
+                                                                            <i class="bi bi-pencil"></i> Edit
+                                                                        </button>
+                                                                    @endif
                                                                 </div>
                                                             </h2>
                                                             <div id="collapseEstimasi{{ $index }}"
@@ -299,7 +304,7 @@
                                                                 data-bs-parent="#accordionExample{{ $index }}">
                                                                 <div class="accordion-body">
                                                                     <!-- Konten Estimasi -->
-                                                                        <div class="estimasi-simple">
+                                                                    <div class="estimasi-simple">
                                                                         <!-- Baris Pertama -->
                                                                         <div class="row mb-3 border-bottom pb-2">
                                                                             <div class="col-md-6">
@@ -313,11 +318,11 @@
                                                                             </div>
                                                                             <div class="col-md-6">
                                                                                 <div class="mb-2">
-                                                                                    <small
-                                                                                        class="text-muted d-block">Jumlah
+                                                                                    <small class="text-muted d-block">Jumlah
                                                                                         Transfer</small>
                                                                                     <div class="fw-semibold">
-                                                                                        <span data-currency="{{ $item->jumlah_transfer ?? 0 }}"></span>
+                                                                                        <span
+                                                                                            data-currency="{{ $item->jumlah_transfer ?? 0 }}"></span>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -327,10 +332,10 @@
                                                                         <div class="row mb-3 border-bottom pb-2">
                                                                             <div class="col-md-6">
                                                                                 <div class="mb-2">
-                                                                                    <small
-                                                                                        class="text-muted d-block">DP</small>
+                                                                                    <small class="text-muted d-block">DP</small>
                                                                                     <div class="fw-semibold">
-                                                                                        <span data-currency="{{ $item->dp ?? 0 }}"></span>
+                                                                                        <span
+                                                                                            data-currency="{{ $item->dp ?? 0 }}"></span>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -339,7 +344,8 @@
                                                                                     <small class="text-muted d-block">Full
                                                                                         Payment</small>
                                                                                     <div class="fw-semibold">
-                                                                                        <span data-currency="{{ $item->fullpayment ?? 0 }}"></span>
+                                                                                        <span
+                                                                                            data-currency="{{ $item->fullpayment ?? 0 }}"></span>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -349,23 +355,21 @@
                                                                         <div class="row mb-3 border-bottom pb-2">
                                                                             <div class="col-md-6">
                                                                                 <div class="mb-2">
-                                                                                    <small
-                                                                                        class="text-muted d-block">Status
+                                                                                    <small class="text-muted d-block">Status
                                                                                         Follow Up</small>
                                                                                     <span
                                                                                         class="badge
-                                                                                            @if ($item->status_follow_up == 'Scheduled') bg-warning text-dark
-                                                                                            @elseif($item->status_follow_up == 'Followed') bg-success
-                                                                                            @elseif($item->status_follow_up == 'Unfollowed') bg-danger
-                                                                                            @else bg-secondary @endif">
+                                                                                                                                                                    @if ($item->status_follow_up == 'Scheduled') bg-warning text-dark
+                                                                                                                                                                    @elseif($item->status_follow_up == 'Followed') bg-success
+                                                                                                                                                                    @elseif($item->status_follow_up == 'Unfollowed') bg-danger
+                                                                                                                                                                    @else bg-secondary @endif">
                                                                                         {{ $item->status_follow_up ?? 'Belum diisi' }}
                                                                                     </span>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-6">
                                                                                 <div class="mb-2">
-                                                                                    <small
-                                                                                        class="text-muted d-block">Mutasi
+                                                                                    <small class="text-muted d-block">Mutasi
                                                                                         Check</small>
                                                                                     <span
                                                                                         class="badge {{ $item->mutasi_check ? 'bg-success' : 'bg-secondary' }}">
@@ -376,13 +380,14 @@
                                                                         </div>
 
                                                                         <!-- Foto Bukti Transfer -->
-                                                                          <div class="row mb-3 border-bottom pb-2">
-                                                                             <div class="col-md-6">
+                                                                        <div class="row mb-3 border-bottom pb-2">
+                                                                            <div class="col-md-6">
                                                                                 <div class="mb-2">
-                                                                                    <small
-                                                                                        class="text-muted d-block">Kurang Bayar</small>
+                                                                                    <small class="text-muted d-block">Kurang
+                                                                                        Bayar</small>
                                                                                     <div class="fw-semibold">
-                                                                                        <span data-currency="{{ $item->kurang_bayar ?? 0 }}"></span>
+                                                                                        <span
+                                                                                            data-currency="{{ $item->kurang_bayar ?? 0 }}"></span>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -413,8 +418,7 @@
 
                                                         <!-- HPP -->
                                                         <div class="accordion-item">
-                                                            <h2 class="accordion-header"
-                                                                id="headingHpp{{ $index }}">
+                                                            <h2 class="accordion-header" id="headingHpp{{ $index }}">
                                                                 <div
                                                                     class="d-flex justify-content-between align-items-center w-100 pe-2">
                                                                     <button
@@ -425,27 +429,28 @@
                                                                         aria-controls="collapseHpp{{ $index }}">
                                                                         HPP
                                                                     </button>
-                                                                     @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_purchase'))
-                                                                    <button type="button"
-                                                                        class="btn btn-outline-primary btn-sm edit-hpp-btn ms-2"
-                                                                        data-item-id="{{ $item->id }}"
-                                                                        data-payment-method="{{ $item->payment_method }}"
-                                                                        data-total-purchase="{{ $item->total_purchase }}"
-                                                                        data-status-purchase="{{ $item->status_purchase }}"
-                                                                        data-notes="{{ $item->notes }}"
-                                                                        data-bukti-pembelian="{{ $item->bukti_pembelian_path }}"
-                                                                        data-harga-hpp="{{ $item->harga_hpp }}"
-                                                                        data-diskon="{{ $item->diskon }}"
-                                                                        data-pajak="{{ $item->pajak }}"
-                                                                        data-pengiriman="{{ $item->pengiriman }}"
-                                                                        data-hpp-mutasi-check="{{ $item->hpp_mutasi_check  }}">
-                                                                        <i class="bi bi-pencil"></i> Edit
-                                                                    </button>
+                                                                    @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_purchase'))
+                                                                        <button type="button"
+                                                                            class="btn btn-outline-primary btn-sm edit-hpp-btn ms-2"
+                                                                            data-item-id="{{ $item->id }}"
+                                                                            data-payment-method="{{ $item->payment_method }}"
+                                                                            data-total-purchase="{{ $item->total_purchase }}"
+                                                                            data-status-purchase="{{ $item->status_purchase }}"
+                                                                            data-notes="{{ $item->notes }}"
+                                                                            data-bukti-pembelian="{{ $item->bukti_pembelian_path }}"
+                                                                            data-harga-hpp="{{ $item->harga_hpp }}"
+                                                                            data-diskon="{{ $item->diskon }}"
+                                                                            data-pajak="{{ $item->pajak }}"
+                                                                            data-pengiriman="{{ $item->pengiriman }}"
+                                                                            data-hpp-mutasi-check="{{ $item->hpp_mutasi_check  }}">
+                                                                            <i class="bi bi-pencil"></i> Edit
+                                                                        </button>
                                                                     @else
-                                                                    <button type="button"
-                                                                        class="btn btn-outline-primary btn-sm edit-hpp-btn ms-2" disabled style="background: #ccc">
-                                                                        <i class="bi bi-pencil"></i> Edit
-                                                                    </button>
+                                                                        <button type="button"
+                                                                            class="btn btn-outline-primary btn-sm edit-hpp-btn ms-2"
+                                                                            disabled style="background: #ccc">
+                                                                            <i class="bi bi-pencil"></i> Edit
+                                                                        </button>
                                                                     @endif
                                                                 </div>
                                                             </h2>
@@ -455,13 +460,12 @@
                                                                 data-bs-parent="#accordionExample{{ $index }}">
                                                                 <div class="accordion-body">
                                                                     <!-- Konten HPP -->
-                                                                         <div class="hpp-simple">
+                                                                    <div class="hpp-simple">
                                                                         <!-- Baris Pertama -->
                                                                         <div class="row mb-3 border-bottom pb-2">
                                                                             <div class="col-md-6">
                                                                                 <div class="mb-2">
-                                                                                    <small
-                                                                                        class="text-muted d-block">Payment
+                                                                                    <small class="text-muted d-block">Payment
                                                                                         Method</small>
                                                                                     <div class="fw-semibold">
                                                                                         {{ $item->payment_method ?? '-' }}
@@ -472,20 +476,21 @@
                                                                                 <div class="mb-2">
                                                                                     <small class="text-muted d-block">Total
                                                                                         Purchase</small>
-                                                                                    <div class="fw-semibold currency-format" data-amount="{{ $item->total_purchase ?? 0 }}">
+                                                                                    <div class="fw-semibold currency-format"
+                                                                                        data-amount="{{ $item->total_purchase ?? 0 }}">
                                                                                         {{ $item->total_purchase ?? 0 }}
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
 
-                                                                         <div class="row mb-3 border-bottom pb-2">
+                                                                        <div class="row mb-3 border-bottom pb-2">
                                                                             <div class="col-md-6">
                                                                                 <div class="mb-2">
-                                                                                    <small
-                                                                                        class="text-muted d-block">Pajak
-                                                                                        </small>
-                                                                                   <div class="fw-semibold currency-format" data-amount="{{ $item->pajak ?? 0 }}">
+                                                                                    <small class="text-muted d-block">Pajak
+                                                                                    </small>
+                                                                                    <div class="fw-semibold currency-format"
+                                                                                        data-amount="{{ $item->pajak ?? 0 }}">
                                                                                         {{ $item->pajak ?? 0 }}
                                                                                     </div>
                                                                                 </div>
@@ -493,8 +498,9 @@
                                                                             <div class="col-md-6">
                                                                                 <div class="mb-2">
                                                                                     <small class="text-muted d-block">Pengiriman
-                                                                                        </small>
-                                                                                    <div class="fw-semibold currency-format" data-amount="{{ $item->pengiriman ?? 0 }}">
+                                                                                    </small>
+                                                                                    <div class="fw-semibold currency-format"
+                                                                                        data-amount="{{ $item->pengiriman ?? 0 }}">
                                                                                         {{ $item->pengiriman ?? 0 }}
                                                                                     </div>
                                                                                 </div>
@@ -504,10 +510,11 @@
                                                                         <div class="row mb-3 border-bottom pb-2">
                                                                             <div class="col-md-6">
                                                                                 <div class="mb-2">
-                                                                                    <small
-                                                                                        class="text-muted d-block">Harga barang
-                                                                                        </small>
-                                                                                   <div class="fw-semibold currency-format" data-amount="{{ $item->harga_hpp ?? 0 }}">
+                                                                                    <small class="text-muted d-block">Harga
+                                                                                        barang
+                                                                                    </small>
+                                                                                    <div class="fw-semibold currency-format"
+                                                                                        data-amount="{{ $item->harga_hpp ?? 0 }}">
                                                                                         {{ $item->harga_hpp ?? 0 }}
                                                                                     </div>
                                                                                 </div>
@@ -515,8 +522,9 @@
                                                                             <div class="col-md-6">
                                                                                 <div class="mb-2">
                                                                                     <small class="text-muted d-block">Diskon
-                                                                                        </small>
-                                                                                    <div class="fw-semibold currency-format" data-amount="{{ $item->diskon ?? 0 }}">
+                                                                                    </small>
+                                                                                    <div class="fw-semibold currency-format"
+                                                                                        data-amount="{{ $item->diskon ?? 0 }}">
                                                                                         {{ $item->diskon ?? 0 }}
                                                                                     </div>
                                                                                 </div>
@@ -527,23 +535,21 @@
                                                                         <div class="row mb-3 border-bottom pb-2">
                                                                             <div class="col-md-6">
                                                                                 <div class="mb-2">
-                                                                                    <small
-                                                                                        class="text-muted d-block">Status
+                                                                                    <small class="text-muted d-block">Status
                                                                                         Purchase</small>
                                                                                     <span
                                                                                         class="badge
-                                                                                        @if ($item->status_purchase == 'Wait For Order') bg-warning text-dark
-                                                                                        @elseif($item->status_purchase == 'Ordered') bg-success
-                                                                                        @elseif($item->status_purchase == 'Failed Order') bg-danger
-                                                                                        @else bg-secondary @endif">
+                                                                                                                                                                @if ($item->status_purchase == 'Wait For Order') bg-warning text-dark
+                                                                                                                                                                @elseif($item->status_purchase == 'Ordered') bg-success
+                                                                                                                                                                @elseif($item->status_purchase == 'Failed Order') bg-danger
+                                                                                                                                                                @else bg-secondary @endif">
                                                                                         {{ $item->status_purchase ?? 'Belum diisi' }}
                                                                                     </span>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-6">
                                                                                 <div class="mb-2">
-                                                                                    <small
-                                                                                        class="text-muted d-block">Mutasi
+                                                                                    <small class="text-muted d-block">Mutasi
                                                                                         Check</small>
                                                                                     <span
                                                                                         class="badge {{ $item->hpp_mutasi_check ? 'bg-success' : 'bg-secondary' }}">
@@ -556,7 +562,7 @@
                                                                         <!-- Baris Ketiga -->
                                                                         <div class="row mb-3">
                                                                             <div class="col-md-6">
- <!-- Foto Bukti Pembelian -->
+                                                                                <!-- Foto Bukti Pembelian -->
                                                                                 <div class="mb-3">
                                                                                     <small class="text-muted d-block">Foto Bukti
                                                                                         Pembelian</small>
@@ -582,7 +588,8 @@
                                                                                     <small
                                                                                         class="text-muted d-block">Notes</small>
                                                                                     <div class="fw-semibold">
-                                                                                        {{ $item->notes ?? '-' }}</div>
+                                                                                        {{ $item->notes ?? '-' }}
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -595,8 +602,7 @@
 
                                                         <!-- Operasional -->
                                                         <div class="accordion-item">
-                                                            <h2 class="accordion-header"
-                                                                id="headingOperasional{{ $index }}">
+                                                            <h2 class="accordion-header" id="headingOperasional{{ $index }}">
                                                                 <div
                                                                     class="d-flex justify-content-between align-items-center w-100 pe-2">
                                                                     <button
@@ -607,7 +613,7 @@
                                                                         aria-controls="collapseOperasional{{ $index }}">
                                                                         Operasional
                                                                     </button>
-                                                                     @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('operasional'))
+                                                                    @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('operasional'))
                                                                         <button type="button"
                                                                             class="btn btn-outline-primary btn-sm edit-operasional-btn ms-2"
                                                                             data-item-id="{{ $item->id }}"
@@ -625,7 +631,8 @@
                                                                         </button>
                                                                     @else
                                                                         <button type="button"
-                                                                            class="btn btn-outline-primary btn-sm edit-operasional-btn ms-2" disabled style="background: #ccc">
+                                                                            class="btn btn-outline-primary btn-sm edit-operasional-btn ms-2"
+                                                                            disabled style="background: #ccc">
                                                                             <i class="bi bi-pencil"></i> Edit
                                                                         </button>
                                                                     @endif
@@ -637,7 +644,7 @@
                                                                 data-bs-parent="#accordionExample{{ $index }}">
                                                                 <div class="accordion-body">
                                                                     <!-- Konten Operasional -->
-                                                                       <div class="operasional-simple">
+                                                                    <div class="operasional-simple">
                                                                         <!-- Baris Pertama -->
                                                                         <div class="row mb-3 border-bottom pb-2">
                                                                             <div class="col-md-6">
@@ -646,7 +653,8 @@
                                                                                         Price</small>
                                                                                     <div class="fw-semibold">
                                                                                         @if($item->fix_price)
-                                                                                            <span data-currency="{{ $item->fix_price }}"></span>
+                                                                                            <span
+                                                                                                data-currency="{{ $item->fix_price }}"></span>
                                                                                         @else
                                                                                             -
                                                                                         @endif
@@ -666,14 +674,16 @@
 
                                                                         </div>
 
-                                                                           <div class="row mb-3 border-bottom pb-2">
+                                                                        <div class="row mb-3 border-bottom pb-2">
                                                                             <div class="col-md-6">
                                                                                 <div class="mb-2">
-                                                                                    <small class="text-muted d-block">Kurir Lokal
-                                                                                        </small>
+                                                                                    <small class="text-muted d-block">Kurir
+                                                                                        Lokal
+                                                                                    </small>
                                                                                     <div class="fw-semibold">
                                                                                         @if($item->kurir_lokal)
-                                                                                            <span data-currency="{{ $item->kurir_lokal }}"></span>
+                                                                                            <span
+                                                                                                data-currency="{{ $item->kurir_lokal }}"></span>
                                                                                         @else
                                                                                             -
                                                                                         @endif
@@ -683,10 +693,12 @@
 
                                                                             <div class="col-md-6">
                                                                                 <div class="mb-2">
-                                                                                    <small class="text-muted d-block">Pelunasan</small>
+                                                                                    <small
+                                                                                        class="text-muted d-block">Pelunasan</small>
                                                                                     <div class="fw-semibold">
                                                                                         @if($item->pelunasan)
-                                                                                            <span data-currency="{{ $item->pelunasan }}"></span>
+                                                                                            <span
+                                                                                                data-currency="{{ $item->pelunasan }}"></span>
                                                                                         @else
                                                                                             -
                                                                                         @endif
@@ -696,11 +708,11 @@
 
                                                                         </div>
 
-                                                                         <div class="row mb-3 border-bottom pb-2">
+                                                                        <div class="row mb-3 border-bottom pb-2">
                                                                             <div class="col-md-6">
                                                                                 <div class="mb-2">
                                                                                     <small class="text-muted d-block">SKU
-                                                                                        </small>
+                                                                                    </small>
                                                                                     <div class="fw-semibold">
                                                                                         {{ $item->sku ? $item->sku : '-' }}
                                                                                     </div>
@@ -709,7 +721,8 @@
 
                                                                             <div class="col-md-6">
                                                                                 <div class="mb-2">
-                                                                                    <small class="text-muted d-block">Nomor Box</small>
+                                                                                    <small class="text-muted d-block">Nomor
+                                                                                        Box</small>
                                                                                     <div class="fw-semibold">
                                                                                         {{ $item->no_box ? $item->no_box : '-' }}
                                                                                     </div>
@@ -722,8 +735,7 @@
 
                                                                             <div class="col-md-6">
                                                                                 <div class="mb-2">
-                                                                                    <small
-                                                                                        class="text-muted d-block">Status
+                                                                                    <small class="text-muted d-block">Status
                                                                                         WH USA</small>
                                                                                     <span
                                                                                         class="badge {{ $item->status_on_check ? 'bg-success' : 'bg-secondary' }}">
@@ -733,15 +745,14 @@
                                                                             </div>
                                                                             <div class="col-md-6">
                                                                                 <div class="mb-2">
-                                                                                    <small
-                                                                                        class="text-muted d-block">Status
+                                                                                    <small class="text-muted d-block">Status
                                                                                         Barang</small>
                                                                                     <span
                                                                                         class="badge
-                                                                                            @if ($item->status_barang_sampai == 'Waiting Courier') bg-warning text-dark
-                                                                                            @elseif($item->status_barang_sampai == 'Received') bg-success
-                                                                                            @elseif($item->status_barang_sampai == 'Cancel') bg-danger
-                                                                                            @else bg-secondary @endif">
+                                                                                                                                                                    @if ($item->status_barang_sampai == 'Waiting Courier') bg-warning text-dark
+                                                                                                                                                                    @elseif($item->status_barang_sampai == 'Received') bg-success
+                                                                                                                                                                    @elseif($item->status_barang_sampai == 'Cancel') bg-danger
+                                                                                                                                                                    @else bg-secondary @endif">
                                                                                         {{ $item->status_barang_sampai ?? 'Belum diisi' }}
                                                                                     </span>
                                                                                 </div>
@@ -760,8 +771,7 @@
                                                                                             <i class="bi bi-eye"></i> Lihat
                                                                                             Dokumen
                                                                                         </a>
-                                                                                        <small
-                                                                                            class="text-muted d-block mt-1">
+                                                                                        <small class="text-muted d-block mt-1">
                                                                                             {{ strtoupper(pathinfo($item->wh_indo, PATHINFO_EXTENSION)) }}
                                                                                             •
                                                                                             {{ round(filesize(public_path('storage/' . $item->wh_indo)) / 1024) }}
@@ -783,8 +793,7 @@
                                                                                             <i class="bi bi-eye"></i> Lihat
                                                                                             Dokumen
                                                                                         </a>
-                                                                                        <small
-                                                                                            class="text-muted d-block mt-1">
+                                                                                        <small class="text-muted d-block mt-1">
                                                                                             {{ strtoupper(pathinfo($item->wh_usa, PATHINFO_EXTENSION)) }}
                                                                                             •
                                                                                             {{ round(filesize(public_path('storage/' . $item->wh_usa)) / 1024) }}
@@ -829,314 +838,335 @@
     </div>
 
     <div class="modal fade" id="estimasiModal" tabindex="-1" aria-labelledby="estimasiModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="estimasiModalLabel">Edit Estimasi Pembayaran</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="estimasiForm">
-                    @csrf
-                    <input type="hidden" id="item_id" name="item_id">
-                    <div class="row">
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Nama Rek Transfer</label>
-                                <input type="text" id="nama_rek" class="form-control form-control-lg"
-                                    name="nama_rek" placeholder="jasmin">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="estimasiModalLabel">Edit Estimasi Pembayaran</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="estimasiForm">
+                        @csrf
+                        <input type="hidden" id="item_id" name="item_id">
+                        <div class="row">
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Nama Rek Transfer</label>
+                                    <input type="text" id="nama_rek" class="form-control form-control-lg" name="nama_rek"
+                                        placeholder="jasmin">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Jumlah Transfer</label>
-                                <input type="number" id="jumlah_transfer" readonly class="form-control form-control-lg"
-                                    name="jumlah_transfer" placeholder="Rp">
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Jumlah Transfer</label>
+                                    <input type="number" id="jumlah_transfer" readonly class="form-control form-control-lg"
+                                        name="jumlah_transfer" placeholder="Rp">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">DP</label>
-                                <input type="number" id="dp" class="form-control form-control-lg"
-                                    name="dp" placeholder="Rp">
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">DP</label>
+                                    <input type="number" id="dp" class="form-control form-control-lg" name="dp"
+                                        placeholder="Rp">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Full Payment</label>
-                                <input type="number" id="full_payment" class="form-control form-control-lg"
-                                    name="full_payment" placeholder="Rp">
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Full Payment</label>
+                                    <input type="number" id="full_payment" class="form-control form-control-lg"
+                                        name="full_payment" placeholder="Rp">
+                                </div>
                             </div>
-                        </div>
-                         <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Kurang Bayar</label>
-                                <input type="number" id="kurang_bayar" class="form-control form-control-lg"
-                                    name="kurang_bayar" placeholder="Rp">
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Kurang Bayar</label>
+                                    <input type="number" id="kurang_bayar" class="form-control form-control-lg"
+                                        name="kurang_bayar" placeholder="Rp">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Status Follow Up</label>
-                                <select class="form-select" id="status_follow_up" name="status_follow_up">
-                                </select>
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Status Follow Up</label>
+                                    <select class="form-select" id="status_follow_up" name="status_follow_up">
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Foto Bukti Transfer</label>
-                                <input type="file" id="bukti_transfer" class="form-control form-control-lg"
-                                    name="bukti_transfer">
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Foto Bukti Transfer</label>
+                                    <input type="file" id="bukti_transfer" class="form-control form-control-lg"
+                                        name="bukti_transfer">
 
                                     <div id="foto-preview" class="mt-3"></div>
 
 
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Mutasi Check</label>
+                                    <br>
+                                    <input id="modal_btn_status" type="checkbox" data-onstyle="success" data-toggle="toggle"
+                                        data-on="Checked" data-off="Unchecked" data-offstyle="secondary" data-width="200"
+                                        data-height="45">
+                                    <input type="true" id="modal_status" name="mutasi_check" hidden>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Mutasi Check</label>
-                                <br>
-                                <input id="modal_btn_status" type="checkbox" data-onstyle="success" data-toggle="toggle"
-                                    data-on="Checked" data-off="Unchecked" data-offstyle="secondary"
-                                    data-width="200" data-height="45">
-                                <input type="true" id="modal_status" name="mutasi_check" hidden>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="saveEstimasi">Save changes</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveEstimasi">Save changes</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Modal HPP -->
-<div class="modal fade" id="hppModal" tabindex="-1" aria-labelledby="hppModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="hppModalLabel">Edit HPP</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="hppForm">
-                    @csrf
-                    <input type="hidden" id="hpp_item_id" name="item_id">
-                    <div class="row">
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Payment Method</label>
+    <!-- Modal HPP -->
+    <div class="modal fade" id="hppModal" tabindex="-1" aria-labelledby="hppModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="hppModalLabel">Edit HPP</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="hppForm">
+                        @csrf
+                        <input type="hidden" id="hpp_item_id" name="item_id">
+                        <div class="row">
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Payment Method</label>
 
-                                <select class="choices form-select" id="payment_method" name="payment_method">
-                                    <option value="">Press to select</option>
+                                    <select class="choices form-select" id="payment_method" name="payment_method">
+                                        <option value="">Press to select</option>
 
                                         @foreach($paymentMethod as $paymentMethods)
-                                        <option value="{{ $paymentMethods->name. '-' . $paymentMethods->number }}" >{{$paymentMethods->name. '-' . $paymentMethods->number}}</option>
+                                            <option value="{{ $paymentMethods->name . '-' . $paymentMethods->number }}">
+                                                {{$paymentMethods->name . '-' . $paymentMethods->number}}
+                                            </option>
                                         @endforeach
-                                </select>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Status Purchase</label>
-                                <select class="form-select" id="status_purchase" name="status_purchase">
-                                </select>
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Status Purchase</label>
+                                    <select class="form-select" id="status_purchase" name="status_purchase">
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                         <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Harga Barang</label>
-                                <input type="number" id="harga_barang" class="form-control form-control-lg"
-                                    name="harga_barang" placeholder="$">
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Harga Barang</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" id="harga_barang" class="form-control form-control-lg"
+                                            name="harga_barang" placeholder="$">
+                                    </div>
+                                    <span id="show_harga_barang" class="invalid-feedback" style="display: block">
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Pajak</label>
-                                <input type="number" id="pajak" class="form-control form-control-lg"
-                                    name="pajak" placeholder="$">
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Pajak</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" id="pajak" class="form-control form-control-lg" name="pajak"
+                                            placeholder="0.00">
+                                    </div>
+                                    <span id="show_pajak" class="invalid-feedback" style="display: block">
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                         <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Diskon</label>
-                                <input type="number" id="diskon" class="form-control form-control-lg"
-                                    name="diskon" placeholder="$">
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Diskon</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" id="diskon" class="form-control form-control-lg" name="diskon"
+                                            placeholder="$">
+                                    </div>
+                                    <span id="show_diskon" class="invalid-feedback" style="display: block">
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Pengiriman</label>
-                                <input type="number" id="pengiriman" class="form-control form-control-lg"
-                                    name="pengiriman" placeholder="$">
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Pengiriman</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" id="pengiriman" class="form-control form-control-lg"
+                                            name="pengiriman" placeholder="$">
+                                    </div>
+                                    <span id="show_pengiriman" class="invalid-feedback" style="display: block">
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Notes</label>
-                                <input type="text" id="notes" class="form-control form-control-lg"
-                                    name="notes" placeholder="Color, Size, Etc">
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Notes</label>
+                                    <input type="text" id="notes" class="form-control form-control-lg" name="notes"
+                                        placeholder="Color, Size, Etc">
+                                </div>
                             </div>
-                        </div>
-                          <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Total Purchase</label>
-                                <input type="number" id="total_purchase" readonly class="form-control form-control-lg"
-                                    name="total_purchase" placeholder="$">
-                                      <span id="show_total_purchase" class="invalid-feedback" style="display: block">
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Total Purchase</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" id="total_purchase" readonly
+                                            class="form-control form-control-lg" name="total_purchase" placeholder="$">
+                                    </div>
+                                    <span id="show_total_purchase" class="invalid-feedback" style="display: block">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Foto Bukti Pembelian</label>
+                                    <input type="file" id="bukti_pembelian" class="form-control form-control-lg"
+                                        name="bukti_pembelian">
+                                    <div id="bukti_pembelian_preview" class="mt-2"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Mutasi Check</label>
+                                    <br>
+                                    <input id="hpp_btn_status" type="checkbox" data-onstyle="info" data-toggle="toggle"
+                                        data-on="Available" data-off="Not Available" data-offstyle="secondary"
+                                        data-width="200" data-height="45">
+                                    <input type="hidden" id="hpp_status" name="hpp_mutasi_check" value="false">
+                                </div>
+                            </div>
 
-                                      </span>
-                            </div>
                         </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Foto Bukti Pembelian</label>
-                                <input type="file" id="bukti_pembelian" class="form-control form-control-lg"
-                                    name="bukti_pembelian">
-                                <div id="bukti_pembelian_preview" class="mt-2"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Mutasi Check</label>
-                                <br>
-                                <input id="hpp_btn_status" type="checkbox" data-onstyle="info" data-toggle="toggle"
-                                    data-on="Available" data-off="Not Available" data-offstyle="secondary"
-                                    data-width="200" data-height="45">
-                                <input type="hidden" id="hpp_status" name="hpp_mutasi_check" value="false">
-                            </div>
-                        </div>
-
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="saveHpp">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Modal Operasional -->
-<div class="modal fade" id="operasionalModal" tabindex="-1" aria-labelledby="operasionalModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="operasionalModalLabel">Edit Operasional</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="operasionalForm">
-                    @csrf
-                    <input type="hidden" id="operasional_item_id" name="item_id">
-                    <div class="row">
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Fix Weight (kg)</label>
-                                <input type="number" step="0.01" id="fix_weight"
-                                    class="form-control form-control-lg" name="fix_weight" placeholder="Kg">
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Fix Price</label>
-                                <input type="number" id="fix_price" class="form-control form-control-lg"
-                                    name="fix_price" placeholder="Rp">
-                            </div>
-                        </div>
-                          <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Nomor Box</label>
-                                <input type="text" id="nomor_box" class="form-control form-control-lg"
-                                    name="nomor_box" placeholder="T2110">
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">SKU</label>
-                                <input type="text" id="sku" class="form-control form-control-lg"
-                                    name="sku" placeholder="Nomor SKU">
-                            </div>
-                        </div>
-
-                          <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Kurir Lokal</label>
-                                <input type="number" id="kurir_lokal" class="form-control form-control-lg"
-                                    name="kurir_lokal" placeholder="JNE, JNT, Gojek, Grab">
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Pelunasan</label>
-                                <input type="number" id="pelunasan" class="form-control form-control-lg"
-                                    name="pelunasan" placeholder="Rp">
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Status Barang Sampai</label>
-                                <select class="form-select" id="status_barang_sampai"
-                                    name="status_barang_sampai">
-
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">Status On Check</label>
-                                <br>
-                                <input id="wh_usa_btn_status" type="checkbox" data-onstyle="info"
-                                    data-toggle="toggle" data-on="Done" data-off="Failed" data-offstyle="secondary"
-                                    data-width="200" data-height="45">
-                                <input type="hidden" id="wh_usa_status" name="wh_usa_mutasi_check" value="false">
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">WH USA</label>
-                                <input type="file" id="wh_usa" class="form-control form-control-lg"
-                                    name="wh_usa">
-                                <div id="wh_usa_preview" class="mt-2"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <div class="form-group">
-                                <label class="form-label">WH Indo</label>
-                                <input type="file" id="wh_indonesia" class="form-control form-control-lg"
-                                    name="wh_indonesia">
-                                <div id="wh_indonesia_preview" class="mt-2"></div>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="saveOperasional">Save changes</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveHpp">Save changes</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+
+    <!-- Modal Operasional -->
+    <div class="modal fade" id="operasionalModal" tabindex="-1" aria-labelledby="operasionalModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="operasionalModalLabel">Edit Operasional</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="operasionalForm">
+                        @csrf
+                        <input type="hidden" id="operasional_item_id" name="item_id">
+                        <div class="row">
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Fix Weight (kg)</label>
+                                    <input type="number" step="0.01" id="fix_weight" class="form-control form-control-lg"
+                                        name="fix_weight" placeholder="Kg">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Fix Price</label>
+                                    <input type="number" id="fix_price" class="form-control form-control-lg"
+                                        name="fix_price" placeholder="Rp">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Nomor Box</label>
+                                    <input type="text" id="nomor_box" class="form-control form-control-lg" name="nomor_box"
+                                        placeholder="T2110">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">SKU</label>
+                                    <input type="text" id="sku" class="form-control form-control-lg" name="sku"
+                                        placeholder="Nomor SKU">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Kurir Lokal</label>
+                                    <input type="number" id="kurir_lokal" class="form-control form-control-lg"
+                                        name="kurir_lokal" placeholder="Rp">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Pelunasan</label>
+                                    <input type="number" id="pelunasan" class="form-control form-control-lg"
+                                        name="pelunasan" placeholder="Rp">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Status Barang Sampai</label>
+                                    <select class="form-select" id="status_barang_sampai" name="status_barang_sampai">
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">Status On Check</label>
+                                    <br>
+                                    <input id="wh_usa_btn_status" type="checkbox" data-onstyle="info" data-toggle="toggle"
+                                        data-on="Done" data-off="Failed" data-offstyle="secondary" data-width="200"
+                                        data-height="45">
+                                    <input type="hidden" id="wh_usa_status" name="wh_usa_mutasi_check" value="false">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">WH USA</label>
+                                    <input type="file" id="wh_usa" class="form-control form-control-lg" name="wh_usa">
+                                    <div id="wh_usa_preview" class="mt-2"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label class="form-label">WH Indo</label>
+                                    <input type="file" id="wh_indonesia" class="form-control form-control-lg"
+                                        name="wh_indonesia">
+                                    <div id="wh_indonesia_preview" class="mt-2"></div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveOperasional">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
     <script src="{{ asset('js/utils/currency.js') }}"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Format all currency elements using formatDollar
-            $('.currency-format').each(function() {
+            $('.currency-format').each(function () {
                 const amount = $(this).data('amount');
                 const formatted = formatDollar(amount, { showDecimals: false });
                 $(this).text(formatted);
@@ -1149,11 +1179,11 @@
             // Juga panggil saat menambah item baru
 
             // Toggle untuk mutasi check
-            $('#modal_btn_status').change(function() {
+            $('#modal_btn_status').change(function () {
                 $('#modal_status').val($(this).prop('checked'));
             });
 
-            $(document).on('click', '.edit-estimasi-btn', function() {
+            $(document).on('click', '.edit-estimasi-btn', function () {
                 const itemId = $(this).data('item-id');
                 $('#item_id').val(itemId);
                 $('#nama_rek').val($(this).data('nama-rek'));
@@ -1163,7 +1193,7 @@
                 $('#status_follow_up').val($(this).data('status-follow-up'));
                 $('#foto-bukti').val($(this).data('foto-bukti'));
 
-                 const fotoBukti = $(this).data('foto-bukti');
+                const fotoBukti = $(this).data('foto-bukti');
                 const fotoBuktiField = $('#bukti_transfer');
                 const fotoPreview = $('#foto-preview');
 
@@ -1173,12 +1203,12 @@
                 if (fotoBukti) {
                     // Jika sudah ada foto bukti, tampilkan preview image yang bisa diklik
                     fotoPreview.html(`
-                    <a href="/storage/${fotoBukti}"
-                        target="_blank"
-                        class="btn btn-sm btn-outline-primary mt-1">
-                        <i class="bi bi-eye"></i> Lihat Dokumen
-                    </a>
-                    `);
+                                                        <a href="/storage/${fotoBukti}"
+                                                            target="_blank"
+                                                            class="btn btn-sm btn-outline-primary mt-1">
+                                                            <i class="bi bi-eye"></i> Lihat Dokumen
+                                                        </a>
+                                                        `);
 
                     // Buat field tidak required karena sudah ada foto
                     fotoBuktiField.removeAttr('required');
@@ -1188,7 +1218,7 @@
                     fotoBuktiField.attr('required', 'required');
                 }
 
-               var statusFollowUp = $(this).data('status-follow-up');
+                var statusFollowUp = $(this).data('status-follow-up');
                 console.log('Nilai status follow up:', statusFollowUp);
 
                 // Dapatkan instance Choices
@@ -1204,10 +1234,10 @@
                     // Buat instance Choices baru dengan opsi yang benar
                     var choicesInstance = new Choices(selectElement, {
                         choices: [
-                            {value: '', label: 'Press to select', selected: true, disabled: true},
-                            {value: 'Scheduled', label: 'Scheduled'},
-                            {value: 'Followed', label: 'Followed'},
-                            {value: 'Unfollowed', label: 'Unfollowed'}
+                            { value: '', label: 'Press to select', selected: true, disabled: true },
+                            { value: 'Scheduled', label: 'Scheduled' },
+                            { value: 'Followed', label: 'Followed' },
+                            { value: 'Unfollowed', label: 'Unfollowed' }
                         ],
                         searchEnabled: false,
                         shouldSort: false,
@@ -1219,11 +1249,11 @@
                 } else {
                     // Fallback traditional method
                     $('#status_follow_up').html('\
-                        <option value="">Press to select</option>\
-                        <option value="Scheduled"' + (statusFollowUp === 'Scheduled' ? ' selected' : '') + '>Scheduled</option>\
-                        <option value="Followed"' + (statusFollowUp === 'Followed' ? ' selected' : '') + '>Followed</option>\
-                        <option value="Unfollowed"' + (statusFollowUp === 'Unfollowed' ? ' selected' : '') + '>Unfollowed</option>\
-                    ');
+                                                            <option value="">Press to select</option>\
+                                                            <option value="Scheduled"' + (statusFollowUp === 'Scheduled' ? ' selected' : '') + '>Scheduled</option>\
+                                                            <option value="Followed"' + (statusFollowUp === 'Followed' ? ' selected' : '') + '>Followed</option>\
+                                                            <option value="Unfollowed"' + (statusFollowUp === 'Unfollowed' ? ' selected' : '') + '>Unfollowed</option>\
+                                                        ');
                     $('#status_follow_up').trigger('change');
                 }
 
@@ -1240,52 +1270,52 @@
                 $('#modal_status').val(isChecked);
 
                 // Pastikan event handler untuk toggle berfungsi
-                $('#modal_btn_status').off('change').on('change', function() {
+                $('#modal_btn_status').off('change').on('change', function () {
                     const isChecked = $(this).is(':checked');
                     $('#modal_status').val(isChecked ? 1 : 0);
                     console.log('Toggle status:', isChecked ? 'Checked' : 'Unchecked');
                 });
 
 
-                 // Add event listeners
-                    $('#jumlah_transfer, #dp, #full_payment').on('input', calculateKurangBayar);
+                // Add event listeners
+                $('#jumlah_transfer, #dp, #full_payment').on('input', calculateKurangBayar);
 
-                    // Calculate initial value
-                    calculateKurangBayar();
+                // Calculate initial value
+                calculateKurangBayar();
                 // Tampilkan modal
                 estimasiModal.show();
             });
 
-            $('#saveEstimasi').click(function() {
+            $('#saveEstimasi').click(function () {
                 // Validasi form
                 const requiredFields = [{
-                        id: '#nama_rek',
-                        name: 'Nama Rekening'
-                    },
-                    {
-                        id: '#jumlah_transfer',
-                        name: 'Jumlah Transfer'
-                    },
-                    {
-                        id: '#dp',
-                        name: 'DP'
-                    },
-                    {
-                        id: '#status_follow_up',
-                        name: 'Status Follow Up'
-                    },
-                    {
-                        id: '#full_payment',
-                        name: 'Full Payment'
-                    },
-                    {
-                        id: '#bukti_transfer',
-                        name: 'Bukti Transfer'
-                    },
-                     {
-                        id: '#kurang_bayar',
-                        name: 'Kurang Bayar'
-                    },
+                    id: '#nama_rek',
+                    name: 'Nama Rekening'
+                },
+                {
+                    id: '#jumlah_transfer',
+                    name: 'Jumlah Transfer'
+                },
+                {
+                    id: '#dp',
+                    name: 'DP'
+                },
+                {
+                    id: '#status_follow_up',
+                    name: 'Status Follow Up'
+                },
+                {
+                    id: '#full_payment',
+                    name: 'Full Payment'
+                },
+                {
+                    id: '#bukti_transfer',
+                    name: 'Bukti Transfer'
+                },
+                {
+                    id: '#kurang_bayar',
+                    name: 'Kurang Bayar'
+                },
                 ];
 
                 let isValid = true;
@@ -1375,7 +1405,7 @@
                             data: formData,
                             processData: false,
                             contentType: false,
-                            success: function(response) {
+                            success: function (response) {
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Berhasil!',
@@ -1389,7 +1419,7 @@
                                         .reload(); // atau update tabel secara dinamis
                                 });
                             },
-                            error: function(xhr) {
+                            error: function (xhr) {
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Gagal!',
@@ -1403,7 +1433,7 @@
             });
 
             // Reset form saat modal ditutup
-            $('#estimasiModal').on('hidden.bs.modal', function() {
+            $('#estimasiModal').on('hidden.bs.modal', function () {
                 $('#estimasiForm')[0].reset();
                 $('.is-invalid').removeClass('is-invalid');
                 $('#modal_btn_status').bootstrapToggle('off');
@@ -1411,7 +1441,7 @@
             });
 
             // Handler untuk input file (preview)
-            $('#bukti_transfer').change(function() {
+            $('#bukti_transfer').change(function () {
                 const file = this.files[0];
                 if (file) {
                     // Validasi ukuran file
@@ -1435,18 +1465,18 @@
             const hppModal = new bootstrap.Modal(document.getElementById('hppModal'));
 
             // Toggle untuk mutasi check HPP
-            $('#hpp_btn_status').change(function() {
+            $('#hpp_btn_status').change(function () {
                 $('#hpp_status').val($(this).prop('checked'));
             });
 
-             $('#harga_barang, #pajak, #diskon, #pengiriman').on('input', hitungTotalPurchase);
+            $('#harga_barang, #pajak, #diskon, #pengiriman').on('input', hitungTotalPurchase);
 
             // Fungsi untuk mereset form
-            $('#resetBtn').click(function() {
+            $('#resetBtn').click(function () {
                 $('#harga_barang, #pajak, #diskon, #pengiriman').val(0);
                 hitungTotalPurchase();
             });
-            $(document).on('click', '.edit-hpp-btn', function() {
+            $(document).on('click', '.edit-hpp-btn', function () {
                 const itemId = $(this).data('item-id');
 
                 // Isi form modal dengan data dari tombol
@@ -1460,7 +1490,7 @@
                 $('#pengiriman').val($(this).data('pengiriman'));
                 $('#harga_barang').val($(this).data('harga-hpp'));
 
-                   hitungTotalPurchase();
+                hitungTotalPurchase();
                 // Tampilkan preview bukti pembelian jika ada
                 const buktiPembelianPath = $(this).data('bukti-pembelian');
                 const previewDiv = $('#bukti_pembelian_preview');
@@ -1468,31 +1498,31 @@
 
                 if (buktiPembelianPath) {
                     previewDiv.append(`
-                <img src="/storage/${buktiPembelianPath}" class="img-thumbnail" style="max-height: 100px;">
-                <p class="small text-muted mt-1">Current file</p>
-            `);
+                                                    <img src="/storage/${buktiPembelianPath}" class="img-thumbnail" style="max-height: 100px;">
+                                                    <p class="small text-muted mt-1">Current file</p>
+                                                `);
                 }
 
                 // Set toggle
 
 
-                 const isChecked = $(this).data('hpp-mutasi-check');
+                const isChecked = $(this).data('hpp-mutasi-check');
 
-                    // Atur nilai checkbox berdasarkan isChecked
-                    // $('#modal_btn_status').prop('checked', true);
-                    if (isChecked) {
-                        $('#hpp_btn_status').bootstrapToggle('on');
-                    } else {
-                        $('#hpp_btn_status').bootstrapToggle('off');
-                    }
-                    $('#hpp_status').val(isChecked);
+                // Atur nilai checkbox berdasarkan isChecked
+                // $('#modal_btn_status').prop('checked', true);
+                if (isChecked) {
+                    $('#hpp_btn_status').bootstrapToggle('on');
+                } else {
+                    $('#hpp_btn_status').bootstrapToggle('off');
+                }
+                $('#hpp_status').val(isChecked);
 
-                    // Pastikan event handler untuk toggle berfungsi
-                    $('#hpp_btn_status').off('change').on('change', function() {
-                        const isChecked = $(this).is(':checked');
-                        $('#hpp_status').val(isChecked ? 1 : 0);
-                        console.log('Toggle status:', isChecked ? 'Checked' : 'Unchecked');
-                    });
+                // Pastikan event handler untuk toggle berfungsi
+                $('#hpp_btn_status').off('change').on('change', function () {
+                    const isChecked = $(this).is(':checked');
+                    $('#hpp_status').val(isChecked ? 1 : 0);
+                    console.log('Toggle status:', isChecked ? 'Checked' : 'Unchecked');
+                });
                 // Inisialisasi Choices untuk select
 
                 var statusFollowUp = $(this).data('status-purchase');
@@ -1512,10 +1542,10 @@
                     // Buat instance Choices baru dengan opsi yang benar
                     var choicesInstance = new Choices(selectElement, {
                         choices: [
-                            {value: '', label: 'Press to select', selected: true, disabled: true},
-                            {value: 'Wait For Order', label: 'Wait For Order'},
-                            {value: 'Ordered', label: 'Ordered'},
-                            {value: 'Failed Order', label: 'Failed Order'}
+                            { value: '', label: 'Press to select', selected: true, disabled: true },
+                            { value: 'Wait For Order', label: 'Wait For Order' },
+                            { value: 'Ordered', label: 'Ordered' },
+                            { value: 'Failed Order', label: 'Failed Order' }
                         ],
                         searchEnabled: false,
                         shouldSort: false,
@@ -1527,11 +1557,11 @@
                 } else {
                     // Fallback traditional method
                     $('#status_purchase').html('\
-                        <option value="">Press to select</option>\
-                        <option value="Wait For Order"' + (statusFollowUp === 'Wait For Order' ? ' selected' : '') + '>Wait For Order</option>\
-                        <option value="Ordered"' + (statusFollowUp === 'Ordered' ? ' selected' : '') + '>Ordered</option>\
-                        <option value="Failed Order"' + (statusFollowUp === 'Failed Order' ? ' selected' : '') + '>Failed Order</option>\
-                    ');
+                                                            <option value="">Press to select</option>\
+                                                            <option value="Wait For Order"' + (statusFollowUp === 'Wait For Order' ? ' selected' : '') + '>Wait For Order</option>\
+                                                            <option value="Ordered"' + (statusFollowUp === 'Ordered' ? ' selected' : '') + '>Ordered</option>\
+                                                            <option value="Failed Order"' + (statusFollowUp === 'Failed Order' ? ' selected' : '') + '>Failed Order</option>\
+                                                        ');
                     $('#status_purchase').trigger('change');
                 }
 
@@ -1539,7 +1569,7 @@
                 hppModal.show();
             });
 
-            $('#bukti_pembelian').change(function() {
+            $('#bukti_pembelian').change(function () {
                 const file = this.files[0];
                 const preview = $('#bukti_pembelian_preview');
                 preview.empty();
@@ -1558,7 +1588,7 @@
                     }
 
                     const reader = new FileReader();
-                    reader.onload = function(e) {
+                    reader.onload = function (e) {
                         preview.html(
                             `<img src="${e.target.result}" class="img-thumbnail" style="max-height: 150px;">`
                         );
@@ -1568,40 +1598,40 @@
             });
 
             // Handler untuk tombol save
-            $('#saveHpp').click(function() {
+            $('#saveHpp').click(function () {
                 // Validasi form
                 const requiredFields = [{
-                        id: '#payment_method',
-                        name: 'Payment Method'
-                    },
-                    {
-                        id: '#total_purchase',
-                        name: 'Total Purchase'
-                    },
-                    {
-                        id: '#notes',
-                        name: 'Notes'
-                    },
-                    {
-                        id: '#pajak',
-                        name: 'Pajak'
-                    },
-                    {
-                        id: '#harga_barang',
-                        name: 'Harga Barang'
-                    },
-                    {
-                        id: '#diskon',
-                        name: 'Diskon'
-                    },
-                     {
-                        id: '#pengiriman',
-                        name: 'Pengiriman'
-                    },
-                    {
-                        id: '#bukti_pembelian',
-                        name: 'Foto Bukti Pembelian'
-                    }
+                    id: '#payment_method',
+                    name: 'Payment Method'
+                },
+                {
+                    id: '#total_purchase',
+                    name: 'Total Purchase'
+                },
+                {
+                    id: '#notes',
+                    name: 'Notes'
+                },
+                {
+                    id: '#pajak',
+                    name: 'Pajak'
+                },
+                {
+                    id: '#harga_barang',
+                    name: 'Harga Barang'
+                },
+                {
+                    id: '#diskon',
+                    name: 'Diskon'
+                },
+                {
+                    id: '#pengiriman',
+                    name: 'Pengiriman'
+                },
+                {
+                    id: '#bukti_pembelian',
+                    name: 'Foto Bukti Pembelian'
+                }
                 ];
 
                 let isValid = true;
@@ -1667,7 +1697,7 @@
                             data: formData,
                             processData: false,
                             contentType: false,
-                            success: function(response) {
+                            success: function (response) {
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Berhasil!',
@@ -1680,7 +1710,7 @@
                                         .reload(); // atau update tabel secara dinamis
                                 });
                             },
-                            error: function(xhr) {
+                            error: function (xhr) {
                                 let errorMessage =
                                     'Terjadi kesalahan saat menyimpan data';
                                 if (xhr.responseJSON && xhr.responseJSON.message) {
@@ -1701,16 +1731,16 @@
             const operasionalModal = new bootstrap.Modal(document.getElementById('operasionalModal'));
 
             // Toggle untuk mutasi check WH USA
-            $('#wh_usa_btn_status').change(function() {
+            $('#wh_usa_btn_status').change(function () {
                 $('#wh_usa_status').val($(this).prop('checked'));
             });
 
-            $('#wh_usa').change(function() {
+            $('#wh_usa').change(function () {
                 previewImage(this, '#wh_usa_preview');
             });
 
             // Preview gambar WH Indonesia
-            $('#wh_indonesia').change(function() {
+            $('#wh_indonesia').change(function () {
                 previewImage(this, '#wh_indonesia_preview');
             });
 
@@ -1737,7 +1767,7 @@
 
                     // Tampilkan preview
                     const reader = new FileReader();
-                    reader.onload = function(e) {
+                    reader.onload = function (e) {
                         preview.html(
                             `<img src="${e.target.result}" class="img-thumbnail" style="max-height: 150px;">`
                         );
@@ -1746,7 +1776,7 @@
                 }
             }
             // Handle klik tombol edit operasional
-            $(document).on('click', '.edit-operasional-btn', function() {
+            $(document).on('click', '.edit-operasional-btn', function () {
                 // Ambil data dari tombol
                 const itemId = $(this).data('item-id');
                 const statusBarang = $(this).data('status-barang-sampai');
@@ -1763,7 +1793,7 @@
                 $('#pelunasan').val($(this).data('pelunasan'));
 
 
-                 var statusFollowUp = $(this).data('status-barang-sampai');
+                var statusFollowUp = $(this).data('status-barang-sampai');
                 console.log('Nilai status follow up:', statusFollowUp);
 
                 // Dapatkan instance Choices
@@ -1779,10 +1809,10 @@
                     // Buat instance Choices baru dengan opsi yang benar
                     var choicesInstance = new Choices(selectElement, {
                         choices: [
-                            {value: '', label: 'Press to select', selected: true, disabled: true},
-                            {value: 'Waiting Courier', label: 'Waiting Courier'},
-                            {value: 'Received', label: 'Received'},
-                            {value: 'Cancel', label: 'Cancel'}
+                            { value: '', label: 'Press to select', selected: true, disabled: true },
+                            { value: 'Waiting Courier', label: 'Waiting Courier' },
+                            { value: 'Received', label: 'Received' },
+                            { value: 'Cancel', label: 'Cancel' }
                         ],
                         searchEnabled: false,
                         shouldSort: false,
@@ -1794,31 +1824,31 @@
                 } else {
                     // Fallback traditional method
                     $('#status_barang_sampai').html('\
-                        <option value="">Press to select</option>\
-                        <option value="Waiting Courier"' + (statusFollowUp === 'Waiting Courier' ? ' selected' : '') + '>Waiting Courier</option>\
-                        <option value="Received"' + (statusFollowUp === 'Received' ? ' selected' : '') + '>Received</option>\
-                        <option value="Cancel"' + (statusFollowUp === 'Cancel' ? ' selected' : '') + '>Cancel</option>\
-                    ');
+                                                            <option value="">Press to select</option>\
+                                                            <option value="Waiting Courier"' + (statusFollowUp === 'Waiting Courier' ? ' selected' : '') + '>Waiting Courier</option>\
+                                                            <option value="Received"' + (statusFollowUp === 'Received' ? ' selected' : '') + '>Received</option>\
+                                                            <option value="Cancel"' + (statusFollowUp === 'Cancel' ? ' selected' : '') + '>Cancel</option>\
+                                                        ');
                     $('#status_barang_sampai').trigger('change');
                 }
 
-                 const isChecked = $(this).data('wh-usa-mutasi-check');
+                const isChecked = $(this).data('wh-usa-mutasi-check');
 
-                    // Atur nilai checkbox berdasarkan isChecked
-                    // $('#modal_btn_status').prop('checked', true);
-                    if (isChecked) {
-                        $('#wh_usa_btn_status').bootstrapToggle('on');
-                    } else {
-                        $('#wh_usa_btn_status').bootstrapToggle('off');
-                    }
-                    $('#wh_usa_status').val(isChecked);
+                // Atur nilai checkbox berdasarkan isChecked
+                // $('#modal_btn_status').prop('checked', true);
+                if (isChecked) {
+                    $('#wh_usa_btn_status').bootstrapToggle('on');
+                } else {
+                    $('#wh_usa_btn_status').bootstrapToggle('off');
+                }
+                $('#wh_usa_status').val(isChecked);
 
-                    // Pastikan event handler untuk toggle berfungsi
-                    $('#wh_usa_btn_status').off('change').on('change', function() {
-                        const isChecked = $(this).is(':checked');
-                        $('#wh_usa_status').val(isChecked ? 1 : 0);
-                        console.log('Toggle status:', isChecked ? 'Checked' : 'Unchecked');
-                    });
+                // Pastikan event handler untuk toggle berfungsi
+                $('#wh_usa_btn_status').off('change').on('change', function () {
+                    const isChecked = $(this).is(':checked');
+                    $('#wh_usa_status').val(isChecked ? 1 : 0);
+                    console.log('Toggle status:', isChecked ? 'Checked' : 'Unchecked');
+                });
 
 
                 // Preview gambar jika ada
@@ -1842,42 +1872,42 @@
             });
 
             // Handle simpan operasional
-            $('#saveOperasional').click(function() {
+            $('#saveOperasional').click(function () {
                 // Validasi form
                 const requiredFields = [{
-                        id: '#wh_usa',
-                        name: 'WH USA',
-                        isFile: true
-                    },
-                    {
-                        id: '#wh_indonesia',
-                        name: 'WH Indo',
-                        isFile: true
-                    },
-                    {
-                        id: '#fix_weight',
-                        name: 'Fix Weight'
-                    },
-                     {
-                        id: '#kurir_lokal',
-                        name: 'Kurir Lokal'
-                    },
-                     {
-                        id: '#pelunasan',
-                        name: 'Pelunasan'
-                    },
-                     {
-                        id: '#sku',
-                        name: 'SKU'
-                    },
-                     {
-                        id: '#nomor_box',
-                        name: 'Nomor Box'
-                    },
-                    {
-                        id: '#fix_price',
-                        name: 'Fix Price'
-                    }
+                    id: '#wh_usa',
+                    name: 'WH USA',
+                    isFile: true
+                },
+                {
+                    id: '#wh_indonesia',
+                    name: 'WH Indo',
+                    isFile: true
+                },
+                {
+                    id: '#fix_weight',
+                    name: 'Fix Weight'
+                },
+                {
+                    id: '#kurir_lokal',
+                    name: 'Kurir Lokal'
+                },
+                {
+                    id: '#pelunasan',
+                    name: 'Pelunasan'
+                },
+                {
+                    id: '#sku',
+                    name: 'SKU'
+                },
+                {
+                    id: '#nomor_box',
+                    name: 'Nomor Box'
+                },
+                {
+                    id: '#fix_price',
+                    name: 'Fix Price'
+                }
                 ];
 
                 let isValid = true;
@@ -1954,7 +1984,7 @@
                             data: formData,
                             processData: false,
                             contentType: false,
-                            success: function(response) {
+                            success: function (response) {
                                 swalLoading.close();
                                 Swal.fire({
                                     icon: 'success',
@@ -1968,7 +1998,7 @@
                                         .reload(); // atau update tabel secara dinamis
                                 });
                             },
-                            error: function(xhr) {
+                            error: function (xhr) {
                                 swalLoading.close();
                                 let errorMessage =
                                     'Terjadi kesalahan saat menyimpan data';
@@ -1987,7 +2017,7 @@
                 });
             });
 
-            $('#operasionalModal').on('hidden.bs.modal', function() {
+            $('#operasionalModal').on('hidden.bs.modal', function () {
                 $('#operasionalForm')[0].reset();
                 $('#wh_usa_preview, #wh_indonesia_preview').empty();
                 $('.is-invalid').removeClass('is-invalid');
@@ -1995,7 +2025,7 @@
                 $('#wh_usa_status').val('false');
             });
 
-            $('#hppModal').on('hidden.bs.modal', function() {
+            $('#hppModal').on('hidden.bs.modal', function () {
                 $('#hppForm')[0].reset();
                 $('#bukti_pembelian_preview').empty();
                 $('.is-invalid').removeClass('is-invalid');
@@ -2003,7 +2033,7 @@
                 $('#hpp_status').val('false');
             });
 
-            $('#estimasiModal').on('hidden.bs.modal', function() {
+            $('#estimasiModal').on('hidden.bs.modal', function () {
                 $('#estimasiForm')[0].reset();
                 $('.is-invalid').removeClass('is-invalid');
                 $('#modal_btn_status').bootstrapToggle('off');
@@ -2014,13 +2044,13 @@
 
         function initLinkButtons() {
             // Handler untuk input link
-            $(document).on('input', '.link-input', function() {
+            $(document).on('input', '.link-input', function () {
                 const btn = $(this).next('.btn-open-link');
                 btn.prop('disabled', !$(this).val().trim());
             });
 
             // Handler untuk klik tombol buka link
-            $(document).on('click', '.btn-open-link', function() {
+            $(document).on('click', '.btn-open-link', function () {
                 const url = $(this).prev('.link-input').val().trim();
                 if (url) {
                     // Validasi URL
@@ -2033,7 +2063,7 @@
             });
 
             // Auto-disable button jika link kosong saat load
-            $('.link-input').each(function() {
+            $('.link-input').each(function () {
                 $(this).next('.btn-open-link').prop('disabled', !$(this).val().trim());
             });
         }
@@ -2051,13 +2081,13 @@
             if (dp > 0 && fullPayment === 0) {
                 kurangBayar = jumlahTransfer - dp;
                 fullPay = 0;
-            $('#full_payment').val(fullPay);
+                $('#full_payment').val(fullPay);
             }
             // Kondisi 2: Jika full payment terisi
             else if (fullPayment > 0) {
                 kurangBayar = fullPayment - jumlahTransfer;
                 dpPay = 0;
-                  $('#dp').val(dpPay);
+                $('#dp').val(dpPay);
             }
 
             $('#kurang_bayar').val(kurangBayar);
@@ -2071,9 +2101,9 @@
             } else if (kurangBayar < 0) {
                 $('#kurang_bayar').addClass('is-warning');
             } else {
-                if($('#dp').val() || $('#full_payment').val()){
+                if ($('#dp').val() || $('#full_payment').val()) {
                     $('#kurang_bayar').addClass('is-valid');
-                }else{
+                } else {
                     $('#kurang_bayar').addClass('is-invalid');
                 }
             }
@@ -2087,6 +2117,21 @@
             const pengiriman = parseFloat($('#pengiriman').val()) || 0;
             const exchange = parseFloat($('#exchange').val()) || 0;
 
+            // Format individual currency fields in IDR
+            const formatCurrency = (amount) => {
+                const idrAmount = amount * exchange;
+                return new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    minimumFractionDigits: 0
+                }).format(idrAmount);
+            };
+
+            // Update individual currency displays
+            $('#show_harga_barang').html(formatCurrency(hargaBarang));
+            $('#show_pajak').html(formatCurrency(pajak));
+            $('#show_diskon').html(formatCurrency(diskon));
+            $('#show_pengiriman').html(formatCurrency(pengiriman));
 
             // Hitung total
             const total = hargaBarang + pajak + pengiriman - diskon;
@@ -2105,7 +2150,7 @@
         // Function to format all currency elements on page load
         function formatAllCurrencyElements() {
             // Format elements with data-currency attribute
-            $('[data-currency]').each(function() {
+            $('[data-currency]').each(function () {
                 const $element = $(this);
                 const value = $element.data('currency');
                 const formatted = CurrencyUtils.formatRupiah(value);

@@ -31,6 +31,7 @@
                     <thead>
                         <tr>
                             <th>No PO</th>
+                            <th>Date</th>
                             <th>Name</th>
                             <th>Phone</th>
                             <th>Address</th>

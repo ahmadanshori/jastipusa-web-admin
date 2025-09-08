@@ -689,56 +689,56 @@ $('.required').on('input change', function() {
                 <div class="col-md-3 col-12">
                     <div class="form-group">
                         <label class="form-label">Quantity</label>
-                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][quantity]">
+                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][quantity]" placeholder="1">
                     </div>
                 </div>
                 <div class="col-md-3 col-12">
                     <div class="form-group">
                         <label class="form-label">Notes</label>
-                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][estimasi_notes]">
+                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][estimasi_notes]" placeholder="color, size, etc">
                     </div>
                 </div>
                 <div class="col-md-6 col-12">
                     <div class="form-group">
                         <label class="form-label">No. PO Customer</label>
-                        <input type="text" readonly class="form-control form-control-lg required" name="items[${itemCounter}][no_po_customer]">
+                        <input type="text" readonly class="form-control form-control-lg required" name="items[${itemCounter}][no_po_customer]" placeholder="Auto Generate By System">
                     </div>
                 </div>
                 <div class="col-md-3 col-12">
                     <div class="form-group">
                         <label class="form-label">Harga Barang</label>
-                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][estimasi_harga]">
+                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][estimasi_harga]" placeholder="Rp">
                     </div>
                 </div>
                 <div class="col-md-3 col-12">
                     <div class="form-group">
                         <label class="form-label">Estimasi Kg</label>
-                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][estimasi_kg]">
+                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][estimasi_kg]" placeholder="Kg">
                     </div>
                 </div>
                 <div class="col-md-6 col-12">
                     <div class="form-group">
                         <label class="form-label">Nama Barang</label>
-                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][nama_barang]">
+                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][nama_barang]" placeholder="Enter Item Name">
                     </div>
                 </div>
                 <div class="col-md-3 col-12">
                     <div class="form-group">
                         <label class="form-label">Asuransi 2%</label>
-                        <input type="text" readonly class="form-control form-control-lg required" name="items[${itemCounter}][asuransi]">
+                        <input type="text" readonly class="form-control form-control-lg required" name="items[${itemCounter}][asuransi]" placeholder="Auto Count">
                     </div>
                 </div>
                 <div class="col-md-3 col-12">
                     <div class="form-group">
                         <label class="form-label">Jasa Kg</label>
-                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][jasakg]">
+                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][jasakg]" placeholder="Rp. 325.000">
                     </div>
                 </div>
                 <div class="col-md-6 col-12">
                     <div class="form-group">
                         <label class="form-label">Link Barang</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-lg required link-input" name="items[${itemCounter}][link_barang]">
+                            <input type="text" class="form-control form-control-lg required link-input" name="items[${itemCounter}][link_barang]" placeholder="https://example.com">
                             <button class="btn btn-outline-primary btn-open-link" type="button">
                                 <i class="bi bi-box-arrow-up-right"></i>
                             </button>
@@ -748,13 +748,13 @@ $('.required').on('input change', function() {
                 <div class="col-md-3 col-12">
                     <div class="form-group">
                         <label class="form-label">Diskon</label>
-                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][diskon]">
+                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][diskon]" placeholder="Rp">
                     </div>
                 </div>
                 <div class="col-md-3 col-12">
                     <div class="form-group">
                         <label class="form-label">Total Estimasi</label>
-                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][total_estimasi]">
+                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][total_estimasi]" placeholder="Rp">
                     </div>
                 </div>
                 <div class="col-md-12 col-12 text-end">
