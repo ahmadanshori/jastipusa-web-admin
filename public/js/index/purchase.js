@@ -1,5 +1,5 @@
 $("#show-table").DataTable({
-    pageLength: 25,
+    pageLength: 10,
     processing: true,
     serverSide: true,
     language: {

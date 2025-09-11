@@ -1,35 +1,34 @@
 $("#show-table").DataTable({
-    pageLength: 25,
+    pageLength: 10,
     processing: true,
     serverSide: true,
     language: {
         paginate: {
             previous: "<i class='fas fa-angle-left'>",
-            next: "<i class='fas fa-angle-right'>"
-        }
+            next: "<i class='fas fa-angle-right'>",
+        },
     },
     order: [[0, "desc"]],
     ajax: {
         url: "/ajax-exchange",
         dataType: "json",
-        type: "GET"
+        type: "GET",
     },
     columns: [
-       
         {
-            data: "id"
+            data: "id",
         },
         {
-            data: "name"
+            data: "name",
         },
-         {
-            data: "value"
+        {
+            data: "value",
         },
         {
             data: "actions",
             name: "actions",
             orderable: false,
-            searchable: false
-        }
-    ]
+            searchable: false,
+        },
+    ],
 });
