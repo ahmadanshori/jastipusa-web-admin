@@ -28,7 +28,6 @@
                 <div class="card">
                     <div class="card-content">
                         <div class="card-body">
-                            <h5 class="card-title">Jasmin</h5>
                             <div class="row">
                                  <div class="col-md-6 col-12">
                                     <div class="form-group">
@@ -37,7 +36,7 @@
 
                                             <option value="">Press to select</option>
                                             <option value="01">Jasmin</option>
-                                            <option value="02">Jastip Order</option>
+                                            <option value="02" selected>Jastip Order</option>
                                             <option value="03">Jastip Only</option>
                                             <option value="04">Jastip B2B</option>
 
@@ -54,11 +53,11 @@
                                    <div class="col-md-6 col-12">
                                     <div class="form-group">
                                          <label for="customer" class="form-label">Customer</label>
-                                        <select class="required choices form-select" id="customer" name="no_telp">
-                                             <option value="custom">-- Custom / Buat Baru --</option>
+                                        <select class="required form-select" id="customer" name="no_telp">
+                                             {{-- <option value="custom">-- Custom / Buat Baru --</option>
 
-                                            <option value="">Press to select</option>
-                                            @if(isset($purchase))
+                                            <option value="">Press to select</option> --}}
+                                            {{-- @if(isset($purchase))
                                                 @foreach($customer as $customers)
                                                 <option value="{{ $customers->id }}" {{ ($customers->whatsapp_number == $purchase->no_telp)? 'selected' : '' }}>{{$customers->whatsapp_number}} - {{$customers->display_name}}</option>
                                                 @endforeach
@@ -66,7 +65,7 @@
                                                 @foreach($customer as $customers)
                                                 <option value="{{ $customers->whatsapp_number }}" >{{$customers->whatsapp_number}}  - {{$customers->display_name}}</option>
                                                 @endforeach
-                                            @endif
+                                            @endif --}}
                                         </select>
                                     </div>
                                     @error('publish_at')
@@ -229,6 +228,22 @@
                                             <input type="text" class="form-control form-control-lg required" name="items[0][total_estimasi]" placeholder="Rp">
                                         </div>
                                     </div>
+                                     <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Category</label>
+                                            <select class="required form-select category-select" name="items[0][category_id]" data-index="0">
+                                                <option value="">Select Category</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                     <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Brand</label>
+                                            <select class="required form-select brand-select" name="items[0][brand_id]" data-index="0">
+                                                <option value="">Select Brand</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="col-md-12 col-12 text-end">
                                         <button type="button" class="btn btn-danger btn-sm remove-item-btn">
                                             <i class="bi bi-trash"></i> Remove Item
@@ -262,6 +277,8 @@
 $(document).ready(function() {
     let itemCounter = $('#items-container .item-row').length;
     const customerOrders = @json($customerOrders);
+    const dataBrand = @json($brand);
+    const dataCategory = @json($category);
     let selectedCustomerOrders = [];
     let choicesInstances = [];
     let currentCustomerId = null;
@@ -383,23 +400,31 @@ $('.required').on('input change', function() {
     // Inisialisasi fungsi untuk item yang sudah ada
     $('.item-row').each(function() {
         const index = $(this).find('.customer-order-select').data('index');
+        const indexCt = $(this).find('.category-select').data('index');
+        const indexBrd = $(this).find('.brand-select').data('index');
         initItemEvents(index);
         initializeChoices($(this).find('.customer-order-select')[0], index);
+        initializeChoicesCategory($(this).find('.category-select')[0], indexCt)
+        initializeChoicesBrand($(this).find('.brand-select')[0], indexBrd)
     });
-       $('#customer').change(function() {
-            const customerId = $(this).val();
-            if(customerId) {
-                $.get('/customers/' + customerId, function(data) {
-                    $('#name').val(data.display_name ? data.display_name : "");
-                    $('#email').val(data.email_address ? data.email_address  : "");
-                    $('#address').val(data.address ? data.address  : "");
-                    $('#no_telp').val(data.whatsapp_number ? data.whatsapp_number  : "");
-                    // Fill other fields as needed
-                });
-            }
-        });
+    
+    $('#customer').on('change', function () {
+        const customerId = $(this).val();
+
+        if (customerId) {
+            
+            $.get('/customers/' + customerId, function(data) {
+
+                $('#name').val(data.display_name ?? "");
+                $('#email').val(data.email_address ?? "");
+                $('#address').val(data.address ?? "");
+                $('#no_telp').val(data.whatsapp_number ?? "");
+                
+            });
+        }
+    });
     // Event change untuk customer select
-    $('#customer').change(function() {
+    $('#customer').on('change', function () {
         currentCustomerId = $(this).val();
         selectedCustomerOrders = [];
 
@@ -472,30 +497,81 @@ $('.required').on('input change', function() {
     }
 
     // Fungsi untuk reset customer order selects
-    function resetCustomerOrderSelects() {
-        $('.customer-order-select').each(function() {
-            const select = $(this)[0];
-            const choicesInstance = choicesInstances.find(i => i.element === select)?.instance;
+    // function resetCustomerOrderSelects() {
+    //     $('.customer-order-select').each(function() {
+    //         const select = $(this)[0];
+    //         const choicesInstance = choicesInstances.find(i => i.element === select)?.instance;
 
-            if (choicesInstance) {
-                choicesInstance.clearChoices();
+    //         if (choicesInstance) {
+    //             choicesInstance.clearChoices();
+    //             choicesInstance.setChoices(
+    //                 customerOrders.map(order => ({
+    //                     value: order.value,
+    //                     label: order.label,
+    //                     customProperties: order.customProperties
+    //                 })),
+    //                 'value',
+    //                 'label',
+    //                 false
+    //             );
+    //             choicesInstance.setValue(['']);
+    //         }
+    //     });
+    // }
+
+    function resetCustomerOrderSelects() {
+    const tipeOrder = $('#tipe_order').val();
+
+    $('.customer-order-select').each(function() {
+        const select = $(this)[0];
+        const choicesInstance = choicesInstances.find(i => i.element === select)?.instance;
+
+        if (choicesInstance) {
+            choicesInstance.clearChoices();
+
+            if (tipeOrder === "01") {
+                // Kalau Jasmin, isi dari customerOrders
+                const customOption = {
+                    value: "custom",
+                    label: "-- Custom / Buat Baru --",
+                    customProperties: {}
+                };
+
                 choicesInstance.setChoices(
-                    customerOrders.map(order => ({
+                    [customOption, ...customerOrders.map(order => ({
                         value: order.value,
                         label: order.label,
                         customProperties: order.customProperties
-                    })),
+                    }))],
                     'value',
                     'label',
                     false
                 );
-                choicesInstance.setValue(['']);
+            } else {
+                // Kalau bukan Jasmin, reset ke custom aja
+                choicesInstance.setChoices(
+                    [{
+                        value: "custom",
+                        label: "-- Custom / Buat Baru --",
+                        selected: true,
+                        customProperties: {}
+                    }],
+                    'value',
+                    'label',
+                    false
+                );
             }
-        });
-    }
+
+            // Reset value ke kosong
+            choicesInstance.setValue(['']);
+        }
+    });
+}
 
     // Fungsi untuk inisialisasi Choices.js pada select element
     function initializeChoices(selectElement, index) {
+        const tipeOrder = $('#tipe_order').val();
+
         const existingInstance = choicesInstances.find(i => i.element === selectElement);
         if (existingInstance) {
             existingInstance.instance.destroy();
@@ -503,21 +579,30 @@ $('.required').on('input change', function() {
         }
 
         // Get available orders (not selected or for current customer)
-        const availableOrders = currentCustomerId
-            ? customerOrders.filter(order =>
-                order.customProperties.customer_id == currentCustomerId &&
-                (!selectedCustomerOrders.includes(order.value) ||
-                 order.value === $(selectElement).val()))
-            : [];
+         let choicesData = [];
+                // Dapatkan order yang tersedia untuk customer saat ini
+             const customOption = {
+                value: "custom",
+                label: "-- Custom / Buat Baru --",
+                selected: true,
+                customProperties: {}
+            };
+        if (tipeOrder === "01") { 
+            const availableOrders = currentCustomerId
+                ? customerOrders.filter(order =>
+                    order.customProperties.customer_id == currentCustomerId &&
+                    (!selectedCustomerOrders.includes(order.value) ||
+                    order.value === $(selectElement).val()))
+                : [];
 
-        const customOption = {
-            value: "custom",
-            label: "-- Custom / Buat Baru --",
-            customProperties: {}
-        };
+          
+            choicesData = [...availableOrders];
+        }else{
+            choicesData = [customOption];
+        }
 
         const choices = new Choices(selectElement, {
-            choices: [customOption, ...availableOrders],
+            choices: choicesData,
             searchEnabled: true,
             shouldSort: false,
             itemSelectText: '',
@@ -530,6 +615,53 @@ $('.required').on('input change', function() {
                     selectedCustomerOrders.push(selectedValue);
                     autoFillItem(index, selectedValue);
                 }
+            },
+            shouldSortItems: function() {
+                return false;
+            }
+        });
+
+        choicesInstances.push({
+            element: selectElement,
+            instance: choices
+        });
+
+        return choices;
+    }
+
+
+     function initializeChoicesCategory(selectElement, index) {
+        
+        const choices = new Choices(selectElement, {
+            choices: dataCategory,
+            searchEnabled: true,
+            shouldSort: false,
+            itemSelectText: '',
+            classNames: {
+                containerInner: 'choices__inner form-select category-select'
+            },
+            shouldSortItems: function() {
+                return false;
+            }
+        });
+
+        choicesInstances.push({
+            element: selectElement,
+            instance: choices
+        });
+
+        return choices;
+    }
+
+     function initializeChoicesBrand(selectElement, index) {
+        
+        const choices = new Choices(selectElement, {
+            choices: dataBrand,
+            searchEnabled: true,
+            shouldSort: false,
+            itemSelectText: '',
+            classNames: {
+                containerInner: 'choices__inner form-select brand-select'
             },
             shouldSortItems: function() {
                 return false;
@@ -581,38 +713,51 @@ $('.required').on('input change', function() {
 
     // Fungsi untuk refresh semua select elements
     function refreshAllSelects() {
+        const tipeOrder = $('#tipe_order').val();
         $('.customer-order-select').each(function() {
             const index = $(this).data('index');
             const currentValue = $(this).val();
             const choicesInstance = choicesInstances.find(i => i.element === this)?.instance;
 
             if (choicesInstance) {
+                    let choicesData = [];
                 // Dapatkan order yang tersedia untuk customer saat ini
-                const availableOrders = currentCustomerId
-                    ? customerOrders.filter(order =>
-                        order.customProperties.customer_id == currentCustomerId &&
-                        (!selectedCustomerOrders.includes(order.value) || order.value === currentValue)
-                    )
-                    : [];
+                 if (tipeOrder === "01") { 
+                    const availableOrders = currentCustomerId
+                        ? customerOrders.filter(order =>
+                            order.customProperties.customer_id == currentCustomerId &&
+                            (!selectedCustomerOrders.includes(order.value) || order.value === currentValue)
+                        )
+                        : [];
 
-                const customOption = {
-                    value: "custom",
-                    label: "-- Custom / Buat Baru --",
-                    customProperties: {}
-                };
+                    const customOption = {
+                        value: "custom",
+                        label: "-- Custom / Buat Baru --",
+                        customProperties: {}
+                    };
 
-                // Simpan nilai yang sedang dipilih
-                const currentSelection = choicesInstance.getValue(true);
+                    choicesData = [...availableOrders];
+                    // Simpan nilai yang sedang dipilih
+                   
+                }else{
+                     choicesData = [{
+                        value: "custom",
+                        label: "-- Custom / Buat Baru --",
+                        selected: true,
+                        customProperties: {}
+                    }];
+                }
+
+                 const currentSelection = choicesInstance.getValue(true);
 
                 // Perbarui pilihan
                 choicesInstance.clearChoices();
                 choicesInstance.setChoices(
-                    [customOption, ...availableOrders],
+                    choicesData,
                     'value',
                     'label',
                     false
                 );
-
                 // Kembalikan seleksi jika masih tersedia
                 if (currentValue && (currentValue === "custom" || availableOrders.some(o => o.value == currentValue))) {
                     choicesInstance.setValue([currentValue]);
@@ -757,6 +902,22 @@ $('.required').on('input change', function() {
                         <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][total_estimasi]" placeholder="Rp">
                     </div>
                 </div>
+                <div class="col-md-6 col-12">
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select class="form-select category-select required" name="items[${itemCounter}][category_id]" data-category="${itemCounter}">
+                            <option value="">Select Category</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="form-group">
+                        <label class="form-label">Brand</label>
+                        <select class="form-select brand-select required" name="items[${itemCounter}][brand_id]" data-brand="${itemCounter}">
+                            <option value="">Select Brand</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="col-md-12 col-12 text-end">
                     <button type="button" class="btn btn-danger btn-sm remove-item-btn">
                         <i class="bi bi-trash"></i> Remove Item
@@ -767,7 +928,11 @@ $('.required').on('input change', function() {
 
         $('#items-container').append(newItemHtml);
         const newSelect = $(`[data-index="${itemCounter}"]`)[0];
+        const newSelectCat = $(`[data-category="${itemCounter}"]`)[0];
+        const newSelectBrand = $(`[data-brand="${itemCounter}"]`)[0];
         initializeChoices(newSelect, itemCounter);
+        initializeChoicesCategory(newSelectCat, itemCounter);
+        initializeChoicesBrand(newSelectBrand, itemCounter);
         initItemEvents(itemCounter);
         resetItemForm(itemCounter);
         itemCounter++;
@@ -870,7 +1035,7 @@ $('.required').on('input change', function() {
         const qty = parseFloat(itemRow.find('input[name="items[' + index + '][quantity]"]').val().replace(/[^\d.]/g, '')) || 0;
 
         // Hitung asuransi (2% dari harga)
-        const asuransi = harga * 0.02;
+        const asuransi = harga * qty * 0.02;
         itemRow.find('input[name="items[' + index + '][asuransi]"]').val(asuransi);
 
         // Hitung total
@@ -905,6 +1070,57 @@ $('.required').on('input change', function() {
         });
     }
 
+    
+        const tipeOrder = document.getElementById("tipe_order");
+        const customerSelect = document.getElementById("customer");
+
+        let customerChoices = customerSelect.choicesInstance 
+        || new Choices(customerSelect, { removeItemButton: true, shouldSort: false });
+
+    // simpan instance di element biar ga double
+    customerSelect.choicesInstance = customerChoices;
+
+        const customers = @json($customer);
+    function loadCustomersIfJasmin() {
+         customerChoices.clearStore();
+
+        // isi default
+        customerChoices.setChoices([
+            { value: "", label: "Press to select", disabled: true },
+        ], 'value', 'label', false);
+
+        // kalau tipe Jasmin → load customers
+        if (tipeOrder.value === "01") {
+            const data = customers.map(c => ({
+                value: c.whatsapp_number,
+                label: `${c.whatsapp_number} - ${c.display_name}`
+            }));
+            customerChoices.setChoices(data, 'value', 'label', false);
+        }else{
+             customerChoices.setChoices([
+                { value: "custom", label: "-- Custom / Buat Baru --" , selected: true}
+            ], 'value', 'label', false);
+            $('#name').val("");
+            $('#email').val("");
+            $('#address').val("");
+            $('#no_telp').val("");
+            
+            $('.item-row').each(function() {
+                const index = $(this).find('.customer-order-select').data('index');
+                resetItemForm(index);
+                $(`input[name="items[${index}][no_po_customer]"]`).prop('readonly', true);
+                $(`input[name="items[${index}][no_po_customer]"]`).val('Generated By System');
+                $(`input[name="items[${index}][nama_barang]"]`).prop('readonly', false);
+            });
+             resetCustomerOrderSelects();
+             refreshAllSelects();
+        }
+    }
+
+    loadCustomersIfJasmin();
+
+    // jalankan saat select berubah
+    tipeOrder.addEventListener("change", loadCustomersIfJasmin);
     // Inisialisasi awal
     initLinkButtons();
 

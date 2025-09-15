@@ -29,15 +29,15 @@
                     <div class="col-md-12 col-12">
                         <div class="card">
                             <div class="card-header bg-light">
-                                {{-- @if ($purchaseOrderDetail->every->mutasi_check &&
-                                App\Models\User::checkRole('master_admin') ||
-                                App\Models\User::checkRole('admin_chat_input')) --}}
+                                @if ($purchaseOrderDetail->every->mutasi_check &&
+                                App\Models\User::checkRole('master_admin') &&
+                                App\Models\User::checkRole('admin_chat_input'))
                                 <a href="{{ route('purchase-estimasi.pdf', [$purchase->id]) }}" target="_blank"
                                     class="btn icon btn-info"> <i class="fas fa-file-pdf me-2"></i>
                                     Invoice Estimasi
                                 </a>
-                                {{-- @endif --}}
-                                @if ($purchaseOrderDetail->every->hpp_mutasi_check && App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_purchase'))
+                                @endif
+                                @if ($purchaseOrderDetail->every->hpp_mutasi_check && App\Models\User::checkRole('master_admin') && App\Models\User::checkRole('admin_purchase'))
 
                                     <a href="{{ route('purchase-hpp.pdf', [$purchase->id]) }}" target="_blank"
                                         class="btn icon btn-warning"> <i class="fas fa-file-pdf me-2"></i>
@@ -45,7 +45,7 @@
                                     </a>
                                 @endif
 
-                                @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('operasional'))
+                                @if ($purchaseOrderDetail->every->status_on_check && App\Models\User::checkRole('master_admin') && App\Models\User::checkRole('operasional'))
 
                                     <a href="{{ route('purchase-operasional.pdf', [$purchase->id]) }}" target="_blank"
                                         class="btn icon btn-danger"> <i class="fas fa-file-pdf me-2"></i>
@@ -53,7 +53,7 @@
                                     </a>
                                 @endif
 
-                                @if (App\Models\User::checkRole('master_admin'))
+                               @if ($purchaseOrderDetail->every->wh_indo && App\Models\User::checkRole('master_admin') && App\Models\User::checkRole('operasional'))
 
                                     <a href="{{ route('purchase-received.pdf', [$purchase->id]) }}" target="_blank"
                                         class="btn icon btn-primary"> <i class="fas fa-file-pdf me-2"></i>
@@ -68,6 +68,26 @@
 
 
                                     <div class="row">
+                                         <div class="col-md-6 col-12">
+                                            <div class="form-group">
+                                                <label for="tipe_order" class="form-label">Tipe Order</label>
+                                                <select class="required choices form-select" disabled id="tipe_order" name="tipe_order">
+                                                    
+                                                    <option value="">Press to select</option>
+                                                        <option value="01" {{ $purchase->tipe_order == '01' ? 'selected' : '' }}>Jasmin</option>
+                                                        <option value="02" {{ $purchase->tipe_order == '02' ? 'selected' : '' }}>Jastip Order</option>
+                                                        <option value="03" {{ $purchase->tipe_order == '03' ? 'selected' : '' }}>Jastip Only</option>
+                                                        <option value="04" {{ $purchase->tipe_order == '04' ? 'selected' : '' }}>Jastip B2B</option>
+
+                                                
+                                                </select>
+                                            </div>
+                                            @error('publish_at')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                            @enderror
+                                        </div>
                                         <div class="col-md-6 col-12">
                                             <div class="form-group">
                                                 <label for="customer" class="form-label">Customer</label>
@@ -105,7 +125,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12 col-12">
+                                        <div class="col-md-6 col-12">
                                             <div class="form-group">
                                                 <label for="address" class="form-label">Address</label>
                                                 <input type="text" id="address" class="form-control form-control-lg"
@@ -124,11 +144,11 @@
                     <div class="col-md-12 col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Customer PO</h4>
+                                {{-- <h4 class="card-title">Customer PO</h4> --}}
                                 <div class="row">
                                     <div class="col-12 col-md-6 order-md-1 order-first">
                                         <h3>Purchase Order #{{ $purchase->no_invoice }}</h3>
-                                        <div class="summary-badges mt-2">
+                                        {{-- <div class="summary-badges mt-2">
                                             <span class="badge bg-light-primary">
                                                 <i class="bi bi-box-seam"></i> {{ $total_items }} Items
                                             </span>
@@ -136,7 +156,7 @@
                                                 <i class="bi bi-cash-stack"></i>
                                                 <span data-currency="{{ $total_estimasi_harga }}"></span>
                                             </span>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
@@ -189,7 +209,7 @@
                                                         <label class="form-label">Harga Barang</label>
                                                         <input type="text" class="form-control form-control-lg"
                                                             name="items[{{ $index }}][estimasi_harga]" readonly
-                                                            value="{{ old("items.$index.estimasi_harga", $item->estimasi_harga) }}">
+                                                            value="{{ old("items.$index.estimasi_harga", number_format($item->estimasi_harga,0,'','')) }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 col-12">
@@ -214,7 +234,7 @@
                                                         <label class="form-label">Asuransi 2%</label>
                                                         <input type="text" class="form-control form-control-lg"
                                                             name="items[{{ $index }}][asuransi]" readonly
-                                                            value="{{ old("items.$index.asuransi", $item->asuransi) }}">
+                                                            value="{{ old("items.$index.asuransi", number_format($item->asuransi,0,'','')) }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 col-12">
@@ -222,7 +242,7 @@
                                                         <label class="form-label">Jasa Kg</label>
                                                         <input type="text" class="form-control form-control-lg" readonly
                                                             name="items[{{ $index }}][jasa]"
-                                                            value="{{ old("items.$index.jasa", $item->jasa) }}">
+                                                            value="{{ old("items.$index.jasa", number_format($item->jasa,0,'','')) }}">
                                                     </div>
                                                 </div>
 
@@ -247,7 +267,7 @@
                                                         <label class="form-label">Dsikon</label>
                                                         <input type="text" class="form-control form-control-lg"
                                                             name="items[{{ $index }}][estimasi_diskon]" readonly
-                                                            value="{{ old("items.$index.estimasi_diskon", $item->estimasi_diskon) }}">
+                                                            value="{{ old("items.$index.estimasi_diskon", number_format($item->estimasi_diskon,0,'','')) }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 col-12">
@@ -255,7 +275,7 @@
                                                         <label class="form-label">Total Harga Estimasi</label>
                                                         <input type="text" class="form-control form-control-lg" readonly
                                                             name="items[{{ $index }}][total_estimasi]"
-                                                            value="{{ old("items.$index.total_estimasi", $item->total_estimasi) }}">
+                                                            value="{{ old("items.$index.total_estimasi", number_format($item->total_estimasi,0,'','')) }}">
                                                     </div>
                                                 </div>
 
@@ -429,7 +449,7 @@
                                                                         aria-controls="collapseHpp{{ $index }}">
                                                                         HPP
                                                                     </button>
-                                                                    @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_purchase'))
+                                                                    @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_purchase') || App\Models\User::checkRole('accounting'))
                                                                         <button type="button"
                                                                             class="btn btn-outline-primary btn-sm edit-hpp-btn ms-2"
                                                                             data-item-id="{{ $item->id }}"
@@ -437,7 +457,7 @@
                                                                             data-total-purchase="{{ $item->total_purchase }}"
                                                                             data-status-purchase="{{ $item->status_purchase }}"
                                                                             data-notes="{{ $item->notes }}"
-                                                                            data-bukti-pembelian="{{ $item->bukti_pembelian_path }}"
+                                                                            data-bukti-pembelian="{{ $item->foto_bukti_pembelian }}"
                                                                             data-harga-hpp="{{ $item->harga_hpp }}"
                                                                             data-diskon="{{ $item->diskon }}"
                                                                             data-pajak="{{ $item->pajak }}"
@@ -613,7 +633,7 @@
                                                                         aria-controls="collapseOperasional{{ $index }}">
                                                                         Operasional
                                                                     </button>
-                                                                    @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('operasional'))
+                                                                    @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('operasional') || App\Models\User::checkRole('accounting'))
                                                                         <button type="button"
                                                                             class="btn btn-outline-primary btn-sm edit-operasional-btn ms-2"
                                                                             data-item-id="{{ $item->id }}"
@@ -896,12 +916,14 @@
                                     <label class="form-label">Foto Bukti Transfer</label>
                                     <input type="file" id="bukti_transfer" class="form-control form-control-lg"
                                         name="bukti_transfer">
+                                        <input type="hidden" id="txt_foto_bukti">
 
                                     <div id="foto-preview" class="mt-3"></div>
 
 
                                 </div>
                             </div>
+                            @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('accounting'))
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Mutasi Check</label>
@@ -912,6 +934,7 @@
                                     <input type="true" id="modal_status" name="mutasi_check" hidden>
                                 </div>
                             </div>
+                            @endif
                         </div>
                     </form>
                 </div>
@@ -940,14 +963,14 @@
                                 <div class="form-group">
                                     <label class="form-label">Payment Method</label>
 
-                                    <select class="choices form-select" id="payment_method" name="payment_method">
+                                    <select class="form-select" id="payment_method" name="payment_method">
                                         <option value="">Press to select</option>
 
-                                        @foreach($paymentMethod as $paymentMethods)
+                                        {{-- @foreach($paymentMethod as $paymentMethods)
                                             <option value="{{ $paymentMethods->name . '-' . $paymentMethods->number }}">
                                                 {{$paymentMethods->name . '-' . $paymentMethods->number}}
                                             </option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
                                 </div>
                             </div>
@@ -1031,19 +1054,26 @@
                                     <label class="form-label">Foto Bukti Pembelian</label>
                                     <input type="file" id="bukti_pembelian" class="form-control form-control-lg"
                                         name="bukti_pembelian">
-                                    <div id="bukti_pembelian_preview" class="mt-2"></div>
+                                    {{-- <div id="bukti_pembelian_preview" class="mt-2"></div> --}}
+
+                                        <input type="hidden" id="txt_foto_bukti_pembelian">
+
+                                        <div id="foto-preview-bukti-pembelian" class="mt-3"></div>
+
                                 </div>
                             </div>
+                            @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('accounting'))
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Mutasi Check</label>
                                     <br>
                                     <input id="hpp_btn_status" type="checkbox" data-onstyle="info" data-toggle="toggle"
-                                        data-on="Available" data-off="Not Available" data-offstyle="secondary"
+                                        data-on="Checked" data-off="Unchecked" data-offstyle="secondary"
                                         data-width="200" data-height="45">
                                     <input type="hidden" id="hpp_status" name="hpp_mutasi_check" value="false">
                                 </div>
                             </div>
+                            @endif
 
                         </div>
                     </form>
@@ -1094,7 +1124,7 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">SKU</label>
-                                    <input type="text" id="sku" class="form-control form-control-lg" name="sku"
+                                    <input type="text" id="sku" readonly class="form-control form-control-lg" name="sku"
                                         placeholder="Nomor SKU">
                                 </div>
                             </div>
@@ -1122,6 +1152,7 @@
                                     </select>
                                 </div>
                             </div>
+                            @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('accounting'))
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Status On Check</label>
@@ -1132,11 +1163,17 @@
                                     <input type="hidden" id="wh_usa_status" name="wh_usa_mutasi_check" value="false">
                                 </div>
                             </div>
+                            @endif
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">WH USA</label>
                                     <input type="file" id="wh_usa" class="form-control form-control-lg" name="wh_usa">
-                                    <div id="wh_usa_preview" class="mt-2"></div>
+                                    {{-- <div id="wh_usa_preview" class="mt-2"></div> --}}
+
+                                     <input type="hidden" id="txt_foto_wh_usa">
+
+                                    <div id="foto-preview-wh-usa" class="mt-3"></div>
+
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
@@ -1144,7 +1181,10 @@
                                     <label class="form-label">WH Indo</label>
                                     <input type="file" id="wh_indonesia" class="form-control form-control-lg"
                                         name="wh_indonesia">
-                                    <div id="wh_indonesia_preview" class="mt-2"></div>
+                                    {{-- <div id="wh_indonesia_preview" class="mt-2"></div> --}}
+                                     <input type="hidden" id="txt_foto_wh_indonesia">
+
+                                    <div id="foto-preview-wh-indonesia" class="mt-3"></div>
                                 </div>
                             </div>
 
@@ -1187,12 +1227,12 @@
                 const itemId = $(this).data('item-id');
                 $('#item_id').val(itemId);
                 $('#nama_rek').val($(this).data('nama-rek'));
-                $('#jumlah_transfer').val($(this).data('total-estimasi'));
-                $('#dp').val($(this).data('dp'));
-                $('#full_payment').val($(this).data('full-payment'));
+                $('#jumlah_transfer').val(parseInt($(this).data('total-estimasi')));
+                $('#dp').val(parseInt($(this).data('dp')));
+                $('#full_payment').val(parseInt($(this).data('full-payment')));
                 $('#status_follow_up').val($(this).data('status-follow-up'));
                 $('#foto-bukti').val($(this).data('foto-bukti'));
-
+                $('#txt_foto_bukti').val($(this).data('foto-bukti'));
                 const fotoBukti = $(this).data('foto-bukti');
                 const fotoBuktiField = $('#bukti_transfer');
                 const fotoPreview = $('#foto-preview');
@@ -1288,7 +1328,8 @@
 
             $('#saveEstimasi').click(function () {
                 // Validasi form
-                const requiredFields = [{
+                const fotoBukti = $('#txt_foto_bukti').val();
+                let requiredFields = [{
                     id: '#nama_rek',
                     name: 'Nama Rekening'
                 },
@@ -1309,15 +1350,14 @@
                     name: 'Full Payment'
                 },
                 {
-                    id: '#bukti_transfer',
-                    name: 'Bukti Transfer'
-                },
-                {
                     id: '#kurang_bayar',
                     name: 'Kurang Bayar'
                 },
                 ];
 
+                if (!fotoBukti) {
+                    requiredFields.push({ id: '#bukti_transfer', name: 'Bukti Transfer' });
+                }
                 let isValid = true;
                 const emptyFields = [];
 
@@ -1479,33 +1519,51 @@
             $(document).on('click', '.edit-hpp-btn', function () {
                 const itemId = $(this).data('item-id');
 
+               
                 // Isi form modal dengan data dari tombol
                 $('#hpp_item_id').val(itemId);
                 $('#payment_method').val($(this).data('payment-method'));
-                $('#total_purchase').val($(this).data('total-purchase'));
+                $('#total_purchase').val(parseInt($(this).data('total-purchase')));
                 $('#status_purchase').val($(this).data('status-purchase'));
                 $('#notes').val($(this).data('notes'));
-                $('#pajak').val($(this).data('pajak'));
-                $('#diskon').val($(this).data('diskon'));
-                $('#pengiriman').val($(this).data('pengiriman'));
-                $('#harga_barang').val($(this).data('harga-hpp'));
-
+                $('#pajak').val(parseInt($(this).data('pajak')));
+                $('#diskon').val(parseInt($(this).data('diskon')));
+                $('#pengiriman').val(parseInt($(this).data('pengiriman')));
+                $('#harga_barang').val(parseInt($(this).data('harga-hpp')));
+                $("#txt_foto_bukti_pembelian").val($(this).data('bukti-pembelian'));
                 hitungTotalPurchase();
                 // Tampilkan preview bukti pembelian jika ada
                 const buktiPembelianPath = $(this).data('bukti-pembelian');
-                const previewDiv = $('#bukti_pembelian_preview');
-                previewDiv.empty();
+                const previewDiv = $('#foto-preview-bukti-pembelian');
+                const fotoBuktiField = $('#bukti_pembelian');
+
+               console.log("AAA",buktiPembelianPath);
+
+                // Reset file input
+                fotoBuktiField.val('');
 
                 if (buktiPembelianPath) {
-                    previewDiv.append(`
-                                                    <img src="/storage/${buktiPembelianPath}" class="img-thumbnail" style="max-height: 100px;">
-                                                    <p class="small text-muted mt-1">Current file</p>
-                                                `);
+                    // Jika sudah ada foto bukti, tampilkan preview image yang bisa diklik
+                    previewDiv.html(`
+                                                        <a href="/storage/${buktiPembelianPath}"
+                                                            target="_blank"
+                                                            class="btn btn-sm btn-outline-primary mt-1">
+                                                            <i class="bi bi-eye"></i> Lihat Dokumen
+                                                        </a>
+                                                        `);
+
+                    // Buat field tidak required karena sudah ada foto
+                    fotoBuktiField.removeAttr('required');
+                } else {
+                    // Jika belum ada foto
+                    previewDiv.html('');
+                    fotoBuktiField.attr('required', 'required');
                 }
 
                 // Set toggle
 
 
+           
                 const isChecked = $(this).data('hpp-mutasi-check');
 
                 // Atur nilai checkbox berdasarkan isChecked
@@ -1565,6 +1623,67 @@
                     $('#status_purchase').trigger('change');
                 }
 
+                 var paymentMethodValue = $(this).data('payment-method');
+    console.log('Nilai payment method:', paymentMethodValue);
+    
+    // Dapatkan instance Choices untuk payment method
+    var paymentMethodElement = document.getElementById('payment_method');
+    
+     if (typeof Choices !== 'undefined') {
+        // Destroy existing instance jika ada
+        if (paymentMethodElement.choices) {
+            paymentMethodElement.choices.destroy();
+        }
+        
+        // Pastikan opsi payment method sudah ada
+        if ($('#payment_method option').length <= 1) {
+            // Isi opsi payment method dari data PHP
+            @foreach($paymentMethod as $paymentMethods)
+                $('#payment_method').append('<option value="{{ $paymentMethods->name . '-' . $paymentMethods->number }}">{{ $paymentMethods->name . '-' . $paymentMethods->number }}</option>');
+            @endforeach
+        }
+
+        // Buat instance Choices baru
+        var paymentMethodChoices = new Choices(paymentMethodElement, {
+            searchEnabled: true,
+            shouldSort: false,
+            itemSelectText: ''
+        });
+
+        // Set nilai yang dipilih setelah timeout kecil
+        setTimeout(function() {
+            if (paymentMethodValue) {
+                paymentMethodChoices.setChoiceByValue(paymentMethodValue);
+            } else {
+                // Auto select index 0 jika belum ada data payment method
+                // Pilih opsi pertama setelah opsi default
+                if ($('#payment_method option').length > 1) {
+                    paymentMethodChoices.setChoiceByValue($('#payment_method option:eq(1)').val());
+                }
+            }
+        }, 100);
+    } else {
+        // Fallback traditional method
+        // Pastikan opsi payment method sudah ada
+        if ($('#payment_method option').length <= 1) {
+            // Isi opsi payment method dari data PHP
+            @foreach($paymentMethod as $paymentMethods)
+                $('#payment_method').append('<option value="{{ $paymentMethods->name . '-' . $paymentMethods->number }}">{{ $paymentMethods->name . '-' . $paymentMethods->number }}</option>');
+            @endforeach
+        }
+        
+        // Set nilai yang dipilih atau auto select index 0
+        if (paymentMethodValue) {
+            $('#payment_method').val(paymentMethodValue);
+        } else {
+            // Auto select index 0 jika belum ada data payment method
+            // Pilih opsi pertama setelah opsi default
+            if ($('#payment_method option').length > 1) {
+                $('#payment_method').val($('#payment_method option:eq(1)').val());
+            }
+        }
+        $('#payment_method').trigger('change');
+    }
                 // Tampilkan modal
                 hppModal.show();
             });
@@ -1600,6 +1719,7 @@
             // Handler untuk tombol save
             $('#saveHpp').click(function () {
                 // Validasi form
+                const fotoBukti = $("#txt_foto_bukti_pembelian").val();
                 const requiredFields = [{
                     id: '#payment_method',
                     name: 'Payment Method'
@@ -1627,13 +1747,12 @@
                 {
                     id: '#pengiriman',
                     name: 'Pengiriman'
-                },
-                {
-                    id: '#bukti_pembelian',
-                    name: 'Foto Bukti Pembelian'
                 }
                 ];
 
+                 if (!fotoBukti) {
+                    requiredFields.push({ id: '#bukti_pembelian', name: 'Foto Bukti Pembelian' });
+                }
                 let isValid = true;
                 const emptyFields = [];
 
@@ -1783,14 +1902,14 @@
 
                 // Isi form modal
                 $('#operasional_item_id').val(itemId);
-                $('#fix_weight').val($(this).data('fix-weight'));
-                $('#fix_price').val($(this).data('fix-price'));
+                $('#fix_weight').val(parseInt($(this).data('fix-weight') || 0));
+                $('#fix_price').val(parseInt($(this).data('fix-price') || 0));
                 $('#status_barang_sampai').val(statusBarang);
 
                 $('#nomor_box').val($(this).data('no-box'));
                 $('#sku').val($(this).data('sku'));
-                $('#kurir_lokal').val($(this).data('kurir-lokal'));
-                $('#pelunasan').val($(this).data('pelunasan'));
+                $('#kurir_lokal').val(parseInt($(this).data('kurir-lokal') || 0));
+                $('#pelunasan').val(parseInt($(this).data('pelunasan') || 0));
 
 
                 var statusFollowUp = $(this).data('status-barang-sampai');
@@ -1852,19 +1971,54 @@
 
 
                 // Preview gambar jika ada
-                const whUsaImg = $(this).data('wh-usa-img');
-                const whIndoImg = $(this).data('wh-indo-img');
+                const whUsaImg = $(this).data('wh-usa-path');
+                const whIndoImg = $(this).data('wh-indonesia-path');
+                $("#txt_foto_wh_usa").val(whUsaImg);
+                $("#txt_foto_wh_indonesia").val(whIndoImg);
+                const fotoBuktiFieldUsa = $('#wh_usa');
+                const fotoPreviewUsa = $('#foto-preview-wh-usa');
+
+                const fotoBuktiFieldIndo = $('#wh_indonesia');
+                const fotoPreviewIndo = $('#foto-preview-wh-indonesia');
+
+                // Reset file input
+                fotoBuktiFieldUsa.val('');
+                fotoBuktiFieldIndo.val('');
 
                 if (whUsaImg) {
-                    $('#wh_usa_preview').html(
-                        `<img src="/storage/${whUsaImg}" class="img-thumbnail" style="max-height: 150px;">`
-                    );
+                    // Jika sudah ada foto bukti, tampilkan preview image yang bisa diklik
+                    fotoPreviewUsa.html(`
+                                                        <a href="/storage/${whUsaImg}"
+                                                            target="_blank"
+                                                            class="btn btn-sm btn-outline-primary mt-1">
+                                                            <i class="bi bi-eye"></i> Lihat Dokumen
+                                                        </a>
+                                                        `);
+
+                    // Buat field tidak required karena sudah ada foto
+                    fotoBuktiFieldUsa.removeAttr('required');
+                } else {
+                    // Jika belum ada foto
+                    fotoPreviewUsa.html('');
+                    fotoBuktiFieldUsa.attr('required', 'required');
                 }
 
                 if (whIndoImg) {
-                    $('#wh_indonesia_preview').html(
-                        `<img src="/storage/${whIndoImg}" class="img-thumbnail" style="max-height: 150px;">`
-                    );
+                    // Jika sudah ada foto bukti, tampilkan preview image yang bisa diklik
+                    fotoPreviewIndo.html(`
+                                                        <a href="/storage/${whIndoImg}"
+                                                            target="_blank"
+                                                            class="btn btn-sm btn-outline-primary mt-1">
+                                                            <i class="bi bi-eye"></i> Lihat Dokumen
+                                                        </a>
+                                                        `);
+
+                    // Buat field tidak required karena sudah ada foto
+                    fotoBuktiFieldIndo.removeAttr('required');
+                } else {
+                    // Jika belum ada foto
+                    fotoPreviewIndo.html('');
+                    fotoBuktiFieldIndo.attr('required', 'required');
                 }
 
                 // Tampilkan modal
@@ -1874,16 +2028,9 @@
             // Handle simpan operasional
             $('#saveOperasional').click(function () {
                 // Validasi form
-                const requiredFields = [{
-                    id: '#wh_usa',
-                    name: 'WH USA',
-                    isFile: true
-                },
-                {
-                    id: '#wh_indonesia',
-                    name: 'WH Indo',
-                    isFile: true
-                },
+                const ftoUsa = $("#txt_foto_wh_usa").val();
+                const ftoIndo = $("#txt_foto_wh_indonesia").val();
+                const requiredFields = [
                 {
                     id: '#fix_weight',
                     name: 'Fix Weight'
@@ -1909,6 +2056,14 @@
                     name: 'Fix Price'
                 }
                 ];
+
+                if (!ftoUsa) {
+                    requiredFields.push({ id: '#wh_usa', name: 'WH USA' });
+                }
+
+                if (!wh_indonesia) {
+                    requiredFields.push({ id: '#wh_indonesia', name: 'WH Indonesia' });
+                }
 
                 let isValid = true;
                 const emptyFields = [];

@@ -52,7 +52,7 @@ class User extends Authenticatable
 
      public static function checkRole($key)
     {
-        $data = Role::where('id',Auth::user()->role_id)->where('guard_name',$key)->first();
+        $data = Role::where('id',Auth::user()->role_id)->where('slug',$key)->first();
         if ($data)
         {
             return true;

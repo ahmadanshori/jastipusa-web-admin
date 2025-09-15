@@ -53,6 +53,24 @@
     </li>
     @endif
 
+     @if (App\Models\User::checkRole('master_admin'))
+    <li class="sidebar-item {{ (request()->is('category*')) ? 'active' : '' }}">
+        <a href="{{ route('category.index') }}" class='sidebar-link'>
+            <i class="bi bi-grid-fill"></i>
+            <span>Category</span>
+        </a>
+    </li>
+    @endif
+
+     @if (App\Models\User::checkRole('master_admin'))
+    <li class="sidebar-item {{ (request()->is('brand*')) ? 'active' : '' }}">
+        <a href="{{ route('brand.index') }}" class='sidebar-link'>
+            <i class="bi bi-tags-fill"></i>
+            <span>Brand</span>
+        </a>
+    </li>
+    @endif
+
 
 
 

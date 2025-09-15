@@ -55,8 +55,11 @@ class UserController extends Controller
                 'updated_by' =>  Auth::id(),
             ];
             $user = $this->user->create($data);
-//  $user->syncRoles($request->role);
-//  $user->assignRole($request->input('role'));
+            $role = $this->role->find($request->input('role'));
+
+            if ($role) {
+                $user->assignRole($role->name);
+            }
 
             \Session::flash('success', 'Account has been created');
             return redirect()->route('user.index');
@@ -87,7 +90,7 @@ class UserController extends Controller
         $validation = Validator::make($request->all(), [
             'name' => 'required|max:255',
             'role' => ['required', 'string'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,id,'.$id],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$id],
         ]);
 
 
@@ -101,9 +104,11 @@ class UserController extends Controller
 
             $user->update($data);
             DB::table('model_has_roles')->where('model_id', $id)->delete();
+            $role = $this->role->find($request->input('role'));
 
-
-            $user->assignRole($request->input('role'));
+            if ($role) {
+                $user->assignRole($role->name);
+            }
 
             \Session::flash('success', 'Account has been updated');
             return redirect()->route('user.index');

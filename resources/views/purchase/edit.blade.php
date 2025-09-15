@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-first">
                 <h3>Edit Purchase Order</h3>
-                <p class="text-subtitle text-muted">Edit purchase order details</p>
+                <p class="text-subtitle text-muted">Edit Purchase Order Detail</p>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -29,12 +29,11 @@
                     <div class="card">
                         <div class="card-content">
                             <div class="card-body">
-                                <h5 class="card-title">Customer Information</h5>
                                      <div class="row">
                                  <div class="col-md-6 col-12">
                                     <div class="form-group">
                                          <label for="tipe_order" class="form-label">Tipe Order</label>
-                                        <select class="required choices form-select" id="tipe_order" name="tipe_order">
+                                        <select class="required choices form-select" id="tipe_order" name="tipe_order" readonly>
                                             
                                             <option value="">Press to select</option>
                                                 <option value="01" {{ $purchase->tipe_order == '01' ? 'selected' : '' }}>Jasmin</option>
@@ -55,7 +54,7 @@
                                    <div class="col-md-6 col-12">
                                     <div class="form-group">
                                          <label for="customer" class="form-label">Customer</label>
-                                        <select class="required choices form-select" id="customer" name="no_telp">
+                                        <select class="required choices form-select" id="customer" disabled name="no_telp">
                                              <option value="custom">-- Custom / Buat Baru --</option>
                                             
                                             <option value="">Press to select</option>
@@ -77,7 +76,7 @@
                                 <div class="col-md-6 col-12">
                                     <div class="form-group">
                                         <label for="name" class="form-label">Name</label>
-                                        <input type="text" id="name" class="form-control form-control-lg required"  value="{{ (isset($purchase->nama)? $purchase->nama:old('nama')) }}"  name="nama">
+                                        <input type="text" id="name" class="form-control form-control-lg required" readonly value="{{ (isset($purchase->nama)? $purchase->nama:old('nama')) }}"  name="nama">
                                     </div>
                                     @error('name')
                                     <div class="invalid-feedback">
@@ -89,7 +88,7 @@
                                 <div class="col-md-6 col-12">
                                     <div class="form-group">
                                         <label for="email" class="form-label">Email</label>
-                                        <input type="text" id="email" class="form-control form-control-lg required"  value="{{ (isset($purchase->email)? $purchase->email:old('email')) }}"  name="email">
+                                        <input type="text" id="email" class="form-control form-control-lg required" readonly value="{{ (isset($purchase->email)? $purchase->email:old('email')) }}"  name="email">
                                     </div>
                                     @error('email')
                                     <div class="invalid-feedback">
@@ -101,7 +100,7 @@
                                  <div class="col-md-6 col-12">
                                     <div class="form-group">
                                         <label for="no_telp" class="form-label">Phone</label>
-                                        <input type="text" id="no_telp" class="form-control form-control-lg required"  value="{{ (isset($purchase->no_telp)? $purchase->no_telp:old('no_telp')) }}"  name="phone">
+                                        <input type="text" id="no_telp" class="form-control form-control-lg required" readonly value="{{ (isset($purchase->no_telp)? $purchase->no_telp:old('no_telp')) }}"  name="phone">
                                     </div>
                                     @error('no_telp')
                                     <div class="invalid-feedback">
@@ -113,7 +112,7 @@
                                   <div class="col-md-6 col-12">
                                     <div class="form-group">
                                         <label for="name" class="form-label">Alamat</label>
-                                        <input type="text" id="address" class="form-control form-control-lg required"  value="{{ (isset($purchase->alamat)? $purchase->alamat:old('alamat')) }}"  name="alamat">
+                                        <input type="text" id="address" class="form-control form-control-lg required" readonly value="{{ (isset($purchase->alamat)? $purchase->alamat:old('alamat')) }}"  name="alamat">
                                     </div>
                                     @error('name')
                                     <div class="invalid-feedback">
@@ -149,7 +148,7 @@
                                         <div class="form-group">
                                             <label class="form-label">Customer Order</label>
                                           
-                                            <select class="choices form-select customer-order-select" disabled
+                                            <select class="choices form-select customer-order-select" 
                                                     name="items[{{ $index }}][customer_order_id]" 
                                                     data-index="{{ $index }}"
                                                     data-selected="{{ $item->no_po }}">
@@ -161,50 +160,50 @@
                                     <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Quantity</label>
-                                            <input type="text" readonly  value="{{ old("items.$index.quantity", $item->qty) }}" class="form-control form-control-lg required" name="items[0][quantity]">
+                                            <input type="text" value="{{ old("items.$index.quantity", $item->qty) }}" class="form-control form-control-lg required" name="items[0][quantity]">
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Notes</label>
-                                            <input type="text" readonly  value="{{ old("items.$index.estimasi_notes", $item->estimasi_notes) }}" class="form-control form-control-lg required" name="items[0][estimasi_notes]">
+                                            <input type="text" value="{{ old("items.$index.estimasi_notes", $item->estimasi_notes) }}" class="form-control form-control-lg required" name="items[0][estimasi_notes]">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label class="form-label">No. PO Customer</label>
-                                            <input type="text"  value="{{ old("items.$index.no_po_customer", $item->no_po) }}" readonly class="form-control form-control-lg required" name="items[0][no_po_customer]">
+                                            <input type="text" value="{{ old("items.$index.no_po_customer", $item->no_po) }}" class="form-control form-control-lg required" name="items[0][no_po_customer]">
                                         </div>
                                     </div>
                                       <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Harga Barang</label>
-                                            <input type="text" class="form-control form-control-lg required" readonly  value="{{ old("items.$index.estimasi_harga", $item->estimasi_harga) }}" name="items[0][estimasi_harga]">
+                                            <input type="text" class="form-control form-control-lg required" value="{{ old("items.$index.estimasi_harga", number_format($item->estimasi_harga)) }}" name="items[0][estimasi_harga]">
                                         </div>
                                     </div>
                                      <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Estimasi Kg</label>
-                                            <input type="text" class="form-control form-control-lg required" readonly  value="{{ old("items.$index.estimasi_kg", $item->estimasi_kg) }}" name="items[0][estimasi_kg]">
+                                            <input type="text" class="form-control form-control-lg required" value="{{ old("items.$index.estimasi_kg", $item->estimasi_kg) }}" name="items[0][estimasi_kg]">
                                         </div>
                                     </div>
                                   
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Nama Barang</label>
-                                            <input type="text" class="form-control form-control-lg required" name="items[0][nama_barang]"  readonly  value="{{ old("items.$index.nama_barang", $item->nama_barang) }}">
+                                            <input type="text" class="form-control form-control-lg required" name="items[0][nama_barang]" value="{{ old("items.$index.nama_barang", $item->nama_barang) }}">
                                         </div>
                                     </div>
                                      <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Asuransi 2%</label>
-                                            <input type="text" readonly class="form-control form-control-lg required" name="items[0][asuransi]" readonly  value="{{ old("items.$index.asuransi", $item->asuransi) }}">
+                                            <input type="text" class="form-control form-control-lg required" name="items[0][asuransi]" value="{{ old("items.$index.asuransi", number_format($item->asuransi)) }}">
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Jasa Kg</label>
-                                            <input type="text" class="form-control form-control-lg required" name="items[0][jasakg]" readonly  value="{{ old("items.$index.jasakg", $item->jasakg) }}">
+                                            <input type="text" class="form-control form-control-lg required" name="items[0][jasakg]" value="{{ old("items.$index.jasakg", number_format($item->jasakg,0)) }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
@@ -213,7 +212,7 @@
                                             <label class="form-label">Link Barang</label>
                                             <div class="input-group">
                                                 <input type="text" class="form-control form-control-lg required link-input"
-                                                    name="items[0][link_barang]" readonly  value="{{ old("items.$index.link_barang", $item->link_barang) }}">
+                                                    name="items[0][link_barang]" value="{{ old("items.$index.link_barang", $item->link_barang) }}">
                                                 <button class="btn btn-outline-primary btn-open-link"
                                                     type="button">
                                                     <i class="bi bi-box-arrow-up-right"></i>
@@ -224,13 +223,13 @@
                                     <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Diskon</label>
-                                            <input type="text" class="form-control form-control-lg required"  readonly  value="{{ old("items.$index.diskon", $item->diskon) }}" name="items[0][diskon]">
+                                            <input type="text" class="form-control form-control-lg required" value="{{ old("items.$index.diskon", number_format($item->diskon,0)) }}" name="items[0][diskon]">
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Total Estimasi</label>
-                                            <input type="text" class="form-control form-control-lg required" name="items[0][total_estimasi]" readonly  value="{{ old("items.$index.total_estimasi", $item->total_estimasi) }}">
+                                            <input type="text" class="form-control form-control-lg required" name="items[0][total_estimasi]" value="{{ old("items.$index.total_estimasi", number_format($item->total_estimasi,0)) }}">
                                         </div>
                                     </div>
                                     <div class="col-md-12 col-12 text-end">
@@ -239,66 +238,6 @@
                                         </button>
                                     </div>
                                 </div>
-
-                                    {{-- <div class="item-row row mb-3 border p-3 rounded">
-                                        <div class="col-md-12 col-12">
-                                            <div class="form-group">
-                                                <label class="form-label">Customer Order</label>
-                                                <select class="choices form-select customer-order-select" disabled
-                                                    name="items[{{ $index }}][customer_order_id]" 
-                                                    data-index="{{ $index }}"
-                                                    data-selected="{{ $item->no_po }}">
-                                                    <option value="">Select Customer Order</option>
-                                                    <option value="{{ $item->no_po }}" selected>{{ $item->no_po }}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <div class="form-group">
-                                                <label class="form-label">No. PO Customer</label>
-                                                <input type="text" class="form-control" 
-                                                    name="items[{{ $index }}][no_po_customer]" 
-                                                    value="{{ old("items.$index.no_po_customer", $item->no_po) }}" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <div class="form-group">
-                                                <label class="form-label">Nama Barang</label>
-                                                <input type="text" class="form-control" 
-                                                    name="items[{{ $index }}][nama_barang]" 
-                                                    value="{{ old("items.$index.nama_barang", $item->nama_barang) }}">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <div class="form-group">
-                                                <label class="form-label">Link Barang</label>
-                                                <input type="text" class="form-control" 
-                                                    name="items[{{ $index }}][link_barang]" 
-                                                    value="{{ old("items.$index.link_barang", $item->link_barang) }}">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3 col-12">
-                                            <div class="form-group">
-                                                <label class="form-label">Estimasi Kg</label>
-                                                <input type="text" class="form-control" 
-                                                    name="items[{{ $index }}][estimasi_kg]" 
-                                                    value="{{ old("items.$index.estimasi_kg", $item->estimasi_kg) }}">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3 col-12">
-                                            <div class="form-group">
-                                                <label class="form-label">Estimasi Harga</label>
-                                                <input type="text" class="form-control" 
-                                                    name="items[{{ $index }}][estimasi_harga]" 
-                                                    value="{{ old("items.$index.estimasi_harga", $item->estimasi_harga) }}">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12 col-12 text-end">
-                                            <button type="button" class="btn btn-danger btn-sm remove-item-btn">
-                                                <i class="bi bi-trash"></i> Remove Item
-                                            </button>
-                                        </div>
-                                    </div> --}}
                                     @endforeach
                                 </div>
                             </div>
@@ -321,6 +260,7 @@
 @section('scripts')
 <script>
 $(document).ready(function() {
+     let currentCustomerId = null;
     // Inisialisasi data customer order dari controller
     $('#customer').change(function() {
         const customerId = $(this).val();
@@ -361,9 +301,22 @@ $(document).ready(function() {
     // Fungsi untuk menginisialisasi Choices
     function initializeChoices(selectElement, index) {
         const selectedValue = $(selectElement).data('selected');
+        const tipeOrder = $('#tipe_order').val();
         
+        const customOption = {
+            value: "custom",
+            label: "-- Custom / Buat Baru --",
+            selected: true,
+            customProperties: {}
+        };
+        let choicesData = [];
+        if (tipeOrder === "01") { 
+            choicesData = customerOrdersJson
+        }else{
+            choicesData = [customOption]
+        }
         const choices = new Choices(selectElement, {
-            choices: customerOrdersJson,
+            choices: choicesData,
             searchEnabled: true,
             shouldSort: false,
             itemSelectText: '',
@@ -385,6 +338,68 @@ $(document).ready(function() {
 
         return choices;
     }
+
+    // function initializeChoices(selectElement, index) {
+    //     const tipeOrder = $('#tipe_order').val();
+
+    //     const existingInstance = choicesInstances.find(i => i.element === selectElement);
+    //     if (existingInstance) {
+    //         existingInstance.instance.destroy();
+    //         choicesInstances = choicesInstances.filter(i => i.element !== selectElement);
+    //     }
+
+    //     // Get available orders (not selected or for current customer)
+    //      let choicesData = [];
+    //             // Dapatkan order yang tersedia untuk customer saat ini
+    //          const customOption = {
+    //             value: "custom",
+    //             label: "-- Custom / Buat Baru --",
+    //             selected: true,
+    //             customProperties: {}
+    //         };
+    //     if (tipeOrder === "01") { 
+    //         const availableOrders = currentCustomerId
+    //             ? customerOrders.filter(order =>
+    //                 order.customProperties.customer_id == currentCustomerId &&
+    //                 (!selectedCustomerOrders.includes(order.value) ||
+    //                 order.value === $(selectElement).val()))
+    //             : [];
+
+          
+    //         choicesData = [customerOrdersJson];
+    //     }else{
+    //         choicesData = [customOption];
+    //     }
+
+    //     const choices = new Choices(selectElement, {
+    //         choices: choicesData,
+    //         searchEnabled: true,
+    //         shouldSort: false,
+    //         itemSelectText: '',
+    //         classNames: {
+    //             containerInner: 'choices__inner form-select'
+    //         },
+    //         callbackOnInit: function() {
+    //             const selectedValue = $(selectElement).val();
+    //             if (selectedValue && !selectedCustomerOrders.includes(selectedValue) && selectedValue !== "custom") {
+    //                 selectedCustomerOrders.push(selectedValue);
+    //              this.setChoiceByValue(selectedValue);
+    //                 autoFillItem(index, selectedValue);
+    //             }
+               
+    //         },
+    //         shouldSortItems: function() {
+    //             return false;
+    //         }
+    //     });
+
+    //     choicesInstances.push({
+    //         element: selectElement,
+    //         instance: choices
+    //     });
+
+    //     return choices;
+    // }
 
     // Fungsi untuk auto-fill data
     function autoFillItem(index, customerOrderId) {
@@ -565,7 +580,7 @@ $(document).ready(function() {
         const qty = parseFloat(itemRow.find('input[name="items[' + index + '][quantity]"]').val().replace(/[^\d.]/g, '')) || 0;
         
         // Hitung asuransi (2% dari harga)
-        const asuransi = harga * 0.02;
+        const asuransi = harga * qty * 0.02;
         itemRow.find('input[name="items[' + index + '][asuransi]"]').val(asuransi);
         
         // Hitung total

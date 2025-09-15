@@ -9,6 +9,8 @@ use App\Models\Customer;
 use App\Models\User;
 use App\Models\PaymentMethod;
 use App\Models\Exchange;
+use App\Models\Category;
+use App\Models\Brand;
 use Auth;
 use Illuminate\Http\Request;
 use DataTables;
@@ -25,7 +27,7 @@ class PurchaseOrderController extends Controller
 
 {
 
-    public function __construct(PurchaseOrder $purchaseOrder, CustomerOrder $customerOrder, Customer $customer, PaymentMethod $paymentMethod, User $user, PurchaseOrderDetail $purchaseOrderDetail, Exchange $exchange)
+    public function __construct(PurchaseOrder $purchaseOrder, CustomerOrder $customerOrder, Customer $customer, PaymentMethod $paymentMethod, User $user, PurchaseOrderDetail $purchaseOrderDetail, Exchange $exchange, Category $category, Brand $brand)
     {
         $this->purchase = $purchaseOrder;
         $this->customerOrder = $customerOrder;
@@ -34,7 +36,8 @@ class PurchaseOrderController extends Controller
         $this->purchaseOrderDetail = $purchaseOrderDetail;
         $this->paymentMethod = $paymentMethod;
         $this->exchange = $exchange;
-
+        $this->category = $category;
+        $this->brand = $brand;
 
     }
 
@@ -46,6 +49,18 @@ class PurchaseOrderController extends Controller
     public function create()
 {
     $customer = $this->customer->get();
+    $category = $this->category->get()->map(function ($itm) {
+            return [
+                'value' => $itm->id,
+                'label' => $itm->name,
+            ];
+        });
+    $brand = $this->brand->get()->map(function ($itm) {
+        return [
+            'value' => $itm->id,
+            'label' => $itm->name,
+        ];
+    });
 
     $customerOrders = $this->customerOrder->whereNotIn('po_number', function($query) {
         $query->select('no_po')
@@ -68,6 +83,8 @@ class PurchaseOrderController extends Controller
 
     return view('purchase.form', [
         'customerOrders' => $customerOrders,
+        'category' => $category,
+        'brand' => $brand,
         'customer' => $customer,
         'customerOrdersJson' => $customerOrders->toJson() // Untuk inisialisasi Choices
     ]);
@@ -155,6 +172,8 @@ class PurchaseOrderController extends Controller
                 'asuransi' => $item['asuransi'],
                 'jasa' => $item['jasakg'],
                 'estimasi_notes' => $item['estimasi_notes'],
+                'brand_id' => $item['brand_id'],
+                'category_id' => $item['category_id'],
 
             ]);
         }
@@ -390,7 +409,6 @@ public function updateOprasional(Request $request, $id)
         'fix_price' => $request->fix_price,
         'status_barang_sampai' => $request->status_barang_sampai,
         'status_on_check' => $request->wh_usa_mutasi_check,
-        'sku' => $request->sku,
         'no_box' => $request->nomor_box,
         'kurir_lokal' => $request->kurir_lokal,
         'pelunasan' => $request->pelunasan,
@@ -427,7 +445,7 @@ public function updateOprasional(Request $request, $id)
 {
     // Load relasi items dan customer
     $purchase = $this->purchase->where('id', $id)->first();
-    $purchaseOrderDetail = $this->purchaseOrderDetail->where('purchase_order_id', $id)->get();
+    $purchaseOrderDetail = $this->purchaseOrderDetail->where('purchase_order_id', $id)->orderBy('id','asc')->get();
     // Ambil data customer untuk dropdown
      $customers = $this->customer->get();
      $paymentMethod = $this->paymentMethod->get();
@@ -450,19 +468,19 @@ public function updateOprasional(Request $request, $id)
                 ]
             ];
         });
-    if($this->user->checkRole('accounting')){
-        return view('purchase.show_accounting', [
-                'purchase' => $purchase,
-                'paymentMethod' => $paymentMethod,
-                'purchaseOrderDetail' => $purchaseOrderDetail,
-                'customers' => $customers,
-                'customerOrders' => $customerOrders,
-                'customerOrdersJson' => $customerOrders->toJson(),
-                'total_items' => $purchaseOrderDetail->count(),
-                'total_estimasi_harga' => $purchaseOrderDetail->sum('estimasi_harga'),
-                'exchange' => $exchange
-            ]);
-    }else{
+    // if($this->user->checkRole('accounting')){
+    //     return view('purchase.show_accounting', [
+    //             'purchase' => $purchase,
+    //             'paymentMethod' => $paymentMethod,
+    //             'purchaseOrderDetail' => $purchaseOrderDetail,
+    //             'customers' => $customers,
+    //             'customerOrders' => $customerOrders,
+    //             'customerOrdersJson' => $customerOrders->toJson(),
+    //             'total_items' => $purchaseOrderDetail->count(),
+    //             'total_estimasi_harga' => $purchaseOrderDetail->sum('estimasi_harga'),
+    //             'exchange' => $exchange
+    //         ]);
+    // }else{
          return view('purchase.show', [
         'purchase' => $purchase,
         'paymentMethod' => $paymentMethod,
@@ -474,7 +492,7 @@ public function updateOprasional(Request $request, $id)
         'total_estimasi_harga' => $purchaseOrderDetail->sum('estimasi_harga'),
         'exchange' => $exchange
     ]);
-    }
+    // }
 
 }
 
@@ -523,14 +541,22 @@ public function updateOprasional(Request $request, $id)
 
     public function ajax(Request $request)
     {
-        $purchaseOrders = $this->purchase->latest()->get();
-        // $purchaseOrders = $this->purchase
-        //     ->leftJoin('purchase_order_detail', 'purchase_order.id', '=', 'purchase_order_detail.purchase_order_id')
-        //     ->select('purchase_order.*')
-        //     ->orderBy('purchase_order_detail.updated_at', 'desc')
-        //     ->get();
-
+        $purchaseOrders = $this->purchase->latest('updated_at')->get();
+    
         return Datatables::of($purchaseOrders)
+            ->editColumn('created_at', function ($purchaseOrders) {
+                 $months = [
+                    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+                ];
+
+                $date = Carbon::parse($purchaseOrders->created_at);
+                $day   = $date->day;
+                $month = $months[$date->month - 1]; // index mulai dari 0
+                $year  = $date->year;
+
+                return "$day $month $year";
+            })
             ->addColumn('actions', function ($purchaseOrders) {
                 $purchase = $purchaseOrders;
                 return view('purchase.action', compact('purchase'))->render();
