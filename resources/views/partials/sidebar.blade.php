@@ -53,7 +53,7 @@
     </li>
     @endif
 
-     @if (App\Models\User::checkRole('master_admin'))
+     @if (App\Models\User::checkRole('admin_chat_input'))
     <li class="sidebar-item {{ (request()->is('category*')) ? 'active' : '' }}">
         <a href="{{ route('category.index') }}" class='sidebar-link'>
             <i class="bi bi-grid-fill"></i>
@@ -62,7 +62,7 @@
     </li>
     @endif
 
-     @if (App\Models\User::checkRole('master_admin'))
+     @if (App\Models\User::checkRole('admin_chat_input'))
     <li class="sidebar-item {{ (request()->is('brand*')) ? 'active' : '' }}">
         <a href="{{ route('brand.index') }}" class='sidebar-link'>
             <i class="bi bi-tags-fill"></i>

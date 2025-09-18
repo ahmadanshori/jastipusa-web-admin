@@ -59,8 +59,8 @@ Auth::routes();
 
 Route::resource('user', UserController::class)->middleware(['auth',CheckRole::class]);
 Route::resource('payment-method', PaymentMethodController::class)->middleware(['auth',CheckRole::class]);
-Route::resource('category', CategoryController::class)->middleware(['auth',CheckRole::class]);
-Route::resource('brand', BrandController::class)->middleware(['auth',CheckRole::class]);
+Route::resource('category', CategoryController::class)->middleware(['auth',CheckRole::class.':admin_chat_input']);
+Route::resource('brand', BrandController::class)->middleware(['auth',CheckRole::class.':admin_chat_input']);
 Route::resource('exchange', ExchangeController::class)->middleware(['auth',CheckRole::class]);
 
 Route::put('/change-password/{id}', [UserController::class, 'changePassword'])->middleware('auth')->name('user.change-password');
@@ -78,8 +78,8 @@ Route::get('/ajax-payment-method',[PaymentMethodController::class, 'ajax']);
 Route::get('/ajax-exchange',[ExchangeController::class, 'ajax']);
 Route::get('/ajax-tracking',[TrackingController::class, 'ajax']);
 Route::get('/ajax-analytics',[HomeController::class, 'getAnalyticsJson'])->middleware('auth');
-Route::get('/ajax-category',[CategoryController::class, 'ajax']);
-Route::get('/ajax-brand',[BrandController::class, 'ajax']);
+Route::get('/ajax-category',[CategoryController::class, 'ajax'])->middleware(['auth',CheckRole::class.':admin_chat_input']);
+Route::get('/ajax-brand',[BrandController::class, 'ajax'])->middleware(['auth',CheckRole::class.':admin_chat_input']);
 
 
 Route::resource('tracking', TrackingController::class)->middleware('auth');
