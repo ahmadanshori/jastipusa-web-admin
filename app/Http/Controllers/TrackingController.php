@@ -176,6 +176,18 @@ class TrackingController extends Controller
                 }
                 return '-';
             })
+            ->editColumn('wh_indo', function($detail) {
+                if($detail->wh_indo) {
+                    return '<a href="'.asset('storage/'.$detail->wh_indo).'" target="_blank" class="btn btn-sm btn-info">View</a>';
+                }
+                return '-';
+            })
+            ->editColumn('wh_usa', function($detail) {
+                if($detail->wh_usa) {
+                    return '<a href="'.asset('storage/'.$detail->wh_usa).'" target="_blank" class="btn btn-sm btn-info">View</a>';
+                }
+                return '-';
+            })
             ->addColumn('mutasi_check', function($detail) {
                 return $detail->mutasi_check ? '<span class="badge bg-success">Checked</span>' : '<span class="badge bg-danger">Unchecked</span>';
             })
@@ -207,7 +219,7 @@ class TrackingController extends Controller
                 }
             })
             ->rawColumns([
-                'link_barang', 'dp', 'fullpayment', 'foto_bukti_tf', 
+                'link_barang', 'dp', 'wh_usa', 'wh_indo', 'fullpayment', 'foto_bukti_tf', 
                 'mutasi_check', 'foto_bukti_pembelian', 'status_barang_sampai'
             ])
             ->make(true);

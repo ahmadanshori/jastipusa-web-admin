@@ -11,6 +11,7 @@ use App\Models\PaymentMethod;
 use App\Models\Exchange;
 use App\Models\Category;
 use App\Models\Brand;
+use Spatie\Permission\Models\Role;
 use Auth;
 use Illuminate\Http\Request;
 use DataTables;
@@ -22,12 +23,14 @@ use DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\PurchaseOrderExport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Mail\NotificationEmail;
+use Illuminate\Support\Facades\Mail;
 
 class PurchaseOrderController extends Controller
 
 {
 
-    public function __construct(PurchaseOrder $purchaseOrder, CustomerOrder $customerOrder, Customer $customer, PaymentMethod $paymentMethod, User $user, PurchaseOrderDetail $purchaseOrderDetail, Exchange $exchange, Category $category, Brand $brand)
+    public function __construct(PurchaseOrder $purchaseOrder, Role $role, CustomerOrder $customerOrder, Customer $customer, PaymentMethod $paymentMethod, User $user, PurchaseOrderDetail $purchaseOrderDetail, Exchange $exchange, Category $category, Brand $brand)
     {
         $this->purchase = $purchaseOrder;
         $this->customerOrder = $customerOrder;
@@ -38,6 +41,7 @@ class PurchaseOrderController extends Controller
         $this->exchange = $exchange;
         $this->category = $category;
         $this->brand = $brand;
+        $this->role = $role;
 
     }
 
@@ -63,7 +67,7 @@ class PurchaseOrderController extends Controller
     });
 
     $customerOrders = $this->customerOrder->whereNotIn('po_number', function($query) {
-        $query->select('no_po')
+        $query->select('no_po_jasmin')->whereNotNull('no_po_jasmin')
               ->from('purchase_order_detail');
     })->whereNotNull('po_number')->get()
         ->map(function ($order) {
@@ -179,8 +183,19 @@ class PurchaseOrderController extends Controller
         }
 
 
-        // Commit transaction jika semua berhasil
+     
         DB::commit();
+
+        $emails = $this->user->pluck('email')->toArray();
+
+        $user = $this->user->where('id', Auth::id())->first();
+        $role = $this->role->where('id', $user->role_id)->first();
+        $purchase["role"] = $role->name;
+        $purchase["user"] = $user->name;
+        Mail::to('no-reply@mail.com')
+            ->bcc($emails)
+            ->send(new NotificationEmail($purchase));
+
 
         return redirect()->route('purchase.index')
             ->with('success', 'Purchase Order berhasil dibuat');
@@ -197,8 +212,6 @@ class PurchaseOrderController extends Controller
     }
 }
 
-
-
     public function edit($id)
 {
     // Load relasi items dan customer
@@ -212,7 +225,7 @@ class PurchaseOrderController extends Controller
         ->map(function ($order) {
             return [
                 'value' => $order->po_number,
-                'label' => $order->po_number . ' - ' . $order->nama_barang,
+                'label' => $order->po_number,
                 'customProperties' => [
                     'po_number' => $order->po_number,
                     'nama_barang' => $order->nama_barang,
@@ -269,13 +282,12 @@ class PurchaseOrderController extends Controller
     $this->purchaseOrderDetail->where('purchase_order_id', $id)->delete();
 
 
-
         // Buat items baru
         foreach ($request->items as $item) {
              $this->purchaseOrderDetail->create([
                 'purchase_order_id' => $purchase->id,
                 'no_po' => $item['no_po_customer'],
-
+                'tipe_order' => $request->tipe_order,
                 'nama_barang' => $item['nama_barang'],
                 'link_barang' => $item['link_barang'],
                 'estimasi_kg' => $item['estimasi_kg'],
@@ -295,6 +307,7 @@ class PurchaseOrderController extends Controller
             ->with('success', 'Purchase order updated successfully');
 
     } catch (\Exception $e) {
+        dd($e);
         DB::rollBack();
         return back()->withInput()
             ->with('error', 'Failed to update purchase order: ' . $e->getMessage());
@@ -452,6 +465,9 @@ public function updateOprasional(Request $request, $id)
 
     $exchange = $this->exchange->first()->value;
 
+     $category = $this->category->get();
+    $brand = $this->brand->get();
+
     // Ambil data customer order untuk dropdown items
     $customerOrders = $this->customerOrder->whereNotNull('po_number')
         ->get()
@@ -490,7 +506,9 @@ public function updateOprasional(Request $request, $id)
         'customerOrdersJson' => $customerOrders->toJson(),
          'total_items' => $purchaseOrderDetail->count(),
         'total_estimasi_harga' => $purchaseOrderDetail->sum('estimasi_harga'),
-        'exchange' => $exchange
+        'exchange' => $exchange,
+        'category' => $category,
+        'brand' => $brand,
     ]);
     // }
 
@@ -610,22 +628,23 @@ public function updateOprasional(Request $request, $id)
         $purchaseOrderDetail = $this->purchaseOrderDetail->where('purchase_order_id', $id)->get();
         // Ambil data customer untuk dropdown
         $customers = $this->customer->where('whatsapp_number',$purchase->no_telp)->first();
+        $user = $this->user->where('id', Auth::id())->first();
+        $role = $this->role->where('id', $user->role_id)->first();
+
         $data = [
             'purchase' => $purchase,
             'purchaseOrderDetail' => $purchaseOrderDetail,
             'customer' => $customers,
             'title' => 'Purchase Order #' . $purchase->id,
             'date' => now()->format('d F Y'),
+            'user' => $user,
+            'role' => $role,
             'isPdf' => true
         ];
+
+        // return view('purchase.pdf_estimasi', $data);
         $pdf = PDF::loadView('purchase.pdf_estimasi', $data);
-        //  return view('purchase.pdf_estimasi', [
-        //          'purchase' => $purchase,
-        //     'purchaseOrderDetail' => $purchaseOrderDetail,
-        //     'customer' => $customers,
-        //     'title' => 'Purchase Order #' . $purchase->id,
-        //     'date' => now()->format('d F Y')
-        //     ]);
+        
         return $pdf->download('purchase-estimasi-'.$purchase->purchase_number.'.pdf');
     }
 
@@ -635,12 +654,16 @@ public function updateOprasional(Request $request, $id)
         $purchaseOrderDetail = $this->purchaseOrderDetail->where('purchase_order_id', $id)->get();
         // Ambil data customer untuk dropdown
         $customers = $this->customer->where('whatsapp_number',$purchase->no_telp)->first();
+        $user = $this->user->where('id', Auth::id())->first();
+        $role = $this->role->where('id', $user->role_id)->first();
         $data = [
             'purchase' => $purchase,
             'purchaseOrderDetail' => $purchaseOrderDetail,
             'customer' => $customers,
             'title' => 'Purchase Order #' . $purchase->id,
-            'date' => now()->format('d F Y')
+            'date' => now()->format('d F Y'),
+            'user' => $user,
+            'role' => $role,
         ];
 
         $pdf = PDF::loadView('purchase.pdf_hpp', $data);
@@ -654,12 +677,16 @@ public function updateOprasional(Request $request, $id)
         $purchaseOrderDetail = $this->purchaseOrderDetail->where('purchase_order_id', $id)->get();
         // Ambil data customer untuk dropdown
         $customers = $this->customer->where('whatsapp_number',$purchase->no_telp)->first();
+         $user = $this->user->where('id', Auth::id())->first();
+        $role = $this->role->where('id', $user->role_id)->first();
         $data = [
             'purchase' => $purchase,
             'purchaseOrderDetail' => $purchaseOrderDetail,
             'customer' => $customers,
             'title' => 'Purchase Order #' . $purchase->id,
-            'date' => now()->format('d F Y')
+            'date' => now()->format('d F Y'),
+            'user' => $user,
+            'role' => $role,
         ];
         $pdf = PDF::loadView('purchase.pdf_operasional', $data);
         return $pdf->download('purchase-operasional-'.$purchase->purchase_number.'.pdf');
@@ -671,12 +698,16 @@ public function updateOprasional(Request $request, $id)
         $purchaseOrderDetail = $this->purchaseOrderDetail->where('purchase_order_id', $id)->get();
         // Ambil data customer untuk dropdown
         $customers = $this->customer->where('whatsapp_number',$purchase->no_telp)->first();
+        $user = $this->user->where('id', Auth::id())->first();
+        $role = $this->role->where('id', $user->role_id)->first();
         $data = [
             'purchase' => $purchase,
             'purchaseOrderDetail' => $purchaseOrderDetail,
             'customer' => $customers,
             'title' => 'Purchase Order #' . $purchase->id,
-            'date' => now()->format('d F Y')
+            'date' => now()->format('d F Y'),
+            'user' => $user,
+            'role' => $role,
         ];
         $pdf = PDF::loadView('purchase.pdf_received', $data);
         return $pdf->download('purchase-received-'.$purchase->purchase_number.'.pdf');

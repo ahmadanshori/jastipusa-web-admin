@@ -54,7 +54,7 @@
                                    <div class="col-md-6 col-12">
                                     <div class="form-group">
                                          <label for="customer" class="form-label">Customer</label>
-                                        <select class="required choices form-select" id="customer" disabled name="no_telp">
+                                        <select class="required choices form-select" id="customer" name="no_telp">
                                              <option value="custom">-- Custom / Buat Baru --</option>
                                             
                                             <option value="">Press to select</option>
@@ -160,50 +160,50 @@
                                     <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Quantity</label>
-                                            <input type="text" value="{{ old("items.$index.quantity", $item->qty) }}" class="form-control form-control-lg required" name="items[0][quantity]">
+                                            <input type="text" value="{{ old("items.$index.quantity", $item->qty) }}" class="form-control form-control-lg required" name="items[{{$index}}][quantity]">
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Notes</label>
-                                            <input type="text" value="{{ old("items.$index.estimasi_notes", $item->estimasi_notes) }}" class="form-control form-control-lg required" name="items[0][estimasi_notes]">
+                                            <input type="text" value="{{ old("items.$index.estimasi_notes", $item->estimasi_notes) }}" class="form-control form-control-lg required" name="items[{{$index}}][estimasi_notes]">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label class="form-label">No. PO Customer</label>
-                                            <input type="text" value="{{ old("items.$index.no_po_customer", $item->no_po) }}" class="form-control form-control-lg required" name="items[0][no_po_customer]">
+                                            <input type="text" value="{{ old("items.$index.no_po_customer", $item->no_po) }}" class="form-control form-control-lg required" name="items[{{$index}}][no_po_customer]">
                                         </div>
                                     </div>
                                       <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Harga Barang</label>
-                                            <input type="text" class="form-control form-control-lg required" value="{{ old("items.$index.estimasi_harga", number_format($item->estimasi_harga)) }}" name="items[0][estimasi_harga]">
+                                            <input type="text" class="form-control form-control-lg required" value="{{ old("items.$index.estimasi_harga", number_format($item->estimasi_harga,0,'','')) }}" name="items[{{$index}}][estimasi_harga]">
                                         </div>
                                     </div>
                                      <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Estimasi Kg</label>
-                                            <input type="text" class="form-control form-control-lg required" value="{{ old("items.$index.estimasi_kg", $item->estimasi_kg) }}" name="items[0][estimasi_kg]">
+                                            <input type="text" class="form-control form-control-lg required" value="{{ old("items.$index.estimasi_kg", $item->estimasi_kg) }}" name="items[{{$index}}][estimasi_kg]">
                                         </div>
                                     </div>
                                   
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Nama Barang</label>
-                                            <input type="text" class="form-control form-control-lg required" name="items[0][nama_barang]" value="{{ old("items.$index.nama_barang", $item->nama_barang) }}">
+                                            <input type="text" class="form-control form-control-lg required" name="items[{{$index}}][nama_barang]" value="{{ old("items.$index.nama_barang", $item->nama_barang) }}">
                                         </div>
                                     </div>
                                      <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Asuransi 2%</label>
-                                            <input type="text" class="form-control form-control-lg required" name="items[0][asuransi]" value="{{ old("items.$index.asuransi", number_format($item->asuransi)) }}">
+                                            <input type="text" class="form-control form-control-lg required" name="items[{{$index}}][asuransi]" value="{{ old("items.$index.asuransi", number_format($item->asuransi,0,'','')) }}">
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Jasa Kg</label>
-                                            <input type="text" class="form-control form-control-lg required" name="items[0][jasakg]" value="{{ old("items.$index.jasakg", number_format($item->jasakg,0)) }}">
+                                            <input type="text" class="form-control form-control-lg required" name="items[{{$index}}][jasakg]" value="{{ old("items.$index.jasakg", number_format($item->jasakg,0,'','')) }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
@@ -212,7 +212,7 @@
                                             <label class="form-label">Link Barang</label>
                                             <div class="input-group">
                                                 <input type="text" class="form-control form-control-lg required link-input"
-                                                    name="items[0][link_barang]" value="{{ old("items.$index.link_barang", $item->link_barang) }}">
+                                                    name="items[{{$index}}][link_barang]" value="{{ old("items.$index.link_barang", $item->link_barang) }}">
                                                 <button class="btn btn-outline-primary btn-open-link"
                                                     type="button">
                                                     <i class="bi bi-box-arrow-up-right"></i>
@@ -223,13 +223,13 @@
                                     <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Diskon</label>
-                                            <input type="text" class="form-control form-control-lg required" value="{{ old("items.$index.diskon", number_format($item->diskon,0)) }}" name="items[0][diskon]">
+                                            <input type="text" class="form-control form-control-lg required" value="{{ old("items.$index.diskon", number_format($item->diskon,0,'','')) }}" name="items[{{$index}}][diskon]">
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Total Estimasi</label>
-                                            <input type="text" class="form-control form-control-lg required" name="items[0][total_estimasi]" value="{{ old("items.$index.total_estimasi", number_format($item->total_estimasi,0)) }}">
+                                            <input type="text" class="form-control form-control-lg required" name="items[{{$index}}][total_estimasi]" value="{{ old("items.$index.total_estimasi", number_format($item->total_estimasi,0,'','')) }}">
                                         </div>
                                     </div>
                                     <div class="col-md-12 col-12 text-end">

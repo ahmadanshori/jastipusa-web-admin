@@ -111,16 +111,16 @@
     <!-- Info -->
     <table class="info-table">
             <tr>
-                <td width="60%">
+                <td width="50%">
                     <strong>Kepada:</strong><br>
                     {{$purchase->nama}}<br>
                     {{$purchase->no_telp}}<br>
                     {{$purchase->alamat}}
                 </td>
-                <td width="40%" class="invoice-info">
+                <td width="50%" class="invoice-info">
                     <strong>No. Invoice:</strong> {{$purchase->no_invoice}}<br>
-                    <strong>Tanggal:</strong> {{$purchase->created_at}}<br>
-                    <strong>Pengiriman:</strong> {{$purchase->created_at}}
+                    <strong>Tanggal:</strong> {{ $purchase->created_at->format('d F Y') }}<br>
+                    <strong>Pengiriman:</strong> {{ $purchase->updated_at->format('d F Y') }}
                 </td>
             </tr>
         </table>
@@ -130,20 +130,24 @@
          <thead>
             <tr>
                 <th>Product</th>
+                <th>Notes</th>
                 <th>QTY</th>
-                <th>Price</th>
+                <th>Weight (KG)</th>
+                <th>Price ($)</th>
             </tr>
         </thead>
         <tbody>
             @foreach($purchaseOrderDetail as $item)
             <tr>
                 <td>{{ $item->nama_barang }}</td>  <!-- Product Name -->
+                <td>{{ $item->estimasi_notes }}</td>  <!-- Product Name -->
+                <td>{{ $item->qty }}</td>  <!-- Quantity (using estimasi_kg) -->
                 <td>{{ $item->qty }}</td>  <!-- Quantity (using estimasi_kg) -->
                 <td>{{ number_format($item->estimasi_harga ?? 0, 0, ',', '.') }}</td>  
             </tr>
             @endforeach
             <tr>
-                <td colspan="2"><strong>Total</strong></td>
+                <td colspan="4"><strong>Total</strong></td>
                 <td>{{ number_format($purchaseOrderDetail->sum('estimasi_harga') ?? 0, 0, ',', '.')  }}</td>  
             </tr>
         </tbody>
@@ -151,17 +155,25 @@
 
     <!-- Summary -->
     <table class="summary-table">
-         <tr>
+         {{-- <tr>
                 <td>Subtotal</td>
                 <td>{{ number_format($purchaseOrderDetail->sum('estimasi_harga') ?? 0, 0, ',', '.')  }}</td>
-            </tr>
+            </tr> --}}
             <tr>
                 <td>Diskon</td>
-                <td>0</td>
+                <td>{{ $purchaseOrderDetail->sum('estimasi_diskon') }}</td>
+            </tr>
+            <tr>
+                <td>Asuransi (2%)</td>
+                <td>{{ $purchaseOrderDetail->sum('asuransi') }}</td>
             </tr>
             <tr>
                 <td>PPN (0%)</td>
                 <td>0</td>
+            </tr>
+            <tr>
+                <td>Biaya Jasa/Kg (0%)</td>
+                <td>{{ $purchaseOrderDetail->sum('jasa') }}</td>
             </tr>
             <tr>
                 <td>Biaya Lain-lain</td>
@@ -173,8 +185,23 @@
             </tr>
             <tr>
                 <td>Total</td>
-                <td>{{ number_format($purchaseOrderDetail->sum('estimasi_harga') - $purchaseOrderDetail->sum('dp') ?? 0, 0, ',', '.')  }}</td>
+                <td>{{ number_format($purchaseOrderDetail->sum('estimasi_harga') - $purchaseOrderDetail->sum('estimasi_diskon') + $purchaseOrderDetail->sum('asuransi')  + $purchaseOrderDetail->sum('jasa') - $purchaseOrderDetail->sum('dp') ?? 0, 0, ',', '.')  }}</td>
             </tr>
+    </table>
+
+    <table>
+            <tr>
+                <td><b>Notes</b></td>
+            </tr>
+            <tr>
+                <td><b>Purchased By :</b></td>
+                <td>{{ $user->name }}</td>
+                <td>({{ $role->name }})</td>
+            </tr>
+            <tr>
+                <td>{{ $purchaseOrderDetail[0]->nama_rek_transfer }}</td>
+            </tr>
+           
     </table>
 
     

@@ -29,15 +29,15 @@
                     <div class="col-md-12 col-12">
                         <div class="card">
                             <div class="card-header bg-light">
-                                @if ($purchaseOrderDetail->every->mutasi_check &&
-                                App\Models\User::checkRole('master_admin') &&
-                                App\Models\User::checkRole('admin_chat_input'))
+                                @if ($purchaseOrderDetail->every->mutasi_check && (
+                                App\Models\User::checkRole('master_admin') ||
+                                App\Models\User::checkRole('admin_chat_input')))
                                 <a href="{{ route('purchase-estimasi.pdf', [$purchase->id]) }}" target="_blank"
                                     class="btn icon btn-info"> <i class="fas fa-file-pdf me-2"></i>
                                     Invoice Estimasi
                                 </a>
                                 @endif
-                                @if ($purchaseOrderDetail->every->hpp_mutasi_check && App\Models\User::checkRole('master_admin') && App\Models\User::checkRole('admin_purchase'))
+                                @if ($purchaseOrderDetail->every->hpp_mutasi_check && (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_purchase')))
 
                                     <a href="{{ route('purchase-hpp.pdf', [$purchase->id]) }}" target="_blank"
                                         class="btn icon btn-warning"> <i class="fas fa-file-pdf me-2"></i>
@@ -45,7 +45,7 @@
                                     </a>
                                 @endif
 
-                                @if ($purchaseOrderDetail->every->status_on_check && App\Models\User::checkRole('master_admin') && App\Models\User::checkRole('operasional'))
+                                @if ($purchaseOrderDetail->every->status_on_check && (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('operasional')))
 
                                     <a href="{{ route('purchase-operasional.pdf', [$purchase->id]) }}" target="_blank"
                                         class="btn icon btn-danger"> <i class="fas fa-file-pdf me-2"></i>
@@ -53,7 +53,7 @@
                                     </a>
                                 @endif
 
-                               @if ($purchaseOrderDetail->every->wh_indo && App\Models\User::checkRole('master_admin') && App\Models\User::checkRole('operasional'))
+                               @if ($purchaseOrderDetail->every->wh_indo && (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('operasional')))
 
                                     <a href="{{ route('purchase-received.pdf', [$purchase->id]) }}" target="_blank"
                                         class="btn icon btn-primary"> <i class="fas fa-file-pdf me-2"></i>
@@ -276,6 +276,35 @@
                                                         <input type="text" class="form-control form-control-lg" readonly
                                                             name="items[{{ $index }}][total_estimasi]"
                                                             value="{{ old("items.$index.total_estimasi", number_format($item->total_estimasi,0,'','')) }}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Category</label>
+                                                        <select class="choices form-select category-select" disabled
+                                                            name="items[{{ $index }}][category_id]"
+                                                            data-index="{{ $index }}" data-selected="{{ $item->category_id }}">
+                                                             @if(isset($item))
+                                                                @foreach($category as $categories)
+                                                                <option value="{{ $categories->id }}" {{ ($categories->id == $item->category_id)? 'selected' : '' }}>{{$categories->name}}</option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                 <div class="col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Brand</label>
+                                                        <select class="choices form-select brand-select" disabled
+                                                            name="items[{{ $index }}][brand_id]"
+                                                            data-index="{{ $index }}" data-selected="{{ $item->brand_id }}">
+                                                            @if(isset($item))
+                                                                @foreach($brand as $brands)
+                                                                <option value="{{ $brands->id }}" {{ ($brands->id == $item->brand_id)? 'selected' : '' }}>{{$brands->name}}</option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
                                                     </div>
                                                 </div>
 
@@ -872,7 +901,7 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Nama Rek Transfer</label>
-                                    <input type="text" id="nama_rek" class="form-control form-control-lg" name="nama_rek"
+                                    <input type="text" id="nama_rek" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg" name="nama_rek"
                                         placeholder="jasmin">
                                 </div>
                             </div>
@@ -886,35 +915,35 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">DP</label>
-                                    <input type="number" id="dp" class="form-control form-control-lg" name="dp"
+                                    <input type="number" id="dp" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg" name="dp"
                                         placeholder="Rp">
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Full Payment</label>
-                                    <input type="number" id="full_payment" class="form-control form-control-lg"
+                                    <input type="number" id="full_payment" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
                                         name="full_payment" placeholder="Rp">
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Kurang Bayar</label>
-                                    <input type="number" id="kurang_bayar" class="form-control form-control-lg"
+                                    <input type="number" id="kurang_bayar" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
                                         name="kurang_bayar" placeholder="Rp">
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Status Follow Up</label>
-                                    <select class="form-select" id="status_follow_up" name="status_follow_up">
+                                    <select class="form-select" id="status_follow_up" {{ App\Models\User::checkRole('accounting') ? 'disabled':''  }} name="status_follow_up">
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Foto Bukti Transfer</label>
-                                    <input type="file" id="bukti_transfer" class="form-control form-control-lg"
+                                    <input type="file" id="bukti_transfer" {{ App\Models\User::checkRole('accounting') ? 'disabled':''  }} class="form-control form-control-lg"
                                         name="bukti_transfer">
                                         <input type="hidden" id="txt_foto_bukti">
 
@@ -963,7 +992,7 @@
                                 <div class="form-group">
                                     <label class="form-label">Payment Method</label>
 
-                                    <select class="form-select" id="payment_method" name="payment_method">
+                                    <select class="form-select" id="payment_method" {{ App\Models\User::checkRole('accounting') ? 'disabled':''  }} name="payment_method">
                                         <option value="">Press to select</option>
 
                                         {{-- @foreach($paymentMethod as $paymentMethods)
@@ -978,7 +1007,7 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Status Purchase</label>
-                                    <select class="form-select" id="status_purchase" name="status_purchase">
+                                    <select class="form-select" id="status_purchase" {{ App\Models\User::checkRole('accounting') ? 'disabled':''  }} name="status_purchase">
                                     </select>
                                 </div>
                             </div>
@@ -987,7 +1016,7 @@
                                     <label class="form-label">Harga Barang</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="number" id="harga_barang" class="form-control form-control-lg"
+                                        <input type="number" id="harga_barang" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
                                             name="harga_barang" placeholder="$">
                                     </div>
                                     <span id="show_harga_barang" class="invalid-feedback" style="display: block">
@@ -999,7 +1028,7 @@
                                     <label class="form-label">Pajak</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="number" id="pajak" class="form-control form-control-lg" name="pajak"
+                                        <input type="number" id="pajak" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg" name="pajak"
                                             placeholder="0.00">
                                     </div>
                                     <span id="show_pajak" class="invalid-feedback" style="display: block">
@@ -1011,7 +1040,7 @@
                                     <label class="form-label">Diskon</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="number" id="diskon" class="form-control form-control-lg" name="diskon"
+                                        <input type="number" id="diskon" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg" name="diskon"
                                             placeholder="$">
                                     </div>
                                     <span id="show_diskon" class="invalid-feedback" style="display: block">
@@ -1023,7 +1052,7 @@
                                     <label class="form-label">Pengiriman</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="number" id="pengiriman" class="form-control form-control-lg"
+                                        <input type="number" id="pengiriman" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
                                             name="pengiriman" placeholder="$">
                                     </div>
                                     <span id="show_pengiriman" class="invalid-feedback" style="display: block">
@@ -1033,7 +1062,7 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Notes</label>
-                                    <input type="text" id="notes" class="form-control form-control-lg" name="notes"
+                                    <input type="text" id="notes" class="form-control form-control-lg" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} name="notes"
                                         placeholder="Color, Size, Etc">
                                 </div>
                             </div>
@@ -1043,7 +1072,7 @@
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
                                         <input type="number" id="total_purchase" readonly
-                                            class="form-control form-control-lg" name="total_purchase" placeholder="$">
+                                            class="form-control form-control-lg" name="total_purchase" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} placeholder="$">
                                     </div>
                                     <span id="show_total_purchase" class="invalid-feedback" style="display: block">
                                     </span>
@@ -1052,7 +1081,7 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Foto Bukti Pembelian</label>
-                                    <input type="file" id="bukti_pembelian" class="form-control form-control-lg"
+                                    <input type="file" id="bukti_pembelian" {{ App\Models\User::checkRole('accounting') ? 'disabled':''  }} class="form-control form-control-lg"
                                         name="bukti_pembelian">
                                     {{-- <div id="bukti_pembelian_preview" class="mt-2"></div> --}}
 
@@ -1103,21 +1132,21 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Fix Weight (kg)</label>
-                                    <input type="number" step="0.01" id="fix_weight" class="form-control form-control-lg"
+                                    <input type="number" step="0.01" id="fix_weight" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
                                         name="fix_weight" placeholder="Kg">
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Fix Price</label>
-                                    <input type="number" id="fix_price" class="form-control form-control-lg"
+                                    <input type="number" id="fix_price" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
                                         name="fix_price" placeholder="Rp">
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Nomor Box</label>
-                                    <input type="text" id="nomor_box" class="form-control form-control-lg" name="nomor_box"
+                                    <input type="text" id="nomor_box" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg" name="nomor_box"
                                         placeholder="T2110">
                                 </div>
                             </div>
@@ -1132,14 +1161,14 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Kurir Lokal</label>
-                                    <input type="number" id="kurir_lokal" class="form-control form-control-lg"
+                                    <input type="number" id="kurir_lokal" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
                                         name="kurir_lokal" placeholder="Rp">
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Pelunasan</label>
-                                    <input type="number" id="pelunasan" class="form-control form-control-lg"
+                                    <input type="number" id="pelunasan" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
                                         name="pelunasan" placeholder="Rp">
                                 </div>
                             </div>
@@ -1147,7 +1176,7 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Status Barang Sampai</label>
-                                    <select class="form-select" id="status_barang_sampai" name="status_barang_sampai">
+                                    <select class="form-select" {{ App\Models\User::checkRole('accounting') ? 'disabled':''  }} id="status_barang_sampai" name="status_barang_sampai">
 
                                     </select>
                                 </div>
@@ -1167,7 +1196,7 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">WH USA</label>
-                                    <input type="file" id="wh_usa" class="form-control form-control-lg" name="wh_usa">
+                                    <input type="file" id="wh_usa" {{ App\Models\User::checkRole('accounting') ? 'disabled':''  }} class="form-control form-control-lg" name="wh_usa">
                                     {{-- <div id="wh_usa_preview" class="mt-2"></div> --}}
 
                                      <input type="hidden" id="txt_foto_wh_usa">
@@ -1179,7 +1208,7 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">WH Indo</label>
-                                    <input type="file" id="wh_indonesia" class="form-control form-control-lg"
+                                    <input type="file" id="wh_indonesia" {{ App\Models\User::checkRole('accounting') ? 'disabled':''  }} class="form-control form-control-lg"
                                         name="wh_indonesia">
                                     {{-- <div id="wh_indonesia_preview" class="mt-2"></div> --}}
                                      <input type="hidden" id="txt_foto_wh_indonesia">

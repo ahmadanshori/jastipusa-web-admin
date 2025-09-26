@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 use DataTables;
 use Storage;
 use Validator;
-use App\Helpers\Summernote;
+
+
 
 class PaymentMethodController extends Controller
 
