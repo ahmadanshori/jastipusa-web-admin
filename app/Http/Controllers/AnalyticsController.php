@@ -41,11 +41,11 @@ class AnalyticsController extends Controller
         $orderType = $request->get('order_type');
         $status = $request->get('status');
 
-        // Build base query with filters
+        // Build base query with filters - Only received orders for revenue calculations
         $purchaseOrderQuery = PurchaseOrder::whereBetween('created_at', [$dateFrom, $dateTo]);
         $purchaseOrderDetailQuery = PurchaseOrderDetail::whereHas('purchaseOrder', function($query) use ($dateFrom, $dateTo) {
             $query->whereBetween('created_at', [$dateFrom, $dateTo]);
-        });
+        })->where('status_barang_sampai', 'received');
 
         if ($orderType) {
             $purchaseOrderQuery->where('tipe_order', $orderType);
@@ -59,19 +59,19 @@ class AnalyticsController extends Controller
         $totalPurchaseOrders = $purchaseOrderQuery->count();
         $totalCustomers = Customer::count();
         $totalUsers = User::count();
-        $totalOrderValue = $purchaseOrderDetailQuery->sum('total_estimasi') ?? 0;
-        $averageOrderValue = $purchaseOrderDetailQuery->avg('total_estimasi') ?? 0;
+        $totalOrderValue = $purchaseOrderDetailQuery->where('status_barang_sampai', 'received')
+            ->sum('total_estimasi') ?? 0;
+        $averageOrderValue = $purchaseOrderDetailQuery->where('status_barang_sampai', 'received')
+            ->avg('total_estimasi') ?? 0;
 
         // Growth calculations (compare with previous period)
         $previousPeriodStart = Carbon::parse($dateFrom)->subDays(Carbon::parse($dateFrom)->diffInDays(Carbon::parse($dateTo)));
         $previousPeriodEnd = Carbon::parse($dateFrom)->subDay();
 
-        $previousOrders = PurchaseOrder::whereBetween('created_at', [$previousPeriodStart, $previousPeriodEnd])->count();
-        $ordersGrowth = $previousOrders > 0 ? (($totalPurchaseOrders - $previousOrders) / $previousOrders) * 100 : 0;
-
         $previousRevenue = PurchaseOrderDetail::whereHas('purchaseOrder', function($query) use ($previousPeriodStart, $previousPeriodEnd) {
             $query->whereBetween('created_at', [$previousPeriodStart, $previousPeriodEnd]);
-        })->sum('total_estimasi') ?? 0;
+        })->where('status_barang_sampai', 'received')
+        ->sum('total_estimasi') ?? 0;
         $revenueGrowth = $previousRevenue > 0 ? (($totalOrderValue - $previousRevenue) / $previousRevenue) * 100 : 0;
 
         // Order Status Distribution
@@ -86,7 +86,7 @@ class AnalyticsController extends Controller
             ->pluck('total', 'tipe_order')
             ->toArray();
 
-        // Monthly Revenue Trend (Last 12 months)
+        // Monthly Revenue Trend (Last 12 months) - Only received orders
         $monthlyRevenue = PurchaseOrderDetail::select(
                 DB::raw('EXTRACT(YEAR FROM purchase_order_details.created_at) as year'),
                 DB::raw('EXTRACT(MONTH FROM purchase_order_details.created_at) as month'),
@@ -94,6 +94,7 @@ class AnalyticsController extends Controller
                 DB::raw('COUNT(*) as orders')
             )
             ->join('purchase_order', 'purchase_order_details.purchase_order_id', '=', 'purchase_order.id')
+            ->where('purchase_order_details.status_barang_sampai', 'received')
             ->where('purchase_order_details.created_at', '>=', Carbon::now()->subMonths(12))
             ->groupBy('year', 'month')
             ->orderBy('year', 'desc')
@@ -147,11 +148,11 @@ class AnalyticsController extends Controller
             ->limit(10)
             ->get();
 
-        // Customer Analysis
+        // Customer Analysis - Only received orders
         $topCustomers = PurchaseOrder::select(
                 'nama',
                 DB::raw('COUNT(*) as total_orders'),
-                DB::raw('SUM((SELECT SUM(total_estimasi) FROM purchase_order_detail WHERE purchase_order_id = purchase_order.id)) as total_spent')
+                DB::raw('SUM((SELECT SUM(total_estimasi) FROM purchase_order_detail WHERE purchase_order_id = purchase_order.id AND status_barang_sampai = \'received\')) as total_spent')
             )
             ->whereBetween('created_at', [$dateFrom, $dateTo])
             ->groupBy('nama')
@@ -205,7 +206,6 @@ class AnalyticsController extends Controller
             'totalUsers' => $totalUsers,
             'totalOrderValue' => $totalOrderValue,
             'averageOrderValue' => $averageOrderValue,
-            'ordersGrowth' => round($ordersGrowth, 1),
             'revenueGrowth' => round($revenueGrowth, 1),
             'ordersByStatus' => $ordersByStatus,
             'ordersByType' => $ordersByType,
@@ -260,7 +260,8 @@ class AnalyticsController extends Controller
             'orders_today' => PurchaseOrder::whereDate('created_at', Carbon::today())->count(),
             'revenue_today' => PurchaseOrderDetail::whereHas('purchaseOrder', function($query) {
                 $query->whereDate('created_at', Carbon::today());
-            })->sum('total_estimasi') ?? 0,
+            })->where('status_barang_sampai', 'received')
+            ->sum('total_estimasi') ?? 0,
             'pending_orders' => PurchaseOrder::where('status', 'pending')->count(),
             'system_health' => [
                 'database' => 'healthy',

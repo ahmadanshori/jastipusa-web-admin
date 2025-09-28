@@ -50,7 +50,6 @@ class HomeController extends Controller
                 'totalPaymentMethods' => 0,
                 'totalOrderValue' => 0,
                 'averageOrderValue' => 0,
-                'ordersGrowth' => 0,
                 'purchaseOrdersByStatus' => [],
                 'purchaseOrdersByType' => ['1' => 5, '2' => 3, '3' => 2],
                 'monthlyOrders' => [
@@ -158,9 +157,11 @@ class HomeController extends Controller
             ]);
         }
 
-        // Purchase Order Details Statistics
-        $totalOrderValue = PurchaseOrderDetail::sum('total_estimasi') ?? 0;
-        $averageOrderValue = PurchaseOrderDetail::avg('total_estimasi') ?? 0;
+        // Purchase Order Details Statistics - Only received orders
+        $totalOrderValue = PurchaseOrderDetail::where('status_barang_sampai', 'received')
+            ->sum('total_estimasi') ?? 0;
+        $averageOrderValue = PurchaseOrderDetail::where('status_barang_sampai', 'received')
+            ->avg('total_estimasi') ?? 0;
 
         // Order Details by Status
         $orderDetailsByStatus = PurchaseOrderDetail::select('status_follow_up', DB::raw('count(*) as total'))
@@ -226,8 +227,13 @@ class HomeController extends Controller
                 ];
             });
 
-        // Top Products by Quantity
-        $topProducts = PurchaseOrderDetail::select('nama_barang', DB::raw('count(*) as quantity'))
+        // Top Products by Quantity - Only received orders
+        $topProducts = PurchaseOrderDetail::select(
+                'nama_barang',
+                DB::raw('count(*) as quantity'),
+                DB::raw('SUM(total_estimasi) as revenue')
+            )
+            ->where('status_barang_sampai', 'received')
             ->whereNotNull('nama_barang')
             ->groupBy('nama_barang')
             ->orderBy('quantity', 'desc')
@@ -281,12 +287,13 @@ class HomeController extends Controller
                 ];
             });
 
-        // Monthly Revenue Trend
+        // Monthly Revenue Trend - Only received orders
         $monthlyRevenue = PurchaseOrderDetail::select(
                 DB::raw('EXTRACT(YEAR FROM created_at) as year'),
                 DB::raw('EXTRACT(MONTH FROM created_at) as month'),
                 DB::raw('SUM(total_estimasi) as revenue')
             )
+            ->where('status_barang_sampai', 'received')
             ->where('created_at', '>=', Carbon::now()->subMonths(12))
             ->groupBy('year', 'month')
             ->orderBy('year', 'desc')
@@ -329,16 +336,6 @@ class HomeController extends Controller
             ];
         }
 
-        // Growth calculations
-        $previousMonth = Carbon::now()->subMonth();
-        $currentMonthOrders = PurchaseOrder::whereMonth('created_at', Carbon::now()->month)
-            ->whereYear('created_at', Carbon::now()->year)->count();
-        $previousMonthOrders = PurchaseOrder::whereMonth('created_at', $previousMonth->month)
-            ->whereYear('created_at', $previousMonth->year)->count();
-
-        $ordersGrowth = $previousMonthOrders > 0 ?
-            (($currentMonthOrders - $previousMonthOrders) / $previousMonthOrders) * 100 : 0;
-
         return [
             'totalPurchaseOrders' => $totalPurchaseOrders,
             'totalUsers' => $totalUsers,
@@ -346,7 +343,6 @@ class HomeController extends Controller
             'totalPaymentMethods' => $totalPaymentMethods,
             'totalOrderValue' => $totalOrderValue,
             'averageOrderValue' => $averageOrderValue,
-            'ordersGrowth' => round($ordersGrowth, 1),
             'purchaseOrdersByStatus' => $purchaseOrdersByStatus,
             'purchaseOrdersByType' => $purchaseOrdersByType,
             'monthlyOrders' => $monthlyOrders,

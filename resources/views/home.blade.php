@@ -20,10 +20,6 @@
                         <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                             <h6 class="text-muted font-semibold">Total Purchase Orders</h6>
                             <h6 class="font-extrabold mb-0">{{ number_format($analytics['totalPurchaseOrders']) }}</h6>
-                            <small class="text-{{ $analytics['ordersGrowth'] >= 0 ? 'success' : 'danger' }}">
-                                <i class="bi bi-arrow-{{ $analytics['ordersGrowth'] >= 0 ? 'up' : 'down' }}"></i>
-                                {{ abs($analytics['ordersGrowth']) }}% from last month
-                            </small>
                         </div>
                     </div>
                 </div>
@@ -41,9 +37,6 @@
                         <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                             <h6 class="text-muted font-semibold">Total Customers</h6>
                             <h6 class="font-extrabold mb-0">{{ number_format($analytics['totalCustomers']) }}</h6>
-                            <small class="text-success">
-                                <i class="bi bi-arrow-up"></i> +8% from last month
-                            </small>
                         </div>
                     </div>
                 </div>
@@ -61,9 +54,6 @@
                         <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                             <h6 class="text-muted font-semibold">Total Revenue</h6>
                             <h6 class="font-extrabold mb-0">Rp {{ number_format($analytics['totalOrderValue']) }}</h6>
-                            <small class="text-success">
-                                <i class="bi bi-arrow-up"></i> +23% from last month
-                            </small>
                         </div>
                     </div>
                 </div>
@@ -81,9 +71,6 @@
                         <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                             <h6 class="text-muted font-semibold">Average Order Value</h6>
                             <h6 class="font-extrabold mb-0">Rp {{ number_format($analytics['averageOrderValue']) }}</h6>
-                            <small class="text-success">
-                                <i class="bi bi-arrow-up"></i> +15% from last month
-                            </small>
                         </div>
                     </div>
                 </div>
@@ -130,7 +117,7 @@
                                         </div>
                                     </td>
                                     <td><span class="badge bg-primary">{{ $product->quantity }}</span></td>
-                                    <td>Rp {{ number_format(rand(100000, 2000000)) }}</td>
+                                    <td>Rp {{ number_format($product->revenue ?? 0) }}</td>
                                     <td>
                                         <div class="progress" style="height: 8px;">
                                             <div class="progress-bar bg-success" style="width: {{ min(100, ($product->quantity / 10) * 100) }}%"></div>
