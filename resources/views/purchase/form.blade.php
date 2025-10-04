@@ -174,7 +174,7 @@
                                       <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Harga Barang</label>
-                                            <input type="text" class="form-control form-control-lg required" name="items[0][estimasi_harga]" placeholder="Rp">
+                                            <input type="text" class="form-control form-control-lg required" name="items[0][estimasi_harga]" placeholder="1.000.000">
                                         </div>
                                     </div>
                                      <div class="col-md-3 col-12">
@@ -199,7 +199,7 @@
                                     <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Jasa Kg</label>
-                                            <input type="text" class="form-control form-control-lg required" name="items[0][jasakg]" placeholder="Rp. 325.000">
+                                            <input type="text" class="form-control form-control-lg required" name="items[0][jasakg]" placeholder="325.000">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
@@ -219,13 +219,13 @@
                                     <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Diskon</label>
-                                            <input type="text" class="form-control form-control-lg required" name="items[0][diskon]" placeholder="Rp">
+                                            <input type="text" class="form-control form-control-lg required" name="items[0][diskon]" placeholder="50.000">
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Total Estimasi</label>
-                                            <input type="text" class="form-control form-control-lg required" name="items[0][total_estimasi]" placeholder="Rp">
+                                            <input type="text" class="form-control form-control-lg required" name="items[0][total_estimasi]" placeholder="Auto Count" readonly>
                                         </div>
                                     </div>
                                      <div class="col-md-6 col-12">
@@ -599,6 +599,99 @@ $(document).ready(function() {
     let choicesInstances = [];
     let currentCustomerId = null;
 
+    // ============================================
+    // RUPIAH FORMATTING FUNCTIONS
+    // ============================================
+
+    /**
+     * Format angka menjadi format Rupiah (dengan separator titik)
+     * Contoh: 1000000 -> 1.000.000
+     */
+    function formatRupiah(angka) {
+        if (!angka) return '';
+
+        // Hapus semua karakter non-digit
+        let number_string = angka.toString().replace(/[^,\d]/g, '');
+        let split = number_string.split(',');
+        let sisa = split[0].length % 3;
+        let rupiah = split[0].substr(0, sisa);
+        let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+        // Tambahkan titik jika sudah menjadi ribuan
+        if (ribuan) {
+            let separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+        }
+
+        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+        return rupiah;
+    }
+
+    /**
+     * Parse format Rupiah kembali ke angka untuk kalkulasi
+     * Contoh: "1.000.000" -> 1000000
+     */
+    function parseRupiah(rupiah) {
+        if (!rupiah) return 0;
+        return parseFloat(rupiah.toString().replace(/\./g, '').replace(/,/g, '.')) || 0;
+    }
+
+    /**
+     * Apply format Rupiah ke input field saat user mengetik
+     */
+    function applyRupiahFormat(element) {
+        let value = $(element).val();
+        let formatted = formatRupiah(value);
+        $(element).val(formatted);
+    }
+
+    /**
+     * Initialize Rupiah format untuk semua field currency yang ada
+     */
+    function initRupiahFormatting() {
+        // Selector untuk semua field yang perlu format Rupiah
+        const currencyFields = [
+            'input[name*="[estimasi_harga]"]',
+            'input[name*="[jasakg]"]',
+            'input[name*="[diskon]"]',
+            'input[name*="[total_estimasi]"]',
+            'input[name*="[asuransi]"]',
+            'input[name*="[dp]"]',
+            'input[name*="[fullpayment]"]',
+            'input[name*="[pelunasan]"]',
+            'input[name*="[kurang_bayar]"]',
+            'input[name*="[jumlah_transfer]"]',
+            'input[name*="[total_purchase]"]',
+            'input[name*="[harga_hpp]"]',
+            'input[name*="[fix_price]"]'
+        ].join(', ');
+
+        // Apply format saat user mengetik
+        $(document).on('keyup', currencyFields, function(e) {
+            // Simpan posisi cursor
+            let cursorPosition = this.selectionStart;
+            let oldLength = this.value.length;
+
+            // Format value
+            applyRupiahFormat(this);
+
+            // Restore posisi cursor (adjust untuk separator yang ditambahkan)
+            let newLength = this.value.length;
+            let newPosition = cursorPosition + (newLength - oldLength);
+            this.setSelectionRange(newPosition, newPosition);
+        });
+
+        // Format existing values on page load
+        $(currencyFields).each(function() {
+            if ($(this).val() && !$(this).prop('readonly')) {
+                applyRupiahFormat(this);
+            }
+        });
+    }
+
+    // Initialize Rupiah formatting
+    initRupiahFormatting();
+
     $('form').submit(function(e) {
     e.preventDefault();
 
@@ -678,27 +771,74 @@ $(document).ready(function() {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.isConfirmed) {
-            // Submit form jika konfirmasi OK
+            // Convert format Rupiah ke angka sebelum submit
+            const $form = $(this);
+            const formData = new FormData($form[0]);
+
+            // List semua field currency yang perlu di-convert
+            const currencyFields = [
+                'estimasi_harga',
+                'jasakg',
+                'diskon',
+                'total_estimasi',
+                'asuransi'
+            ];
+
+            // Convert semua item currency fields
+            $('.item-row').each(function(index) {
+                currencyFields.forEach(field => {
+                    const $input = $(this).find(`input[name="items[${index}][${field}]"]`);
+                    if ($input.length && $input.val()) {
+                        const rawValue = parseRupiah($input.val());
+                        formData.set(`items[${index}][${field}]`, rawValue);
+                    }
+                });
+            });
+
+            // Submit form dengan FormData yang sudah di-convert
             $.ajax({
-                url: $(this).attr('action'),
-                method: $(this).attr('method'),
-                data: $(this).serialize(),
+                url: $form.attr('action'),
+                method: $form.attr('method'),
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: function(response) {
                     Swal.fire({
                         icon: 'success',
                         title: 'Berhasil!',
-                        text: 'Data berhasil disimpan',
+                        text: response.message || 'Data berhasil disimpan',
                         timer: 2000,
                         showConfirmButton: false
                     }).then(() => {
-                        window.location.href = "{{ route('purchase.index') }}";
+                        window.location.href = response.redirect || "{{ route('purchase.index') }}";
                     });
                 },
                 error: function(xhr) {
+                    let errorMessage = 'Terjadi kesalahan saat menyimpan data';
+                    let errorDetails = '';
+
+                    if (xhr.responseJSON) {
+                        if (xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+                        if (xhr.responseJSON.errors) {
+                            // Format validation errors
+                            const errors = xhr.responseJSON.errors;
+                            errorDetails = '<ul class="text-start">';
+                            Object.keys(errors).forEach(key => {
+                                errors[key].forEach(error => {
+                                    errorDetails += `<li>${error}</li>`;
+                                });
+                            });
+                            errorDetails += '</ul>';
+                        }
+                    }
+
                     Swal.fire({
                         icon: 'error',
                         title: 'Gagal!',
-                        text: 'Terjadi kesalahan saat menyimpan data'
+                        html: errorMessage + errorDetails,
+                        width: '600px'
                     });
                 }
             });
@@ -1004,7 +1144,13 @@ $('.required').on('input change', function() {
         itemRow.find(`input[name="items[${index}][nama_barang]"]`).val(order.customProperties.nama_barang || '');
         itemRow.find(`input[name="items[${index}][link_barang]"]`).val(order.customProperties.link_product || '');
         itemRow.find(`input[name="items[${index}][estimasi_notes]"]`).val(order.customProperties.jumlah_berat || '');
-        itemRow.find(`input[name="items[${index}][estimasi_harga]"]`).val(order.customProperties.total_harga || '');
+
+        // Format harga ke Rupiah jika ada
+        const totalHarga = order.customProperties.total_harga || '';
+        if (totalHarga) {
+            itemRow.find(`input[name="items[${index}][estimasi_harga]"]`).val(formatRupiah(totalHarga.toString()));
+        }
+
         itemRow.find(`input[name="items[${index}][quantity]"]`).val('1');
 
         // Hitung asuransi dan total
@@ -1168,7 +1314,7 @@ $('.required').on('input change', function() {
                 <div class="col-md-3 col-12">
                     <div class="form-group">
                         <label class="form-label">Harga Barang</label>
-                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][estimasi_harga]" placeholder="Rp">
+                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][estimasi_harga]" placeholder="1.000.000">
                     </div>
                 </div>
                 <div class="col-md-3 col-12">
@@ -1192,7 +1338,7 @@ $('.required').on('input change', function() {
                 <div class="col-md-3 col-12">
                     <div class="form-group">
                         <label class="form-label">Jasa Kg</label>
-                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][jasakg]" placeholder="Rp. 325.000">
+                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][jasakg]" placeholder="325.000">
                     </div>
                 </div>
                 <div class="col-md-6 col-12">
@@ -1209,13 +1355,13 @@ $('.required').on('input change', function() {
                 <div class="col-md-3 col-12">
                     <div class="form-group">
                         <label class="form-label">Diskon</label>
-                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][diskon]" placeholder="Rp">
+                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][diskon]" placeholder="50.000">
                     </div>
                 </div>
                 <div class="col-md-3 col-12">
                     <div class="form-group">
                         <label class="form-label">Total Estimasi</label>
-                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][total_estimasi]" placeholder="Rp">
+                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][total_estimasi]" placeholder="Auto Count" readonly>
                     </div>
                 </div>
                 <div class="col-md-6 col-12">
@@ -1355,18 +1501,22 @@ $('.required').on('input change', function() {
     // Fungsi untuk menghitung total
     function calculateTotals(index) {
         const itemRow = $(`[data-index="${index}"]`).closest('.item-row');
-        const harga = parseFloat(itemRow.find('input[name="items[' + index + '][estimasi_harga]"]').val().replace(/[^\d.]/g, '')) || 0;
-        const jasa = parseFloat(itemRow.find('input[name="items[' + index + '][jasakg]"]').val().replace(/[^\d.]/g, '')) || 0;
-        const diskon = parseFloat(itemRow.find('input[name="items[' + index + '][diskon]"]').val().replace(/[^\d.]/g, '')) || 0;
+
+        // Parse nilai dari format Rupiah ke angka
+        const harga = parseRupiah(itemRow.find('input[name="items[' + index + '][estimasi_harga]"]').val());
+        const jasa = parseRupiah(itemRow.find('input[name="items[' + index + '][jasakg]"]').val());
+        const diskon = parseRupiah(itemRow.find('input[name="items[' + index + '][diskon]"]').val());
         const qty = parseFloat(itemRow.find('input[name="items[' + index + '][quantity]"]').val().replace(/[^\d.]/g, '')) || 0;
 
         // Hitung asuransi (2% dari harga)
         const asuransi = harga * qty * 0.02;
-        itemRow.find('input[name="items[' + index + '][asuransi]"]').val(asuransi);
+        const asuransiFormatted = formatRupiah(Math.round(asuransi).toString());
+        itemRow.find('input[name="items[' + index + '][asuransi]"]').val(asuransiFormatted);
 
         // Hitung total
         const total = (harga * qty) + jasa + asuransi - diskon;
-        itemRow.find('input[name="items[' + index + '][total_estimasi]"]').val(total);
+        const totalFormatted = formatRupiah(Math.round(total).toString());
+        itemRow.find('input[name="items[' + index + '][total_estimasi]"]').val(totalFormatted);
     }
 
     // Inisialisasi link buttons

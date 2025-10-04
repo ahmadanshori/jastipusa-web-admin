@@ -11,10 +11,10 @@
         <div class="col-6 col-lg-3 col-md-6">
             <div class="card">
                 <div class="card-body px-4 py-4-5">
-                    <div class="row">
-                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-center">
-                            <div class="stats-icon purple mb-2">
-                                <i class="bi bi-basket-fill"></i>
+                    <div class="row align-items-center">
+                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 ">
+                            <div class="stats-icon purple mb-2 d-flex justify-content-center align-items-center" style="width: 3rem; height: 3rem;">
+                                <i class="bi bi-basket-fill" style="font-size: 1rem;"></i>
                             </div>
                         </div>
                         <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
@@ -28,10 +28,10 @@
         <div class="col-6 col-lg-3 col-md-6">
             <div class="card">
                 <div class="card-body px-4 py-4-5">
-                    <div class="row">
-                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-center">
-                            <div class="stats-icon blue mb-2">
-                                <i class="bi bi-people-fill"></i>
+                    <div class="row align-items-center">
+                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-center align-items-center">
+                            <div class="stats-icon blue mb-2 d-flex justify-content-center align-items-center" style="width: 3rem; height: 3rem;">
+                                <i class="bi bi-people-fill" style="font-size: 1rem;"></i>
                             </div>
                         </div>
                         <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
@@ -45,10 +45,10 @@
         <div class="col-6 col-lg-3 col-md-6">
             <div class="card">
                 <div class="card-body px-4 py-4-5">
-                    <div class="row">
-                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-center">
-                            <div class="stats-icon green mb-2">
-                                <i class="bi bi-currency-dollar"></i>
+                    <div class="row align-items-center">
+                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-center align-items-center">
+                            <div class="stats-icon green mb-2 d-flex justify-content-center align-items-center" style="width: 3rem; height: 3rem;">
+                                <i class="bi bi-currency-dollar" style="font-size: 1rem;"></i>
                             </div>
                         </div>
                         <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
@@ -62,10 +62,10 @@
         <div class="col-6 col-lg-3 col-md-6">
             <div class="card">
                 <div class="card-body px-4 py-4-5">
-                    <div class="row">
-                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-center">
-                            <div class="stats-icon red mb-2">
-                                <i class="bi bi-graph-up"></i>
+                    <div class="row align-items-center">
+                        <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-center align-items-center">
+                            <div class="stats-icon red mb-2 d-flex justify-content-center align-items-center" style="width: 3rem; height: 3rem;">
+                                <i class="bi bi-graph-up" style="font-size: 1rem;"></i>
                             </div>
                         </div>
                         <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">

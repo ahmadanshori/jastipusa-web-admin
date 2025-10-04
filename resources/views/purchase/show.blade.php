@@ -72,14 +72,14 @@
                                             <div class="form-group">
                                                 <label for="tipe_order" class="form-label">Tipe Order</label>
                                                 <select class="required choices form-select" disabled id="tipe_order" name="tipe_order">
-                                                    
+
                                                     <option value="">Press to select</option>
                                                         <option value="01" {{ $purchase->tipe_order == '01' ? 'selected' : '' }}>Jasmin</option>
                                                         <option value="02" {{ $purchase->tipe_order == '02' ? 'selected' : '' }}>Jastip Order</option>
                                                         <option value="03" {{ $purchase->tipe_order == '03' ? 'selected' : '' }}>Jastip Only</option>
                                                         <option value="04" {{ $purchase->tipe_order == '04' ? 'selected' : '' }}>Jastip B2B</option>
 
-                                                
+
                                                 </select>
                                             </div>
                                             @error('publish_at')
@@ -209,7 +209,7 @@
                                                         <label class="form-label">Harga Barang</label>
                                                         <input type="text" class="form-control form-control-lg"
                                                             name="items[{{ $index }}][estimasi_harga]" readonly
-                                                            value="{{ old("items.$index.estimasi_harga", number_format($item->estimasi_harga,0,'','')) }}">
+                                                            value="{{ old("items.$index.estimasi_harga", number_format($item->estimasi_harga,0,',','.')) }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 col-12">
@@ -234,7 +234,7 @@
                                                         <label class="form-label">Asuransi 2%</label>
                                                         <input type="text" class="form-control form-control-lg"
                                                             name="items[{{ $index }}][asuransi]" readonly
-                                                            value="{{ old("items.$index.asuransi", number_format($item->asuransi,0,'','')) }}">
+                                                            value="{{ old("items.$index.asuransi", number_format($item->asuransi,0,',','.')) }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 col-12">
@@ -242,7 +242,7 @@
                                                         <label class="form-label">Jasa Kg</label>
                                                         <input type="text" class="form-control form-control-lg" readonly
                                                             name="items[{{ $index }}][jasa]"
-                                                            value="{{ old("items.$index.jasa", number_format($item->jasa,0,'','')) }}">
+                                                            value="{{ old("items.$index.jasa", number_format($item->jasa,0,',','.')) }}">
                                                     </div>
                                                 </div>
 
@@ -264,10 +264,10 @@
                                                 </div>
                                                 <div class="col-md-3 col-12">
                                                     <div class="form-group">
-                                                        <label class="form-label">Dsikon</label>
+                                                        <label class="form-label">Diskon</label>
                                                         <input type="text" class="form-control form-control-lg"
                                                             name="items[{{ $index }}][estimasi_diskon]" readonly
-                                                            value="{{ old("items.$index.estimasi_diskon", number_format($item->estimasi_diskon,0,'','')) }}">
+                                                            value="{{ old("items.$index.estimasi_diskon", number_format($item->estimasi_diskon,0,',','.')) }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 col-12">
@@ -275,7 +275,7 @@
                                                         <label class="form-label">Total Harga Estimasi</label>
                                                         <input type="text" class="form-control form-control-lg" readonly
                                                             name="items[{{ $index }}][total_estimasi]"
-                                                            value="{{ old("items.$index.total_estimasi", number_format($item->total_estimasi,0,'','')) }}">
+                                                            value="{{ old("items.$index.total_estimasi", number_format($item->total_estimasi,0,',','.')) }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 col-12">
@@ -908,29 +908,29 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Jumlah Transfer</label>
-                                    <input type="number" id="jumlah_transfer" readonly class="form-control form-control-lg"
-                                        name="jumlah_transfer" placeholder="Rp">
+                                    <input type="text" id="jumlah_transfer" readonly class="form-control form-control-lg"
+                                        name="jumlah_transfer" placeholder="1.000.000">
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">DP</label>
-                                    <input type="number" id="dp" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg" name="dp"
-                                        placeholder="Rp">
+                                    <input type="text" id="dp" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg" name="dp"
+                                        placeholder="500.000">
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Full Payment</label>
-                                    <input type="number" id="full_payment" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
-                                        name="full_payment" placeholder="Rp">
+                                    <input type="text" id="full_payment" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
+                                        name="full_payment" placeholder="1.000.000">
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Kurang Bayar</label>
-                                    <input type="number" id="kurang_bayar" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
-                                        name="kurang_bayar" placeholder="Rp">
+                                    <input type="text" id="kurang_bayar" readonly class="form-control form-control-lg"
+                                        name="kurang_bayar" placeholder="Auto Count">
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
@@ -1016,8 +1016,8 @@
                                     <label class="form-label">Harga Barang</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="number" id="harga_barang" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
-                                            name="harga_barang" placeholder="$">
+                                        <input type="text" id="harga_barang" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
+                                            name="harga_barang" placeholder="100">
                                     </div>
                                     <span id="show_harga_barang" class="invalid-feedback" style="display: block">
                                     </span>
@@ -1028,8 +1028,8 @@
                                     <label class="form-label">Pajak</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="number" id="pajak" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg" name="pajak"
-                                            placeholder="0.00">
+                                        <input type="text" id="pajak" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg" name="pajak"
+                                            placeholder="10">
                                     </div>
                                     <span id="show_pajak" class="invalid-feedback" style="display: block">
                                     </span>
@@ -1040,8 +1040,8 @@
                                     <label class="form-label">Diskon</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="number" id="diskon" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg" name="diskon"
-                                            placeholder="$">
+                                        <input type="text" id="diskon" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg" name="diskon"
+                                            placeholder="5">
                                     </div>
                                     <span id="show_diskon" class="invalid-feedback" style="display: block">
                                     </span>
@@ -1052,8 +1052,8 @@
                                     <label class="form-label">Pengiriman</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="number" id="pengiriman" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
-                                            name="pengiriman" placeholder="$">
+                                        <input type="text" id="pengiriman" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
+                                            name="pengiriman" placeholder="15">
                                     </div>
                                     <span id="show_pengiriman" class="invalid-feedback" style="display: block">
                                     </span>
@@ -1139,8 +1139,8 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Fix Price</label>
-                                    <input type="number" id="fix_price" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
-                                        name="fix_price" placeholder="Rp">
+                                    <input type="text" id="fix_price" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
+                                        name="fix_price" placeholder="1.000.000">
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
@@ -1161,15 +1161,15 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Kurir Lokal</label>
-                                    <input type="number" id="kurir_lokal" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
-                                        name="kurir_lokal" placeholder="Rp">
+                                    <input type="text" id="kurir_lokal" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
+                                        name="kurir_lokal" placeholder="50.000">
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Pelunasan</label>
-                                    <input type="number" id="pelunasan" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
-                                        name="pelunasan" placeholder="Rp">
+                                    <input type="text" id="pelunasan" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
+                                        name="pelunasan" placeholder="500.000">
                                 </div>
                             </div>
 
@@ -1256,9 +1256,17 @@
                 const itemId = $(this).data('item-id');
                 $('#item_id').val(itemId);
                 $('#nama_rek').val($(this).data('nama-rek'));
-                $('#jumlah_transfer').val(parseInt($(this).data('total-estimasi')));
-                $('#dp').val(parseInt($(this).data('dp')));
-                $('#full_payment').val(parseInt($(this).data('full-payment')));
+
+                // Format values dengan Rupiah
+                const totalEstimasi = $(this).data('total-estimasi');
+                $('#jumlah_transfer').val(totalEstimasi ? formatRupiah(totalEstimasi.toString()) : '');
+
+                const dp = $(this).data('dp');
+                $('#dp').val(dp ? formatRupiah(dp.toString()) : '');
+
+                const fullPayment = $(this).data('full-payment');
+                $('#full_payment').val(fullPayment ? formatRupiah(fullPayment.toString()) : '');
+
                 $('#status_follow_up').val($(this).data('status-follow-up'));
                 $('#foto-bukti').val($(this).data('foto-bukti'));
                 $('#txt_foto_bukti').val($(this).data('foto-bukti'));
@@ -1545,20 +1553,36 @@
                 $('#harga_barang, #pajak, #diskon, #pengiriman').val(0);
                 hitungTotalPurchase();
             });
+
+            // Auto-calculate saat input HPP berubah
+            $('#harga_barang, #pajak, #diskon, #pengiriman').on('input', hitungTotalPurchase);
             $(document).on('click', '.edit-hpp-btn', function () {
                 const itemId = $(this).data('item-id');
 
-               
+
                 // Isi form modal dengan data dari tombol
                 $('#hpp_item_id').val(itemId);
                 $('#payment_method').val($(this).data('payment-method'));
-                $('#total_purchase').val(parseInt($(this).data('total-purchase')));
+
+                // Format values dengan Rupiah
+                const totalPurchase = $(this).data('total-purchase');
+                $('#total_purchase').val(totalPurchase ? formatRupiah(totalPurchase.toString()) : '');
+
                 $('#status_purchase').val($(this).data('status-purchase'));
                 $('#notes').val($(this).data('notes'));
-                $('#pajak').val(parseInt($(this).data('pajak')));
-                $('#diskon').val(parseInt($(this).data('diskon')));
-                $('#pengiriman').val(parseInt($(this).data('pengiriman')));
-                $('#harga_barang').val(parseInt($(this).data('harga-hpp')));
+
+                const pajak = $(this).data('pajak');
+                $('#pajak').val(pajak ? formatRupiah(pajak.toString()) : '');
+
+                const diskon = $(this).data('diskon');
+                $('#diskon').val(diskon ? formatRupiah(diskon.toString()) : '');
+
+                const pengiriman = $(this).data('pengiriman');
+                $('#pengiriman').val(pengiriman ? formatRupiah(pengiriman.toString()) : '');
+
+                const hargaHpp = $(this).data('harga-hpp');
+                $('#harga_barang').val(hargaHpp ? formatRupiah(hargaHpp.toString()) : '');
+
                 $("#txt_foto_bukti_pembelian").val($(this).data('bukti-pembelian'));
                 hitungTotalPurchase();
                 // Tampilkan preview bukti pembelian jika ada
@@ -1592,7 +1616,7 @@
                 // Set toggle
 
 
-           
+
                 const isChecked = $(this).data('hpp-mutasi-check');
 
                 // Atur nilai checkbox berdasarkan isChecked
@@ -1654,16 +1678,16 @@
 
                  var paymentMethodValue = $(this).data('payment-method');
     console.log('Nilai payment method:', paymentMethodValue);
-    
+
     // Dapatkan instance Choices untuk payment method
     var paymentMethodElement = document.getElementById('payment_method');
-    
+
      if (typeof Choices !== 'undefined') {
         // Destroy existing instance jika ada
         if (paymentMethodElement.choices) {
             paymentMethodElement.choices.destroy();
         }
-        
+
         // Pastikan opsi payment method sudah ada
         if ($('#payment_method option').length <= 1) {
             // Isi opsi payment method dari data PHP
@@ -1700,7 +1724,7 @@
                 $('#payment_method').append('<option value="{{ $paymentMethods->name . '-' . $paymentMethods->number }}">{{ $paymentMethods->name . '-' . $paymentMethods->number }}</option>');
             @endforeach
         }
-        
+
         // Set nilai yang dipilih atau auto select index 0
         if (paymentMethodValue) {
             $('#payment_method').val(paymentMethodValue);
@@ -1931,14 +1955,25 @@
 
                 // Isi form modal
                 $('#operasional_item_id').val(itemId);
-                $('#fix_weight').val(parseInt($(this).data('fix-weight') || 0));
-                $('#fix_price').val(parseInt($(this).data('fix-price') || 0));
+
+                // Fix Weight tidak perlu format Rupiah (dalam kg)
+                const fixWeight = $(this).data('fix-weight');
+                $('#fix_weight').val(fixWeight || 0);
+
+                // Format values dengan Rupiah
+                const fixPrice = $(this).data('fix-price');
+                $('#fix_price').val(fixPrice ? formatRupiah(fixPrice.toString()) : '');
+
                 $('#status_barang_sampai').val(statusBarang);
 
                 $('#nomor_box').val($(this).data('no-box'));
                 $('#sku').val($(this).data('sku'));
-                $('#kurir_lokal').val(parseInt($(this).data('kurir-lokal') || 0));
-                $('#pelunasan').val(parseInt($(this).data('pelunasan') || 0));
+
+                const kurirLokal = $(this).data('kurir-lokal');
+                $('#kurir_lokal').val(kurirLokal ? formatRupiah(kurirLokal.toString()) : '');
+
+                const pelunasan = $(this).data('pelunasan');
+                $('#pelunasan').val(pelunasan ? formatRupiah(pelunasan.toString()) : '');
 
 
                 var statusFollowUp = $(this).data('status-barang-sampai');
@@ -2252,10 +2287,95 @@
             });
         }
 
+        // Format number to Rupiah format (1000000 -> "1.000.000")
+        function formatRupiah(angka) {
+            if (!angka) return '';
+
+            // Hapus semua karakter non-digit
+            const numberString = angka.toString().replace(/[^,\d]/g, '');
+            const split = numberString.split(',');
+            const sisa = split[0].length % 3;
+            let rupiah = split[0].substr(0, sisa);
+            const ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                const separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            return split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+        }
+
+        // Parse Rupiah format back to number ("1.000.000" -> 1000000)
+        function parseRupiah(rupiah) {
+            if (!rupiah) return 0;
+            return parseInt(rupiah.toString().replace(/\./g, '')) || 0;
+        }
+
+        // Apply Rupiah formatting to input element
+        function applyRupiahFormat(element) {
+            const value = $(element).val();
+            if (value) {
+                const formatted = formatRupiah(value);
+                $(element).val(formatted);
+            }
+        }
+
+        // Initialize Rupiah formatting for all currency fields
+        function initRupiahFormatting() {
+            // Daftar semua field yang perlu formatting
+            const currencyFields = [
+                'input[name="estimasi_harga"]',
+                'input[name="jasa"]',
+                'input[name="kurir_lokal"]',
+                'input[name="pajak"]',
+                'input[name="diskon"]',
+                'input[name="pengiriman"]',
+                'input[name="fix_price"]',
+                'input[name="total_purchase"]',
+                'input[name="harga_hpp"]',
+                'input#jumlah_transfer',
+                'input#dp',
+                'input#full_payment',
+                'input#pelunasan',
+                'input#kurang_bayar'
+            ].join(', ');
+
+            // Auto-format saat mengetik
+            $(document).on('keyup', currencyFields, function(e) {
+                // Save cursor position
+                const element = this;
+                const cursorPosition = element.selectionStart;
+                const oldLength = element.value.length;
+
+                // Format value
+                const value = $(element).val();
+                const formatted = formatRupiah(value);
+                $(element).val(formatted);
+
+                // Restore cursor position (adjust for new length)
+                const newLength = formatted.length;
+                const lengthDiff = newLength - oldLength;
+                const newPosition = cursorPosition + lengthDiff;
+
+                // Set cursor position
+                if (element.setSelectionRange) {
+                    element.setSelectionRange(newPosition, newPosition);
+                }
+            });
+
+            // Format existing values on page load
+            $(currencyFields).each(function() {
+                if ($(this).val() && !$(this).prop('readonly') && !$(this).prop('disabled')) {
+                    applyRupiahFormat(this);
+                }
+            });
+        }
+
         function calculateKurangBayar() {
-            const jumlahTransfer = parseFloat($('#jumlah_transfer').val()) || 0;
-            const dp = parseFloat($('#dp').val()) || 0;
-            const fullPayment = parseFloat($('#full_payment').val()) || 0;
+            const jumlahTransfer = parseRupiah($('#jumlah_transfer').val());
+            const dp = parseRupiah($('#dp').val());
+            const fullPayment = parseRupiah($('#full_payment').val());
 
             let kurangBayar = 0;
             let fullPay = 0;
@@ -2274,7 +2394,8 @@
                 $('#dp').val(dpPay);
             }
 
-            $('#kurang_bayar').val(kurangBayar);
+            // Format kurang bayar dengan Rupiah
+            $('#kurang_bayar').val(formatRupiah(Math.round(kurangBayar).toString()));
 
 
             // Update styling
@@ -2294,11 +2415,11 @@
         }
 
         function hitungTotalPurchase() {
-            // Ambil nilai dari input
-            const hargaBarang = parseFloat($('#harga_barang').val()) || 0;
-            const pajak = parseFloat($('#pajak').val()) || 0;
-            const diskon = parseFloat($('#diskon').val()) || 0;
-            const pengiriman = parseFloat($('#pengiriman').val()) || 0;
+            // Ambil nilai dari input dengan parseRupiah
+            const hargaBarang = parseRupiah($('#harga_barang').val());
+            const pajak = parseRupiah($('#pajak').val());
+            const diskon = parseRupiah($('#diskon').val());
+            const pengiriman = parseRupiah($('#pengiriman').val());
             const exchange = parseFloat($('#exchange').val()) || 0;
 
             // Format individual currency fields in IDR
@@ -2320,8 +2441,9 @@
             // Hitung total
             const total = hargaBarang + pajak + pengiriman - diskon;
 
-            // Tampilkan hasil (pastikan tidak negatif)
-            $('#total_purchase').val(total >= 0 ? total : 0);
+            // Tampilkan hasil dengan format Rupiah (pastikan tidak negatif)
+            const totalValue = total >= 0 ? total : 0;
+            $('#total_purchase').val(formatRupiah(Math.round(totalValue).toString()));
             const showTotal = parseFloat(total * exchange);
             const formattedTotal = new Intl.NumberFormat('id-ID', {
                 style: 'currency',
@@ -2344,6 +2466,9 @@
 
         // Format currency elements when page loads
         formatAllCurrencyElements();
+
+        // Initialize Rupiah formatting
+        initRupiahFormatting();
 
     </script>
 @endsection

@@ -90,76 +90,52 @@ class PurchaseOrderController extends Controller
         'category' => $category,
         'brand' => $brand,
         'customer' => $customer,
-        'customerOrdersJson' => $customerOrders->toJson() // Untuk inisialisasi Choices
+        'customerOrdersJson' => $customerOrders->toJson()
     ]);
 }
 
-    // public function store(Request $request)
-    // {
-    //     $validation = Validator::make($request->all(), [
-    //         'no_po' => 'required',
-    //         'nama' => 'required',
-    //         'no_telp' => 'required',
-    //         'alamat' => 'required',
-    //         'email' => 'required',
-    //         'nama_barang' => 'required',
-    //         'link_barang' => 'required',
-    //         'estimasi_kg' => 'required',
-    //         'estimasi_harga' => 'required',
-    //     ]);
-
-
-    //     if ($validation->passes()) {
-    //         $data = [
-    //             'no_po' => $request->no_po,
-    //             'nama' => $request->nama,
-    //             'no_telp' => $request->no_telp,
-    //             'alamat' => $request->alamat,
-    //             'email' => $request->email,
-    //             'nama_barang' => $request->nama_barang,
-    //             'link_barang' => $request->link_barang,
-    //             'estimasi_kg' => $request->estimasi_kg,
-    //             'estimasi_harga' => $request->estimasi_harga,
-    //         ];
-    //         $this->purchase->create($data);
-
-    //         \Session::flash('success', 'purchase has been created');
-    //         return redirect()->route('purchase.index');
-    //     } else {
-    //         return redirect()->back()
-    //             ->withErrors($validation)->withInput();
-    //     }
-    // }
-
     public function store(Request $request)
 {
-    // Validasi data utama
-    // $validatedData = $request->validate([
-    //     'items' => 'required|array|min:1',
-    //     'items.*.customer_order_id' => 'required',
-    //     'items.*.no_po_customer' => 'required|string',
-    //     'items.*.nama_barang' => 'required|string',
-    //     'items.*.link_barang' => 'nullable|url',
-    //     'items.*.estimasi_kg' => 'required',
-    //     'items.*.estimasi_harga' => 'required',
-    // ]);
+    $validator = Validator::make($request->all(), [
+        'nama' => 'required|string',
+        'phone' => 'required|string',
+        'alamat' => 'required|string',
+        'email' => 'required|email',
+        'tipe_order' => 'required|string',
+        'items' => 'required|array|min:1',
+        'items.*.no_po_customer' => 'required|string',
+        'items.*.nama_barang' => 'required|string',
+        'items.*.quantity' => 'required|numeric',
+        'items.*.estimasi_kg' => 'required|numeric',
+        'items.*.estimasi_harga' => 'required|numeric',
+        'items.*.total_estimasi' => 'required|numeric',
+        'items.*.category_id' => 'required|exists:category,id',
+        'items.*.brand_id' => 'required|exists:brand,id',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Validasi gagal',
+            'errors' => $validator->errors()
+        ], 422);
+    }
 
     // Mulai transaction database
     DB::beginTransaction();
 
     try {
         // Simpan data purchase order utama
-
         $data = [
-            // 'no_po' => $request->no_po,
             'nama' => $request->nama,
             'no_telp' => $request->phone,
             'alamat' => $request->alamat,
             'email' => $request->email,
             'tipe_order' => $request->tipe_order,
         ];
+
         $purchase = $this->purchase->create($data);
-        // dd($purchase);
+
         // Simpan item-item purchase order
         foreach ($request->items as $item) {
             $this->purchaseOrderDetail->create([
@@ -183,32 +159,35 @@ class PurchaseOrderController extends Controller
         }
 
 
-     
+
         DB::commit();
 
-        $emails = $this->user->pluck('email')->toArray();
-
-        $user = $this->user->where('id', Auth::id())->first();
-        $role = $this->role->where('id', $user->role_id)->first();
-        $purchase["role"] = $role->name;
-        $purchase["user"] = $user->name;
-        Mail::to('no-reply@mail.com')
-            ->bcc($emails)
-            ->send(new NotificationEmail($purchase));
-
-
-        return redirect()->route('purchase.index')
-            ->with('success', 'Purchase Order berhasil dibuat');
+        // Send email notification
+        try {
+            $emails = $this->user->pluck('email')->toArray();
+            $user = $this->user->where('id', Auth::id())->first();
+            $role = $this->role->where('id', $user->role_id)->first();
+            $purchase["role"] = $role->name;
+            $purchase["user"] = $user->name;
+            Mail::to('no-reply@mail.com')
+                ->bcc($emails)
+                ->send(new NotificationEmail($purchase));
+        } catch (\Exception $mailError) {
+            // Continue even if email fails
+        }
+        return response()->json([
+            'success' => true,
+            'message' => 'Purchase Order berhasil dibuat',
+            'redirect' => route('purchase.index')
+        ]);
 
     } catch (\Exception $e) {
-        // Rollback transaction jika terjadi error
-        // dd($e);
         DB::rollBack();
 
-             return back()
-            ->withInput()
-            ->with('error', 'Failed to create Purchase Order: '.$e->getMessage())
-            ->with('old_items', $request->items); // Tambahkan items ke session
+        return response()->json([
+            'success' => false,
+            'message' => 'Gagal membuat Purchase Order: ' . $e->getMessage()
+        ], 500);
     }
 }
 
@@ -244,29 +223,9 @@ class PurchaseOrderController extends Controller
         'customerOrdersJson' => $customerOrders->toJson()
     ]);
 }
-    // public function edit($id)
-    // {
-    //     $purchase = $this->purchase->where('id', $id)->first();
-    //        $customer = $this->customer->get();
-    //     $customerOrder = $this->customerOrder->whereNotNull('po_number')->get();
-    //     return view('purchase.form', compact('purchase','customer','customerOrder'));
-    // }
 
     public function update(Request $request, $id)
 {
-    // $validatedData = $request->validate([
-    //     'no_telp' => 'required',
-    //     'nama' => 'required',
-    //     'email' => 'required|email',
-    //     'alamat' => 'required',
-    //     'items' => 'required|array|min:1',
-    //     'items.*.customer_order_id' => 'required|exists:customer_orders,id',
-    //     'items.*.no_po_customer' => 'required',
-    //     'items.*.nama_barang' => 'required',
-    //     'items.*.estimasi_kg' => 'required|numeric',
-    //     'items.*.estimasi_harga' => 'required|numeric'
-    // ]);
-
     DB::beginTransaction();
 
     try {
@@ -317,17 +276,6 @@ class PurchaseOrderController extends Controller
 
 public function updateEstimasi(Request $request, $id)
 {
-    // $validatedData = $request->validate([
-    //     'nama_rek' => 'sometimes|string|max:255',
-    //     'jumlah_transfer' => 'sometimes|numeric',
-    //     'dp' => 'sometimes|numeric',
-    //     'full_payment' => 'sometimes|numeric',
-    //     'status_follow_up' => 'sometimes|in:Scheduled,Followed,Unfollowed',
-    //     'mutasi_check' => 'sometimes|boolean',
-    //     'bukti_transfer' => 'sometimes|image|max:2048'
-    // ]);
-
-    // Handle file upload
     $data = [
         'nama_rek_transfer' => $request->nama_rek,
         'jumlah_transfer' => $request->jumlah_transfer,
@@ -347,29 +295,12 @@ public function updateEstimasi(Request $request, $id)
 
     return response()->json([
         'success' => true,
-        'message' => 'Estimasi berhasil diperbarui',
-        // 'nama_rek' => $item->nama_rek,
-        // 'jumlah_transfer' => $item->jumlah_transfer,
-        // 'dp' => $item->dp,
-        // 'full_payment' => $item->full_payment,
-        // 'status_follow_up' => $item->status_follow_up,
-        // 'mutasi_check' => $item->mutasi_check
+        'message' => 'Estimasi berhasil diperbarui'
     ]);
 }
 
 public function updateHpp(Request $request, $id)
 {
-    // $validatedData = $request->validate([
-    //     'nama_rek' => 'sometimes|string|max:255',
-    //     'jumlah_transfer' => 'sometimes|numeric',
-    //     'dp' => 'sometimes|numeric',
-    //     'full_payment' => 'sometimes|numeric',
-    //     'status_follow_up' => 'sometimes|in:Scheduled,Followed,Unfollowed',
-    //     'mutasi_check' => 'sometimes|boolean',
-    //     'bukti_transfer' => 'sometimes|image|max:2048'
-    // ]);
-
-    // Handle file upload
     $data = [
         'payment_method' => $request->payment_method,
         'total_purchase' => $request->total_purchase,
@@ -383,40 +314,21 @@ public function updateHpp(Request $request, $id)
     ];
 
    if ($request->hasFile('bukti_pembelian')) {
-        // Hapus file lama jika ada
         $path = $request->file('bukti_pembelian')->store('bukti_pembelian', 'public');
         $data['foto_bukti_pembelian'] = $path;
     }
 
-        $purchaseOrderDetail = $this->purchaseOrderDetail->where('id', $id)->first();
-        $purchaseOrderDetail->update($data);
+    $purchaseOrderDetail = $this->purchaseOrderDetail->where('id', $id)->first();
+    $purchaseOrderDetail->update($data);
 
     return response()->json([
         'success' => true,
-        'message' => 'Estimasi berhasil diperbarui',
-        // 'nama_rek' => $item->nama_rek,
-        // 'jumlah_transfer' => $item->jumlah_transfer,
-        // 'dp' => $item->dp,
-        // 'full_payment' => $item->full_payment,
-        // 'status_follow_up' => $item->status_follow_up,
-        // 'mutasi_check' => $item->mutasi_check
+        'message' => 'HPP berhasil diperbarui'
     ]);
 }
 
 public function updateOprasional(Request $request, $id)
 {
-    // $validatedData = $request->validate([
-    //     'nama_rek' => 'sometimes|string|max:255',
-    //     'jumlah_transfer' => 'sometimes|numeric',
-    //     'dp' => 'sometimes|numeric',
-    //     'full_payment' => 'sometimes|numeric',
-    //     'status_follow_up' => 'sometimes|in:Scheduled,Followed,Unfollowed',
-    //     'mutasi_check' => 'sometimes|boolean',
-    //     'bukti_transfer' => 'sometimes|image|max:2048'
-    // ]);
-
-    // Handle file upload
-
     $data = [
         'fix_weight' => $request->fix_weight,
         'fix_price' => $request->fix_price,
@@ -510,41 +422,7 @@ public function updateOprasional(Request $request, $id)
         'category' => $category,
         'brand' => $brand,
     ]);
-    // }
-
 }
-
-//     public function update(Request $request, $id)
-//     {
-//         $purchaseOrder = $this->purchase->where('id', $id)->first();
-
-//         $validation = Validator::make($request->all(), [
-//             'id_title' => 'required',
-//             'image' => 'required',
-//         ]);
-
-//         $title = [
-//             'id' => $request->id_title,
-//             'en' => $request->en_title
-//         ];
-
-
-//         if ($validation->passes()) {
-//             $data = [
-//                 'title' => json_encode($title),
-//                 'publish_at' => $request->publish_at,
-//                 'cover_image' => $request->image,
-//                 'status_publish' => $request->status_publish == "true" ? "1" : "0",
-//             ];
-//             $purchaseOrder->update($data);
-
-//             \Session::flash('success', 'purchase has been updated');
-//             return redirect()->route('purchase.index');
-//         } else {
-//             return redirect()->back()
-//                 ->withErrors($validation)->withInput();
-//         }
-//     }
 
     public function destroy($id)
     {
@@ -560,7 +438,7 @@ public function updateOprasional(Request $request, $id)
     public function ajax(Request $request)
     {
         $purchaseOrders = $this->purchase->latest('updated_at')->get();
-    
+
         return Datatables::of($purchaseOrders)
             ->editColumn('created_at', function ($purchaseOrders) {
                  $months = [
@@ -642,9 +520,8 @@ public function updateOprasional(Request $request, $id)
             'isPdf' => true
         ];
 
-        // return view('purchase.pdf_estimasi', $data);
         $pdf = PDF::loadView('purchase.pdf_estimasi', $data);
-        
+
         return $pdf->download('purchase-estimasi-'.$purchase->purchase_number.'.pdf');
     }
 
