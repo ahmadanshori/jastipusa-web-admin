@@ -104,11 +104,64 @@ class CategoryController extends Controller
 
         return Datatables::of($categorys)
 
-          
+
             ->addColumn('actions', function ($categorys) {
                 $category = $categorys;
                 return view('category.action', compact('category'))->render();
             })->rawColumns(['actions'])->make(true);
+    }
+
+    /**
+     * Store category via AJAX (for purchase form)
+     */
+    public function storeAjax(Request $request)
+    {
+        $validation = Validator::make($request->all(), [
+            'name' => 'required|max:255',
+            'code' => 'required|string|max:50|unique:category,code',
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validation->errors()
+            ], 422);
+        }
+
+        try {
+            $category = $this->category->create([
+                'name' => $request->name,
+                'code' => strtoupper($request->code),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Category berhasil ditambahkan!',
+                'data' => [
+                    'value' => $category->id,
+                    'label' => $category->name . ' (' . $category->code . ')'
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Check if category code already exists (for real-time validation)
+     */
+    public function checkCode(Request $request)
+    {
+        $code = strtoupper($request->code);
+        $exists = $this->category->where('code', $code)->exists();
+
+        return response()->json([
+            'exists' => $exists,
+            'message' => $exists ? 'Category code sudah digunakan' : 'Category code tersedia'
+        ]);
     }
 
 }

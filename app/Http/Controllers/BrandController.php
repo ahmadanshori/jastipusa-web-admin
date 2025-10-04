@@ -104,11 +104,65 @@ class BrandController extends Controller
 
         return Datatables::of($brands)
 
-          
+
             ->addColumn('actions', function ($brands) {
                 $brand = $brands;
                 return view('brand.action', compact('brand'))->render();
             })->rawColumns(['actions'])->make(true);
+    }
+
+    // AJAX method untuk menambah brand dari purchase form
+    public function storeAjax(Request $request)
+    {
+        try {
+            $validation = Validator::make($request->all(), [
+                'name' => 'required|max:255',
+                'code' => 'required|string|max:50|unique:brand,code',
+            ]);
+
+            if ($validation->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validasi gagal',
+                    'errors' => $validation->errors()
+                ], 422);
+            }
+
+            $brand = $this->brand->create([
+                'name' => $request->name,
+                'code' => strtoupper($request->code),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Brand berhasil ditambahkan',
+                'data' => [
+                    'id' => $brand->id,
+                    'name' => $brand->name,
+                    'code' => $brand->code,
+                    'value' => $brand->id,
+                    'label' => $brand->name . ' (' . $brand->code . ')'
+                ]
+            ], 201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Method untuk cek duplikasi brand code via AJAX
+    public function checkCode(Request $request)
+    {
+        $code = strtoupper($request->code);
+        $exists = $this->brand->where('code', $code)->exists();
+
+        return response()->json([
+            'exists' => $exists,
+            'message' => $exists ? 'Brand code sudah digunakan' : 'Brand code tersedia'
+        ]);
     }
 
 }

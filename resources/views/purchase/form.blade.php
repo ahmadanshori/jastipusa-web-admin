@@ -231,17 +231,27 @@
                                      <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Category</label>
-                                            <select class="required form-select category-select" name="items[0][category_id]" data-index="0">
-                                                <option value="">Select Category</option>
-                                            </select>
+                                            <div class="input-group">
+                                                <select class="required form-select category-select" name="items[0][category_id]" data-index="0">
+                                                    <option value="">Select Category</option>
+                                                </select>
+                                                <button type="button" class="btn btn-primary btn-add-category" title="Add New Category" style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                                                    <i class="bi bi-plus-lg"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                      <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Brand</label>
-                                            <select class="required form-select brand-select" name="items[0][brand_id]" data-index="0">
-                                                <option value="">Select Brand</option>
-                                            </select>
+                                            <div class="input-group">
+                                                <select class="required form-select brand-select" name="items[0][brand_id]" data-index="0">
+                                                    <option value="">Select Brand</option>
+                                                </select>
+                                                <button type="button" class="btn btn-success btn-add-brand" title="Add New Brand" style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                                                    <i class="bi bi-plus-lg"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-12 col-12 text-end">
@@ -269,6 +279,312 @@
         </form>
     </section>
 </div>
+
+<!-- Modal Add Category -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border: none; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15);">
+            <div class="modal-header" style="border-bottom: 2px solid rgba(255,255,255,0.2); border-radius: 15px 15px 0 0;">
+                <h5 class="modal-title" id="addCategoryModalLabel" style="font-weight: 600;">
+                    <i class="bi bi-folder-plus me-2"></i> Add New Category
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="padding: 2rem;">
+                <form id="addCategoryForm">
+                    <div class="mb-4">
+                        <label for="category_name" class="form-label">
+                            <i class="bi bi-folder me-1"></i> Category Name <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-lg" id="category_name" name="name"
+                               placeholder="e.g., Shoes, Apparel" required
+                               style="border-radius: 10px; border: 2px solid #e2e8f0;">
+                        <div class="invalid-feedback" id="category_name_error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="category_code" class="form-label">
+                            <i class="bi bi-upc-scan me-1"></i> Category Code <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-lg text-uppercase" id="category_code" name="code"
+                               placeholder="e.g., SHO, APP" required maxlength="50"
+                               style="border-radius: 10px; border: 2px solid #e2e8f0; font-weight: 600; letter-spacing: 1px;">
+                        <small class="text-muted d-block mt-2">
+                            <i class="bi bi-info-circle me-1"></i> Kode unik untuk category (otomatis uppercase)
+                        </small>
+                        <div class="invalid-feedback" id="category_code_error"></div>
+                        <div class="valid-feedback" id="category_code_success">
+                            <i class="bi bi-check-circle me-1"></i> Category code tersedia!
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" style="border-top: 1px solid #e2e8f0; padding: 1.5rem 2rem; border-radius: 0 0 15px 15px;">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius: 8px; padding: 0.5rem 1.5rem;">
+                    <i class="bi bi-x-circle me-1"></i> Cancel
+                </button>
+                <button type="button" class="btn btn-primary" id="saveCategoryBtn" style="border-radius: 8px; padding: 0.5rem 1.5rem; font-weight: 600;">
+                    <i class="bi bi-save me-1"></i> Save Category
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Add Brand -->
+<div class="modal fade" id="addBrandModal" tabindex="-1" aria-labelledby="addBrandModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border: none; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15);">
+            <div class="modal-header" style="border-bottom: 2px solid rgba(255,255,255,0.2); border-radius: 15px 15px 0 0;">
+                <h5 class="modal-title" id="addBrandModalLabel" style="font-weight: 600;">
+                    <i class="bi bi-tags-fill me-2"></i> Add New Brand
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="padding: 2rem;">
+                <form id="addBrandForm">
+                    <div class="mb-4">
+                        <label for="brand_name" class="form-label">
+                            <i class="bi bi-tag me-1"></i> Brand Name <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-lg" id="brand_name" name="name"
+                               placeholder="e.g., Nike, Adidas" required
+                               style="border-radius: 10px; border: 2px solid #e2e8f0;">
+                        <div class="invalid-feedback" id="name_error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="brand_code" class="form-label">
+                            <i class="bi bi-upc-scan me-1"></i> Brand Code <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-lg text-uppercase" id="brand_code" name="code"
+                               placeholder="e.g., NKE, ADS" required maxlength="50"
+                               style="border-radius: 10px; border: 2px solid #e2e8f0; font-weight: 600; letter-spacing: 1px;">
+                        <small class="text-muted d-block mt-2">
+                            <i class="bi bi-info-circle me-1"></i> Kode unik untuk brand (otomatis uppercase)
+                        </small>
+                        <div class="invalid-feedback" id="code_error"></div>
+                        <div class="valid-feedback" id="code_success">
+                            <i class="bi bi-check-circle me-1"></i> Brand code tersedia!
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" style="border-top: 1px solid #e2e8f0; padding: 1.5rem 2rem; border-radius: 0 0 15px 15px;">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius: 8px; padding: 0.5rem 1.5rem;">
+                    <i class="bi bi-x-circle me-1"></i> Cancel
+                </button>
+                <button type="button" class="btn btn-success" id="saveBrandBtn" style="border-radius: 8px; padding: 0.5rem 1.5rem; font-weight: 600;">
+                    <i class="bi bi-save me-1"></i> Save Brand
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@endsection
+
+@section('styles')
+<style>
+    /* Styling untuk Category & Brand Input Group dengan Choices.js */
+    .input-group .choices {
+        flex: 1 1 auto;
+        width: 1%;
+    }
+
+    .input-group .choices .choices__inner {
+        border-top-right-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        border-right: 0;
+        min-height: 48px !important;
+        height: 48px !important;
+        padding: 0.625rem 1rem;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Category Button Styling */
+    .input-group .btn-add-category {
+        border-left: 1px solid #dfe3e7;
+        padding: 0;
+        min-width: 48px;
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .input-group .btn-add-category i {
+        font-size: 1.1rem;
+        line-height: 1;
+    }
+
+    .input-group .btn-add-category:hover {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        transform: none;
+    }
+
+    /* Brand Button Styling */
+    .input-group .btn-add-brand {
+        border-left: 1px solid #dfe3e7;
+        padding: 0;
+        min-width: 48px;
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .input-group .btn-add-brand i {
+        font-size: 1.1rem;
+        line-height: 1;
+    }
+
+    .input-group .btn-add-brand:hover {
+        background-color: #28a745;
+        border-color: #28a745;
+        transform: none;
+    }
+
+    .input-group:focus-within .choices .choices__inner {
+        border-color: #5a8dee;
+        box-shadow: 0 0 0 0.2rem rgba(90, 141, 238, 0.25);
+    }
+
+    /* Pastikan single value text vertical center */
+    .input-group .choices__inner .choices__list--single {
+        padding: 0;
+    }
+
+    .input-group .choices__inner .choices__list--single .choices__item {
+        padding: 0;
+    }    /* Fix untuk Choices dropdown yang terpotong */
+    .choices[data-type*="select-one"] .choices__inner {
+        padding-bottom: 0.625rem;
+    }
+
+    .choices__list--dropdown {
+        z-index: 100;
+    }
+
+    /* Styling untuk modal category */
+    #addCategoryModal .modal-header {
+        background: linear-gradient(135deg, #4285f4 0%, #0d47a1 100%);
+        color: white;
+    }
+
+    #addCategoryModal .modal-header .btn-close {
+        filter: brightness(0) invert(1);
+        opacity: 1;
+    }
+
+    #addCategoryModal .modal-header .btn-close:hover {
+        opacity: 0.8;
+    }
+
+    #addCategoryModal .form-label {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 0.5rem;
+    }
+
+    #addCategoryModal .form-control:focus {
+        border-color: #4285f4;
+        box-shadow: 0 0 0 0.2rem rgba(66, 133, 244, 0.25);
+    }
+
+    #addCategoryModal .text-danger {
+        color: #dc3545;
+    }
+
+    #addCategoryModal .invalid-feedback,
+    #addCategoryModal .valid-feedback {
+        display: block;
+        margin-top: 0.5rem;
+        font-size: 0.875rem;
+    }
+
+    /* Styling untuk modal brand */
+    #addBrandModal .modal-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    #addBrandModal .modal-header .btn-close {
+        filter: brightness(0) invert(1);
+        opacity: 1;
+    }
+
+    #addBrandModal .modal-header .btn-close:hover {
+        opacity: 0.8;
+    }
+
+    #addBrandModal .form-label {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 0.5rem;
+    }
+
+    #addBrandModal .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    #addBrandModal .text-danger {
+        color: #dc3545;
+    }
+
+    #addBrandModal .invalid-feedback,
+    #addBrandModal .valid-feedback {
+        display: block;
+        margin-top: 0.5rem;
+        font-size: 0.875rem;
+    }
+
+    /* Animasi untuk button add category & brand */
+    .btn-add-category,
+    .btn-add-brand {
+        transition: all 0.2s ease;
+    }
+
+    .btn-add-category:active,
+    .btn-add-brand:active {
+        transform: scale(0.95);
+    }
+
+    /* Animasi modal */
+    .modal.fade .modal-dialog {
+        transition: transform 0.3s ease-out;
+    }
+
+    .modal.show .modal-dialog {
+        transform: none;
+    }
+
+    /* Styling untuk button save */
+    #saveCategoryBtn,
+    #saveBrandBtn {
+        transition: all 0.3s ease;
+    }
+
+    #saveCategoryBtn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+    }
+
+    #saveBrandBtn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+    }
+
+    #saveCategoryBtn:active,
+    #saveBrandBtn:active {
+        transform: translateY(0);
+    }
+</style>
 @endsection
 
 @section('scripts')
@@ -277,7 +593,7 @@
 $(document).ready(function() {
     let itemCounter = $('#items-container .item-row').length;
     const customerOrders = @json($customerOrders);
-    const dataBrand = @json($brand);
+    let dataBrand = @json($brand); // Ubah ke let agar bisa diupdate saat add brand baru
     const dataCategory = @json($category);
     let selectedCustomerOrders = [];
     let choicesInstances = [];
@@ -407,19 +723,19 @@ $('.required').on('input change', function() {
         initializeChoicesCategory($(this).find('.category-select')[0], indexCt)
         initializeChoicesBrand($(this).find('.brand-select')[0], indexBrd)
     });
-    
+
     $('#customer').on('change', function () {
         const customerId = $(this).val();
 
         if (customerId) {
-            
+
             $.get('/customers/' + customerId, function(data) {
 
                 $('#name').val(data.display_name ?? "");
                 $('#email').val(data.email_address ?? "");
                 $('#address').val(data.address ?? "");
                 $('#no_telp').val(data.whatsapp_number ?? "");
-                
+
             });
         }
     });
@@ -587,7 +903,7 @@ $('.required').on('input change', function() {
                 selected: true,
                 customProperties: {}
             };
-        if (tipeOrder === "01") { 
+        if (tipeOrder === "01") {
             const availableOrders = currentCustomerId
                 ? customerOrders.filter(order =>
                     order.customProperties.customer_id == currentCustomerId &&
@@ -595,7 +911,7 @@ $('.required').on('input change', function() {
                     order.value === $(selectElement).val()))
                 : [];
 
-          
+
             choicesData = [...availableOrders];
         }else{
             choicesData = [customOption];
@@ -631,7 +947,7 @@ $('.required').on('input change', function() {
 
 
      function initializeChoicesCategory(selectElement, index) {
-        
+
         const choices = new Choices(selectElement, {
             choices: dataCategory,
             searchEnabled: true,
@@ -654,7 +970,7 @@ $('.required').on('input change', function() {
     }
 
      function initializeChoicesBrand(selectElement, index) {
-        
+
         const choices = new Choices(selectElement, {
             choices: dataBrand,
             searchEnabled: true,
@@ -722,7 +1038,7 @@ $('.required').on('input change', function() {
             if (choicesInstance) {
                     let choicesData = [];
                 // Dapatkan order yang tersedia untuk customer saat ini
-                 if (tipeOrder === "01") { 
+                 if (tipeOrder === "01") {
                     const availableOrders = currentCustomerId
                         ? customerOrders.filter(order =>
                             order.customProperties.customer_id == currentCustomerId &&
@@ -738,7 +1054,7 @@ $('.required').on('input change', function() {
 
                     choicesData = [...availableOrders];
                     // Simpan nilai yang sedang dipilih
-                   
+
                 }else{
                      choicesData = [{
                         value: "custom",
@@ -905,17 +1221,27 @@ $('.required').on('input change', function() {
                 <div class="col-md-6 col-12">
                     <div class="form-group">
                         <label class="form-label">Category</label>
-                        <select class="form-select category-select required" name="items[${itemCounter}][category_id]" data-category="${itemCounter}">
-                            <option value="">Select Category</option>
-                        </select>
+                        <div class="input-group">
+                            <select class="form-select category-select required" name="items[${itemCounter}][category_id]" data-category="${itemCounter}">
+                                <option value="">Select Category</option>
+                            </select>
+                            <button type="button" class="btn btn-primary btn-add-category" title="Add New Category" style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-6 col-12">
                     <div class="form-group">
                         <label class="form-label">Brand</label>
-                        <select class="form-select brand-select required" name="items[${itemCounter}][brand_id]" data-brand="${itemCounter}">
-                            <option value="">Select Brand</option>
-                        </select>
+                        <div class="input-group">
+                            <select class="form-select brand-select required" name="items[${itemCounter}][brand_id]" data-brand="${itemCounter}">
+                                <option value="">Select Brand</option>
+                            </select>
+                            <button type="button" class="btn btn-success btn-add-brand" title="Add New Brand" style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-12 col-12 text-end">
@@ -1070,11 +1396,11 @@ $('.required').on('input change', function() {
         });
     }
 
-    
+
         const tipeOrder = document.getElementById("tipe_order");
         const customerSelect = document.getElementById("customer");
 
-        let customerChoices = customerSelect.choicesInstance 
+        let customerChoices = customerSelect.choicesInstance
         || new Choices(customerSelect, { removeItemButton: true, shouldSort: false });
 
     // simpan instance di element biar ga double
@@ -1104,7 +1430,7 @@ $('.required').on('input change', function() {
             $('#email').val("");
             $('#address').val("");
             $('#no_telp').val("");
-            
+
             $('.item-row').each(function() {
                 const index = $(this).find('.customer-order-select').data('index');
                 resetItemForm(index);
@@ -1124,6 +1450,409 @@ $('.required').on('input change', function() {
     // Inisialisasi awal
     initLinkButtons();
 
+    // ============================================
+    // CATEGORY MODAL FUNCTIONALITY
+    // ============================================
+    let currentCategoryItemIndex = null;
+    const addCategoryModal = new bootstrap.Modal(document.getElementById('addCategoryModal'));
+    let categoryCodeCheckTimeout;
+
+    // Event handler untuk tombol add category
+    $(document).on('click', '.btn-add-category', function() {
+        // Simpan index item yang sedang aktif
+        currentCategoryItemIndex = $(this).closest('.item-row').find('.category-select').data('category');
+
+        // Reset form
+        $('#addCategoryForm')[0].reset();
+        $('#category_name').removeClass('is-invalid is-valid');
+        $('#category_code').removeClass('is-invalid is-valid');
+        $('#category_name_error').text('');
+        $('#category_code_error').text('');
+        $('#category_code_success').text('Category code tersedia!');
+
+        // Tampilkan modal
+        addCategoryModal.show();
+    });
+
+    // Auto-uppercase untuk category code
+    $('#category_code').on('input', function() {
+        this.value = this.value.toUpperCase();
+    });
+
+    // Real-time check category code saat user mengetik
+    $('#category_code').on('input', function() {
+        const code = $(this).val().trim();
+        const codeInput = $(this);
+
+        // Clear timeout sebelumnya
+        clearTimeout(categoryCodeCheckTimeout);
+
+        if (code.length < 2) {
+            codeInput.removeClass('is-invalid is-valid');
+            $('#category_code_error').text('');
+            return;
+        }
+
+        // Set timeout untuk menghindari terlalu banyak request
+        categoryCodeCheckTimeout = setTimeout(function() {
+            $.ajax({
+                url: '{{ route("category.check.code") }}',
+                method: 'POST',
+                data: {
+                    code: code,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.exists) {
+                        codeInput.removeClass('is-valid').addClass('is-invalid');
+                        $('#category_code_error').text(response.message);
+                    } else {
+                        codeInput.removeClass('is-invalid').addClass('is-valid');
+                        $('#category_code_error').text('');
+                    }
+                }
+            });
+        }, 500); // Delay 500ms
+    });
+
+    // Handle save category
+    $('#saveCategoryBtn').click(function() {
+        const name = $('#category_name').val().trim();
+        const code = $('#category_code').val().trim();
+        const saveBtn = $(this);
+
+        // Reset validasi
+        $('#category_name').removeClass('is-invalid');
+        $('#category_code').removeClass('is-invalid');
+        $('#category_name_error').text('');
+        $('#category_code_error').text('');
+
+        // Validasi client-side
+        let hasError = false;
+
+        if (!name) {
+            $('#category_name').addClass('is-invalid');
+            $('#category_name_error').text('Category name wajib diisi');
+            hasError = true;
+        }
+
+        if (!code) {
+            $('#category_code').addClass('is-invalid');
+            $('#category_code_error').text('Category code wajib diisi');
+            hasError = true;
+        } else if (code.length < 2) {
+            $('#category_code').addClass('is-invalid');
+            $('#category_code_error').text('Category code minimal 2 karakter');
+            hasError = true;
+        }
+
+        if (hasError) return;
+
+        // Disable button dan tampilkan loading
+        saveBtn.prop('disabled', true).html('<i class="bi bi-hourglass-split"></i> Saving...');
+
+        // Kirim AJAX request
+        $.ajax({
+            url: '{{ route("category.store.ajax") }}',
+            method: 'POST',
+            data: {
+                name: name,
+                code: code,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Tutup modal
+                    addCategoryModal.hide();
+
+                    // Tampilkan success message
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: response.message,
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+
+                    // Tambahkan category baru ke semua select category
+                    $('.category-select').each(function() {
+                        const selectElement = this;
+                        const choicesInstance = choicesInstances.find(i => i.element === selectElement)?.instance;
+
+                        if (choicesInstance) {
+                            choicesInstance.setChoices([{
+                                value: response.data.value,
+                                label: response.data.label,
+                                selected: false
+                            }], 'value', 'label', false);
+                        }
+                    });
+
+                    // Set category yang baru ditambahkan ke item yang aktif
+                    if (currentCategoryItemIndex !== null) {
+                        const targetSelect = $(`.category-select[data-category="${currentCategoryItemIndex}"]`)[0];
+                        const targetInstance = choicesInstances.find(i => i.element === targetSelect)?.instance;
+
+                        if (targetInstance) {
+                            targetInstance.setChoiceByValue(response.data.value.toString());
+                        }
+                    }
+
+                    // Update global category data
+                    dataCategory.push({
+                        value: response.data.value,
+                        label: response.data.label
+                    });
+                }
+            },
+            error: function(xhr) {
+                const response = xhr.responseJSON;
+
+                if (xhr.status === 422 && response.errors) {
+                    // Validasi error dari server
+                    if (response.errors.name) {
+                        $('#category_name').addClass('is-invalid');
+                        $('#category_name_error').text(response.errors.name[0]);
+                    }
+                    if (response.errors.code) {
+                        $('#category_code').addClass('is-invalid');
+                        $('#category_code_error').text(response.errors.code[0]);
+                    }
+                } else {
+                    // Error lainnya
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: response?.message || 'Terjadi kesalahan saat menyimpan category',
+                    });
+                }
+            },
+            complete: function() {
+                // Re-enable button
+                saveBtn.prop('disabled', false).html('<i class="bi bi-save me-1"></i> Save Category');
+            }
+        });
+    });
+
+    // Reset form saat modal ditutup
+    $('#addCategoryModal').on('hidden.bs.modal', function() {
+        $('#addCategoryForm')[0].reset();
+        $('#category_name').removeClass('is-invalid is-valid');
+        $('#category_code').removeClass('is-invalid is-valid');
+        $('#category_name_error').text('');
+        $('#category_code_error').text('');
+        currentCategoryItemIndex = null;
+    });
+
+    // Handle Enter key di form modal
+    $('#addCategoryForm').on('keypress', function(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            $('#saveCategoryBtn').click();
+        }
+    });
+
+    // ============================================
+    // BRAND MODAL FUNCTIONALITY
+    // ============================================
+    let currentBrandItemIndex = null;
+    const addBrandModal = new bootstrap.Modal(document.getElementById('addBrandModal'));
+    let codeCheckTimeout;
+
+    // Event handler untuk tombol add brand
+    $(document).on('click', '.btn-add-brand', function() {
+        // Simpan index item yang sedang aktif
+        currentBrandItemIndex = $(this).closest('.item-row').find('.brand-select').data('brand');
+
+        // Reset form
+        $('#addBrandForm')[0].reset();
+        $('#brand_name').removeClass('is-invalid is-valid');
+        $('#brand_code').removeClass('is-invalid is-valid');
+        $('#name_error').text('');
+        $('#code_error').text('');
+        $('#code_success').text('Brand code tersedia!');
+
+        // Tampilkan modal
+        addBrandModal.show();
+    });
+
+    // Auto-uppercase untuk brand code
+    $('#brand_code').on('input', function() {
+        this.value = this.value.toUpperCase();
+    });
+
+    // Real-time check brand code saat user mengetik
+    $('#brand_code').on('input', function() {
+        const code = $(this).val().trim();
+        const codeInput = $(this);
+
+        // Clear timeout sebelumnya
+        clearTimeout(codeCheckTimeout);
+
+        if (code.length < 2) {
+            codeInput.removeClass('is-invalid is-valid');
+            $('#code_error').text('');
+            return;
+        }
+
+        // Set timeout untuk menghindari terlalu banyak request
+        codeCheckTimeout = setTimeout(function() {
+            $.ajax({
+                url: '{{ route("brand.check.code") }}',
+                method: 'POST',
+                data: {
+                    code: code,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.exists) {
+                        codeInput.removeClass('is-valid').addClass('is-invalid');
+                        $('#code_error').text(response.message);
+                    } else {
+                        codeInput.removeClass('is-invalid').addClass('is-valid');
+                        $('#code_error').text('');
+                    }
+                }
+            });
+        }, 500); // Delay 500ms
+    });
+
+    // Handle save brand
+    $('#saveBrandBtn').click(function() {
+        const name = $('#brand_name').val().trim();
+        const code = $('#brand_code').val().trim();
+        const saveBtn = $(this);
+
+        // Reset validasi
+        $('#brand_name').removeClass('is-invalid');
+        $('#brand_code').removeClass('is-invalid');
+        $('#name_error').text('');
+        $('#code_error').text('');
+
+        // Validasi client-side
+        let hasError = false;
+
+        if (!name) {
+            $('#brand_name').addClass('is-invalid');
+            $('#name_error').text('Brand name wajib diisi');
+            hasError = true;
+        }
+
+        if (!code) {
+            $('#brand_code').addClass('is-invalid');
+            $('#code_error').text('Brand code wajib diisi');
+            hasError = true;
+        } else if (code.length < 2) {
+            $('#brand_code').addClass('is-invalid');
+            $('#code_error').text('Brand code minimal 2 karakter');
+            hasError = true;
+        }
+
+        if (hasError) return;
+
+        // Disable button dan tampilkan loading
+        saveBtn.prop('disabled', true).html('<i class="bi bi-hourglass-split"></i> Saving...');
+
+        // Kirim AJAX request
+        $.ajax({
+            url: '{{ route("brand.store.ajax") }}',
+            method: 'POST',
+            data: {
+                name: name,
+                code: code,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Tutup modal
+                    addBrandModal.hide();
+
+                    // Tampilkan success message
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: response.message,
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+
+                    // Tambahkan brand baru ke semua select brand
+                    $('.brand-select').each(function() {
+                        const selectElement = this;
+                        const choicesInstance = choicesInstances.find(i => i.element === selectElement)?.instance;
+
+                        if (choicesInstance) {
+                            choicesInstance.setChoices([{
+                                value: response.data.value,
+                                label: response.data.label,
+                                selected: false
+                            }], 'value', 'label', false);
+                        }
+                    });
+
+                    // Set brand yang baru ditambahkan ke item yang aktif
+                    if (currentBrandItemIndex !== null) {
+                        const targetSelect = $(`.brand-select[data-brand="${currentBrandItemIndex}"]`)[0];
+                        const targetInstance = choicesInstances.find(i => i.element === targetSelect)?.instance;
+
+                        if (targetInstance) {
+                            targetInstance.setChoiceByValue(response.data.value.toString());
+                        }
+                    }
+
+                    // Update global brand data
+                    dataBrand.push({
+                        value: response.data.value,
+                        label: response.data.label
+                    });
+                }
+            },
+            error: function(xhr) {
+                const response = xhr.responseJSON;
+
+                if (xhr.status === 422 && response.errors) {
+                    // Validasi error dari server
+                    if (response.errors.name) {
+                        $('#brand_name').addClass('is-invalid');
+                        $('#name_error').text(response.errors.name[0]);
+                    }
+                    if (response.errors.code) {
+                        $('#brand_code').addClass('is-invalid');
+                        $('#code_error').text(response.errors.code[0]);
+                    }
+                } else {
+                    // Error lainnya
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: response?.message || 'Terjadi kesalahan saat menyimpan brand',
+                    });
+                }
+            },
+            complete: function() {
+                // Re-enable button
+                saveBtn.prop('disabled', false).html('<i class="bi bi-save"></i> Save Brand');
+            }
+        });
+    });
+
+    // Reset form saat modal ditutup
+    $('#addBrandModal').on('hidden.bs.modal', function() {
+        $('#addBrandForm')[0].reset();
+        $('#brand_name').removeClass('is-invalid is-valid');
+        $('#brand_code').removeClass('is-invalid is-valid');
+        $('#name_error').text('');
+        $('#code_error').text('');
+        currentBrandItemIndex = null;
+    });
+
+    // Handle Enter key di form modal
+    $('#addBrandForm').on('keypress', function(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            $('#saveBrandBtn').click();
+        }
+    });
 
 });
 </script>

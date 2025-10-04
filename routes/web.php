@@ -60,7 +60,11 @@ Auth::routes();
 Route::resource('user', UserController::class)->middleware(['auth',CheckRole::class]);
 Route::resource('payment-method', PaymentMethodController::class)->middleware(['auth',CheckRole::class]);
 Route::resource('category', CategoryController::class)->middleware(['auth',CheckRole::class.':admin_chat_input']);
+Route::post('/category/store-ajax', [CategoryController::class, 'storeAjax'])->middleware('auth')->name('category.store.ajax');
+Route::post('/category/check-code', [CategoryController::class, 'checkCode'])->middleware('auth')->name('category.check.code');
 Route::resource('brand', BrandController::class)->middleware(['auth',CheckRole::class.':admin_chat_input']);
+Route::post('/brand/store-ajax', [BrandController::class, 'storeAjax'])->middleware('auth')->name('brand.store.ajax');
+Route::post('/brand/check-code', [BrandController::class, 'checkCode'])->middleware('auth')->name('brand.check.code');
 Route::resource('exchange', ExchangeController::class)->middleware(['auth',CheckRole::class]);
 
 Route::put('/change-password/{id}', [UserController::class, 'changePassword'])->middleware('auth')->name('user.change-password');

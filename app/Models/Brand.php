@@ -11,8 +11,12 @@ class Brand extends Model
 
     protected $primaryKey = 'id';
 
+    public $incrementing = true;
+
+    protected $keyType = 'int';
+
     protected $fillable = [
-        'id', 'name', 'code'
+        'name', 'code'
     ];
-  
+
 }
