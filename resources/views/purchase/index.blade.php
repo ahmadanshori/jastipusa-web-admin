@@ -31,9 +31,9 @@
                     <thead>
                         <tr>
                             <th>No PO</th>
-                            <th>Date</th>
+                            <th style="min-width: 140px;">Date</th>
                             <th>Name</th>
-                            <th>Phone</th>
+                            <th style="min-width: 140px;">Phone</th>
                             <th>Address</th>
                             <th>Email</th>
                             <th>Action</th>
