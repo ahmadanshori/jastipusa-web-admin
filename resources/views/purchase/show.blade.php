@@ -1465,6 +1465,17 @@
                         // Submit form via AJAX
                         const formData = new FormData($('#estimasiForm')[0]);
 
+                        // Convert formatted numbers to plain numbers before sending
+                        const numericFields = ['jumlah_transfer', 'dp', 'full_payment', 'kurang_bayar'];
+                        numericFields.forEach(fieldName => {
+                            const fieldValue = formData.get(fieldName);
+                            if (fieldValue) {
+                                // Remove dots (thousand separators) and parse to number
+                                const cleanValue = parseRupiah(fieldValue);
+                                formData.set(fieldName, cleanValue);
+                            }
+                        });
+
                         // Tampilkan loading
                         Swal.fire({
                             title: 'Menyimpan...',
@@ -1852,6 +1863,16 @@
                         const formData = new FormData($('#hppForm')[0]);
                         const itemId = $('#hpp_item_id').val();
 
+                        // Convert formatted numbers to plain numbers before sending
+                        const numericFields = ['total_purchase', 'harga_barang', 'pajak', 'diskon', 'pengiriman'];
+                        numericFields.forEach(fieldName => {
+                            const fieldValue = formData.get(fieldName);
+                            if (fieldValue) {
+                                const cleanValue = parseRupiah(fieldValue);
+                                formData.set(fieldName, cleanValue);
+                            }
+                        });
+
                         // Tampilkan loading
                         Swal.fire({
                             title: 'Menyimpan...',
@@ -2185,6 +2206,16 @@
                     if (result.isConfirmed) {
                         const formData = new FormData($('#operasionalForm')[0]);
                         const itemId = $('#operasional_item_id').val();
+
+                        // Convert formatted numbers to plain numbers before sending
+                        const numericFields = ['fix_weight', 'fix_price', 'asuransi', 'kurir_lokal', 'pelunasan'];
+                        numericFields.forEach(fieldName => {
+                            const fieldValue = formData.get(fieldName);
+                            if (fieldValue) {
+                                const cleanValue = parseRupiah(fieldValue);
+                                formData.set(fieldName, cleanValue);
+                            }
+                        });
 
                         // Tampilkan loading
                         const swalLoading = Swal.fire({
