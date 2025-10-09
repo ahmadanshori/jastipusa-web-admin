@@ -771,6 +771,18 @@ $(document).ready(function() {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.isConfirmed) {
+            // Tampilkan loading indicator
+            Swal.fire({
+                title: 'Menyimpan Data...',
+                html: 'Mohon tunggu, sedang memproses data Anda',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
             // Convert format Rupiah ke angka sebelum submit
             const $form = $(this);
             const formData = new FormData($form[0]);
