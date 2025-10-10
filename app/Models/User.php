@@ -52,7 +52,12 @@ class User extends Authenticatable
 
      public static function checkRole($key)
     {
-        $data = Role::where('id',Auth::user()->role_id)->where('slug',$key)->first();
+        // Check if user is authenticated first
+        if (!Auth::check() || !Auth::user()) {
+            return false;
+        }
+        
+        $data = Role::where('id', Auth::user()->role_id)->where('slug', $key)->first();
         if ($data)
         {
             return true;
@@ -64,7 +69,12 @@ class User extends Authenticatable
 
      public static function getRole($key)
     {
-        $data = Role::where('id',Auth::user()->role_id)->where('id',$key)->first();
+        // Check if user is authenticated first
+        if (!Auth::check() || !Auth::user()) {
+            return false;
+        }
+        
+        $data = Role::where('id', Auth::user()->role_id)->where('id', $key)->first();
         if ($data)
         {
             return $data->name;
