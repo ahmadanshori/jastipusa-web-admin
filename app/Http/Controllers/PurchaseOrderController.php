@@ -437,7 +437,8 @@ public function updateOprasional(Request $request, $id)
 
     public function ajax(Request $request)
     {
-        $purchaseOrders = $this->purchase->latest('updated_at')->get();
+        // Use query builder instead of get() to enable server-side processing
+        $purchaseOrders = $this->purchase->latest('updated_at');
 
         return Datatables::of($purchaseOrders)
             ->editColumn('created_at', function ($purchaseOrders) {

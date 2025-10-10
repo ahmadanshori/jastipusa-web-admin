@@ -74,13 +74,13 @@ Route::resource('customer', CustomerController::class)->middleware(['auth',Check
 Route::get('/customer-export', [CustomerController::class, 'exportExcel'])->name('customer.export');
 Route::get('/purchase-export', [PurchaseOrderController::class, 'export'])->name('purchase.export');
 
-Route::get('/ajax-user',[UserController::class, 'ajax']);
-Route::get('/ajax-purchase',[PurchaseOrderController::class, 'ajax']);
-Route::get('/ajax-customer',[CustomerController::class, 'ajax']);
-Route::get('/ajax-order-detail/{id}',[CustomerController::class, 'ajaxOrderDetail']);
-Route::get('/ajax-payment-method',[PaymentMethodController::class, 'ajax']);
-Route::get('/ajax-exchange',[ExchangeController::class, 'ajax']);
-Route::get('/ajax-tracking',[TrackingController::class, 'ajax']);
+Route::get('/ajax-user',[UserController::class, 'ajax'])->middleware('auth');
+Route::get('/ajax-purchase',[PurchaseOrderController::class, 'ajax'])->middleware('auth');
+Route::get('/ajax-customer',[CustomerController::class, 'ajax'])->middleware('auth');
+Route::get('/ajax-order-detail/{id}',[CustomerController::class, 'ajaxOrderDetail'])->middleware('auth');
+Route::get('/ajax-payment-method',[PaymentMethodController::class, 'ajax'])->middleware('auth');
+Route::get('/ajax-exchange',[ExchangeController::class, 'ajax'])->middleware('auth');
+Route::get('/ajax-tracking',[TrackingController::class, 'ajax'])->middleware('auth');
 Route::get('/ajax-analytics',[HomeController::class, 'getAnalyticsJson'])->middleware('auth');
 Route::get('/ajax-category',[CategoryController::class, 'ajax'])->middleware(['auth',CheckRole::class.':admin_chat_input']);
 Route::get('/ajax-brand',[BrandController::class, 'ajax'])->middleware(['auth',CheckRole::class.':admin_chat_input']);
