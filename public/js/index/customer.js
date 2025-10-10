@@ -13,6 +13,10 @@ $("#show-table").DataTable({
         url: "/ajax-customer",
         dataType: "json",
         type: "GET",
+        error: function (xhr, error, thrown) {
+            console.error("DataTables AJAX error:", error, thrown);
+            console.error("Response:", xhr.responseText);
+        },
     },
     columns: [
         {
