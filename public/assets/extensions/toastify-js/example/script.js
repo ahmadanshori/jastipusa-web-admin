@@ -29,7 +29,6 @@ var options = {
   text: "Happy toasting!",
   duration: 2500,
   callback: function() {
-    console.log("Toast hidden");
     Toastify.reposition();
   },
   close: true,

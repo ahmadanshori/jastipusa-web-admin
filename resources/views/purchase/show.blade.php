@@ -5,8 +5,8 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-first">
-                    <h3>Edit Purchase Order</h3>
-                    <p class="text-subtitle text-muted">Edit purchase order details</p>
+                    <h3>Edit Purchase Order Detail</h3>
+                    <p class="text-subtitle text-muted">Edit purchase order detail</p>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -909,7 +909,7 @@
                                 <div class="form-group">
                                     <label class="form-label">Jumlah Transfer</label>
                                     <input type="text" id="jumlah_transfer" readonly class="form-control form-control-lg"
-                                        name="jumlah_transfer" placeholder="1.000.000">
+                                        name="jumlah_transfer" placeholder="Rp">
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
@@ -923,7 +923,7 @@
                                 <div class="form-group">
                                     <label class="form-label">Full Payment</label>
                                     <input type="text" id="full_payment" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
-                                        name="full_payment" placeholder="1.000.000">
+                                        name="full_payment" placeholder="Rp">
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
@@ -1140,7 +1140,7 @@
                                 <div class="form-group">
                                     <label class="form-label">Fix Price</label>
                                     <input type="text" id="fix_price" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
-                                        name="fix_price" placeholder="1.000.000">
+                                        name="fix_price" placeholder="Rp">
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
@@ -1296,7 +1296,6 @@
                 }
 
                 var statusFollowUp = $(this).data('status-follow-up');
-                console.log('Nilai status follow up:', statusFollowUp);
 
                 // Dapatkan instance Choices
                 var selectElement = document.getElementById('status_follow_up');
@@ -1350,7 +1349,6 @@
                 $('#modal_btn_status').off('change').on('change', function () {
                     const isChecked = $(this).is(':checked');
                     $('#modal_status').val(isChecked ? 1 : 0);
-                    console.log('Toggle status:', isChecked ? 'Checked' : 'Unchecked');
                 });
 
 
@@ -1601,8 +1599,6 @@
                 const previewDiv = $('#foto-preview-bukti-pembelian');
                 const fotoBuktiField = $('#bukti_pembelian');
 
-               console.log("AAA",buktiPembelianPath);
-
                 // Reset file input
                 fotoBuktiField.val('');
 
@@ -1643,12 +1639,10 @@
                 $('#hpp_btn_status').off('change').on('change', function () {
                     const isChecked = $(this).is(':checked');
                     $('#hpp_status').val(isChecked ? 1 : 0);
-                    console.log('Toggle status:', isChecked ? 'Checked' : 'Unchecked');
                 });
                 // Inisialisasi Choices untuk select
 
                 var statusFollowUp = $(this).data('status-purchase');
-                console.log('Nilai status follow up:', statusFollowUp);
 
                 // Dapatkan instance Choices
                 var selectElement = document.getElementById('status_purchase');
@@ -1688,7 +1682,6 @@
                 }
 
                  var paymentMethodValue = $(this).data('payment-method');
-    console.log('Nilai payment method:', paymentMethodValue);
 
     // Dapatkan instance Choices untuk payment method
     var paymentMethodElement = document.getElementById('payment_method');
@@ -1998,7 +1991,6 @@
 
 
                 var statusFollowUp = $(this).data('status-barang-sampai');
-                console.log('Nilai status follow up:', statusFollowUp);
 
                 // Dapatkan instance Choices
                 var selectElement = document.getElementById('status_barang_sampai');
@@ -2051,7 +2043,6 @@
                 $('#wh_usa_btn_status').off('change').on('change', function () {
                     const isChecked = $(this).is(':checked');
                     $('#wh_usa_status').val(isChecked ? 1 : 0);
-                    console.log('Toggle status:', isChecked ? 'Checked' : 'Unchecked');
                 });
 
 
@@ -2322,19 +2313,31 @@
         function formatRupiah(angka) {
             if (!angka) return '';
 
-            // Hapus semua karakter non-digit
-            const numberString = angka.toString().replace(/[^,\d]/g, '');
-            const split = numberString.split(',');
-            const sisa = split[0].length % 3;
-            let rupiah = split[0].substr(0, sisa);
-            const ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+            // Convert to string and handle decimal numbers
+            let numberString = angka.toString();
+
+            // Remove trailing .00 if present
+            if (numberString.endsWith('.00')) {
+                numberString = numberString.slice(0, -3);
+            }
+
+            // Split by decimal point to handle both integer and decimal parts
+            const parts = numberString.split('.');
+            const integerPart = parts[0];
+            const decimalPart = parts[1];
+
+            // Format integer part with thousand separators
+            const sisa = integerPart.length % 3;
+            let rupiah = integerPart.substr(0, sisa);
+            const ribuan = integerPart.substr(sisa).match(/\d{3}/gi);
 
             if (ribuan) {
                 const separator = sisa ? '.' : '';
                 rupiah += separator + ribuan.join('.');
             }
 
-            return split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+            // Add decimal part if it exists and is not empty
+            return decimalPart ? rupiah + ',' + decimalPart : rupiah;
         }
 
         // Parse Rupiah format back to number ("1.000.000" -> 1000000)

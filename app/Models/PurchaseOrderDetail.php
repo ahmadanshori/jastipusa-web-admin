@@ -55,10 +55,10 @@ class PurchaseOrderDetail extends Model
         'estimasi_notes',
         'kurang_bayar',
         'sku',
-        'kurir_lokal',	
-        'pelunasan',	
+        'kurir_lokal',
+        'pelunasan',
         'pajak',
-        'diskon',	
+        'diskon',
         'pengiriman',
         'no_box',
         'harga_hpp',
@@ -67,13 +67,13 @@ class PurchaseOrderDetail extends Model
         'category_id',
     ];
 
-   
+
     /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
- 
+
 
     public function purchaseOrder()
     {
@@ -112,19 +112,19 @@ class PurchaseOrderDetail extends Model
 
         // Prefix tetap
         $prefix = "JUSA";
-        
+
         // Tahun dan bulan sekarang
         $year = now()->format('Y');
         $month = now()->format('m');
-        
+
         // Pattern untuk mencari invoice terakhir bulan ini
         $pattern = $prefix . $orderType . '%';
-        
+
         // Cari invoice terakhir dengan pattern yang sama
         $lastInvoice = self::where('no_po', 'like', $pattern)
             ->orderBy('no_po', 'desc')
             ->first();
-        
+
         // Tentukan increment number
         if ($lastInvoice && $lastInvoice->no_po) {
             $lastNumber = substr($lastInvoice->no_po, -5);
@@ -132,10 +132,10 @@ class PurchaseOrderDetail extends Model
         } else {
             $increment = 1;
         }
-        
+
         // Format increment menjadi 4 digit
         $incrementFormatted = str_pad($increment, 5, '0', STR_PAD_LEFT);
-        
+
         // Gabungkan semua bagian
         return $prefix . $orderType . $incrementFormatted;
     }
@@ -145,15 +145,15 @@ class PurchaseOrderDetail extends Model
         // Get category code
         $category = Category::find($categoryId);
         $categoryCode = $category ? $category->code : 'UNK';
-        
+
         // Get brand code
         $brand = Brand::find($brandId);
         $brandCode = $brand ? $brand->code : 'UNK';
-        
+
         // Get current year and month
         $currentYear = Carbon::now()->format('y'); // 2-digit year
         $currentMonth = Carbon::now()->format('m'); // 2-digit month
-        
+
         // Get the last SKU for this category+brand+month+year combination
         $lastSku = self::where('category_id', $categoryId)
             ->where('brand_id', $brandId)
@@ -161,23 +161,23 @@ class PurchaseOrderDetail extends Model
             ->whereMonth('created_at', Carbon::now()->month)
             ->orderBy('id', 'desc')
             ->value('sku');
-        
+
         // Extract the increment number from the last SKU
         $increment = 1;
         if ($lastSku) {
             // Pattern: CAT-BRAND-YYMM-NNNN
-            $pattern = '/^' . preg_quote($categoryCode, '/') . '-' . 
-                       preg_quote($brandCode, '/') . '-' . 
+            $pattern = '/^' . preg_quote($categoryCode, '/') . '-' .
+                       preg_quote($brandCode, '/') . '-' .
                        $currentYear . $currentMonth . '-(\d+)$/';
-            
+
             if (preg_match($pattern, $lastSku, $matches)) {
                 $increment = (int) $matches[1] + 1;
             }
         }
-        
+
         // Format the increment with leading zeros (4 digits)
         $incrementFormatted = str_pad($increment, 4, '0', STR_PAD_LEFT);
-        
+
         // Generate the final SKU
         return "{$categoryCode}-{$brandCode}-{$currentYear}{$currentMonth}{$incrementFormatted}";
     }

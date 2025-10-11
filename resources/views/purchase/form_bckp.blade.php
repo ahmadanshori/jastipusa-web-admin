@@ -180,7 +180,7 @@
                             <h5 class="card-title">Perkiraan/Estimasi</h5>
                             <div class="row">
 
-                                
+
 
                                 <div class="col-md-6 col-12">
                                     <div class="form-group mandatory">
@@ -238,7 +238,7 @@
                                                 <option value="Schedulled">Schedulled</option>
                                                 <option value="Followed">Followed</option>
                                                 <option value="Unfollowed">Unfollowed</option>
-                                              
+
                                         </select>
                                     </div>
                                     @error('publish_at')
@@ -285,7 +285,7 @@
                             <h5 class="card-title">HPP</h5>
                             <div class="row">
 
-                                
+
 
                                 <div class="col-md-6 col-12">
                                     <div class="form-group mandatory">
@@ -320,7 +320,7 @@
                                                 <option value="Schedulled">Wait For Order</option>
                                                 <option value="Followed">Ordered</option>
                                                 <option value="Unfollowed">Failed Order</option>
-                                              
+
                                         </select>
                                     </div>
                                     @error('publish_at')
@@ -379,7 +379,7 @@
                             <h5 class="card-title">Oprasional</h5>
                             <div class="row">
 
-                                
+
                                    <div class="col-md-6 col-12">
                                     <div class="form-group mandatory">
                                         <label for="name" class="form-label">WH USA</label>
@@ -449,7 +449,7 @@
                                                 <option value="Schedulled">Waiting Courier</option>
                                                 <option value="Followed">Received</option>
                                                 <option value="Unfollowed">Cancel</option>
-                                              
+
                                         </select>
                                     </div>
                                     @error('publish_at')
@@ -459,7 +459,7 @@
                                     @enderror
                                 </div>
 
-                                 
+
                             </div>
                         </div>
                     </div>
@@ -629,7 +629,7 @@
                     <div class="card-content">
                         <div class="card-body">
                             <div id="items-container">
-   
+
 
                                 <!-- Default empty item -->
                                 <div class="item-row row mb-3 border p-3 rounded">
@@ -678,17 +678,17 @@
                                         </button>
                                     </div>
                                 </div>
-                      
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-     
+
          </div>
 
-   
+
             <div class="row">
                 <div class="col-12 d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary me-1 mb-1">Submit</button>
@@ -701,7 +701,7 @@
 
 @section('scripts')
 <script>
-   
+
 
    $(document).ready(function() {
     // Inisialisasi data customer order dari controller
@@ -717,23 +717,22 @@
             }
         });
 
-       
+
     let currentCustomerId = null;
 let selectedCustomerOrders = [];
    const customerOrders = [...new Map(@json($customerOrders).map(item => [item.value, item])).values()];
     const customerOrdersJson = JSON.parse('{!! addslashes($customerOrdersJson) !!}');
-    console.log(customerOrders);
     let choicesInstances = [];
     let itemCounter = $('#items-container .item-row').length;
 
     $('#customer').change(function() {
     const customerId = $(this).val();
     currentCustomerId = customerId;
-    
+
     if (customerId) {
         // Reset semua item terlebih dahulu
         resetAllItems();
-        
+
         // Fetch customer details
         $.get('/customers/' + customerId, function(data) {
             $('#name').val(data.display_name || "-");
@@ -754,7 +753,7 @@ let selectedCustomerOrders = [];
     $('.item-row').each(function() {
         const index = $(this).find('.customer-order-select').data('index');
         resetItemForm(index);
-        
+
         // Reset select value
         const selectElement = $(this).find('.customer-order-select')[0];
         const choicesInstance = choicesInstances.find(i => i.element === selectElement)?.instance;
@@ -766,7 +765,7 @@ let selectedCustomerOrders = [];
 
     function filterCustomerOrders(customerId) {
          resetAllItems();
-        const filteredOrders = customerOrders.filter(order => 
+        const filteredOrders = customerOrders.filter(order =>
             order.customProperties.customer_id == customerId
         );
 
@@ -779,7 +778,7 @@ let selectedCustomerOrders = [];
             if (choicesInstance) {
                 // Clear current choices
                 choicesInstance.clearChoices();
-                
+
                 // Add filtered options
                 choicesInstance.setChoices(
                     filteredOrders.map(order => ({
@@ -799,12 +798,12 @@ let selectedCustomerOrders = [];
             }
         });
     }
-    
+
     function resetCustomerOrderSelects() {
         $('.customer-order-select').each(function() {
             const select = $(this)[0];
             const choicesInstance = choicesInstances.find(i => i.element === select)?.instance;
-            
+
             if (choicesInstance) {
                 choicesInstance.clearChoices();
                 choicesInstance.setChoices(
@@ -830,7 +829,7 @@ let selectedCustomerOrders = [];
     }
 
     const choices = new Choices(selectElement, {
-        choices: currentCustomerId 
+        choices: currentCustomerId
             ? customerOrders.filter(o => o.customProperties.customer_id == currentCustomerId)
             : customerOrders,
         searchEnabled: true,
@@ -864,12 +863,12 @@ let selectedCustomerOrders = [];
    function autoFillItem(index, customerOrderId) {
     // Reset form terlebih dahulu
     resetItemForm(index);
-    
+
     const customerOrders = @json($customerOrders);
     const order = customerOrders.find(o => o.value == customerOrderId);
 
     if (!order) return;
-    
+
     const itemRow = $(`.item-row [data-index="${index}"]`).closest('.item-row');
     itemRow.find(`input[name="items[${index}][no_po_customer]"]`).val(order.customProperties.po_number || '');
     itemRow.find(`input[name="items[${index}][nama_barang]"]`).val(order.customProperties.nama_barang || '');
@@ -894,32 +893,32 @@ $('#items-container').on('change', '.customer-order-select', function() {
     if (previousValue && selectedCustomerOrders.includes(previousValue)) {
         selectedCustomerOrders = selectedCustomerOrders.filter(v => v !== previousValue);
     }
-    
+
     // Cek apakah sudah dipilih di item lain
     if (selectedValue && selectedCustomerOrders.includes(selectedValue)) {
         alert('Customer Order ini sudah dipilih di item lain!');
-        
+
         // Kembalikan ke nilai sebelumnya
         if (choicesInstance) {
             choicesInstance.setValue([previousValue]);
         }
-        
+
         // Tambahkan kembali previousValue ke selectedCustomerOrders
         if (previousValue) {
             selectedCustomerOrders.push(previousValue);
         }
-        
+
         return;
     }
-    
+
     // Tambahkan ke daftar yang dipilih jika ada nilai
     if (selectedValue) {
         selectedCustomerOrders.push(selectedValue);
     }
-    
+
     // Simpan nilai saat ini sebagai previous value
     $(this).data('prev-value', selectedValue);
-    
+
     // Lanjutkan dengan auto-fill atau reset
     if (!selectedValue) {
         resetItemForm(index);
@@ -982,10 +981,10 @@ $('#items-container').on('change', '.customer-order-select', function() {
     $('#items-container').append(newItemHtml);
     const newSelect = $(`[data-index="${itemCounter}"]`)[0];
     initializeChoices(newSelect, itemCounter);
-    
+
     // Reset form untuk item yang baru ditambahkan
     resetItemForm(itemCounter);
-    
+
     itemCounter++;
 });
 
@@ -995,19 +994,19 @@ $('#items-container').on('change', '.customer-order-select', function() {
         const itemRow = $(this).closest('.item-row');
         const selectElement = itemRow.find('.customer-order-select')[0];
         const selectedValue = $(selectElement).val();
-        
+
         // Hapus dari daftar yang dipilih
         if (selectedValue && selectedCustomerOrders.includes(selectedValue)) {
             selectedCustomerOrders = selectedCustomerOrders.filter(v => v !== selectedValue);
         }
-        
+
         // Hancurkan instance Choices
         const instanceIndex = choicesInstances.findIndex(i => i.element === selectElement);
         if (instanceIndex !== -1) {
             choicesInstances[instanceIndex].instance.destroy();
             choicesInstances.splice(instanceIndex, 1);
         }
-        
+
         itemRow.remove();
         reindexItems();
     } else {
@@ -1025,31 +1024,31 @@ $('#items-container').on('change', '.customer-order-select', function() {
    function reindexItems() {
     let newIndex = 0;
     selectedCustomerOrders = []; // Reset daftar yang dipilih
-    
+
     $('#items-container .item-row').each(function() {
         const selectElement = $(this).find('.customer-order-select')[0];
         const selectedValue = $(selectElement).val();
-        
+
         // Tambahkan kembali nilai yang dipilih
         if (selectedValue) {
             selectedCustomerOrders.push(selectedValue);
         }
-        
+
         $(this).find('input, select').each(function() {
             const name = $(this).attr('name').replace(/items\[\d+\]/, `items[${newIndex}]`);
             $(this).attr('name', name);
         });
-        
+
         $(selectElement).attr('data-index', newIndex);
-        
+
         const instance = choicesInstances.find(i => i.element === selectElement);
         if (instance) {
             instance.instance.setValue([$(selectElement).val()]);
         }
-        
+
         newIndex++;
     });
-    
+
     itemCounter = newIndex;
 }
 

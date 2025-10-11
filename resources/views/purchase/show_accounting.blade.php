@@ -5,7 +5,7 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-first">
-                    <h3>Edit Purchase Order</h3>
+                    <h3>Edit Purchase Order Detail</h3>
                     <p class="text-subtitle text-muted">Edit purchase order details</p>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
@@ -226,7 +226,7 @@
                                                                         </button>
 
                                                                         @else
-                                                                            <button type="button" 
+                                                                            <button type="button"
                                                                                 class="btn btn-outline-primary btn-sm edit-estimasi-btn ms-2" disabled style="background: #ccc">
                                                                                 <i class="bi bi-pencil"></i> Edit
                                                                             </button>
@@ -293,7 +293,7 @@
                                                                                         class="text-muted d-block">Status
                                                                                         Follow Up</small>
                                                                                     <span
-                                                                                        class="badge 
+                                                                                        class="badge
                                                                                             @if ($item->status_follow_up == 'Scheduled') bg-warning text-dark
                                                                                             @elseif($item->status_follow_up == 'Followed') bg-success
                                                                                             @elseif($item->status_follow_up == 'Unfollowed') bg-danger
@@ -412,7 +412,7 @@
                                                                                         class="text-muted d-block">Status
                                                                                         Purchase</small>
                                                                                     <span
-                                                                                        class="badge 
+                                                                                        class="badge
                                                                                         @if ($item->status_purchase == 'Wait For Order') bg-warning text-dark
                                                                                         @elseif($item->status_purchase == 'Ordered') bg-success
                                                                                         @elseif($item->status_purchase == 'Failed Order') bg-danger
@@ -555,7 +555,7 @@
                                                                                         class="text-muted d-block">Status
                                                                                         Barang</small>
                                                                                     <span
-                                                                                        class="badge 
+                                                                                        class="badge
                                                                                             @if ($item->status_barang_sampai == 'Waiting Courier') bg-warning text-dark
                                                                                             @elseif($item->status_barang_sampai == 'Received') bg-success
                                                                                             @elseif($item->status_barang_sampai == 'Cancel') bg-danger
@@ -622,7 +622,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                               
+
 
                                                 </div>
                                                 <div class="col-md-12 col-12 text-end">
@@ -658,7 +658,7 @@
                     @csrf
                     <input type="hidden" id="item_id" name="item_id">
                     <div class="row">
-                       
+
                         <div class="col-md-6 col-12">
                             <div class="form-group mandatory">
                                 <label class="form-label">Mutasi Check</label>
@@ -693,7 +693,7 @@
                     @csrf
                     <input type="hidden" id="hpp_item_id" name="item_id">
                     <div class="row">
-                        
+
                         <div class="col-md-6 col-12">
                             <div class="form-group mandatory">
                                 <label class="form-label">Mutasi Check</label>
@@ -813,13 +813,13 @@
             $(document).on('click', '.edit-estimasi-btn', function() {
                 const itemId = $(this).data('item-id');
                 $('#item_id').val(itemId);
-               
+
                 // Set toggle
                 const isChecked = $(this).data('mutasi-check') === 'true';
                 $('#modal_btn_status').prop('checked', isChecked).change();
                 $('#modal_status').val(isChecked);
 
-              
+
                 // Tampilkan modal
                 estimasiModal.show();
             });

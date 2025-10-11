@@ -174,7 +174,7 @@
                                       <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Harga Barang</label>
-                                            <input type="text" class="form-control form-control-lg required" name="items[0][estimasi_harga]" placeholder="1.000.000">
+                                            <input type="text" class="form-control form-control-lg required" name="items[0][estimasi_harga]" placeholder="Rp">
                                         </div>
                                     </div>
                                      <div class="col-md-3 col-12">
@@ -605,31 +605,42 @@ $(document).ready(function() {
 
     /**
      * Format angka menjadi format Rupiah (dengan separator titik)
-     * Contoh: 1000000 -> 1.000.000
+     * Contoh: 1000000 -> Rp, 427000.00 -> 427.000
      */
     function formatRupiah(angka) {
         if (!angka) return '';
 
-        // Hapus semua karakter non-digit
-        let number_string = angka.toString().replace(/[^,\d]/g, '');
-        let split = number_string.split(',');
-        let sisa = split[0].length % 3;
-        let rupiah = split[0].substr(0, sisa);
-        let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+        // Convert to string and handle decimal numbers
+        let numberString = angka.toString();
+
+        // Remove trailing .00 if present
+        if (numberString.endsWith('.00')) {
+            numberString = numberString.slice(0, -3);
+        }
+
+        // Split by decimal point to handle both integer and decimal parts
+        const parts = numberString.split('.');
+        const integerPart = parts[0];
+        const decimalPart = parts[1];
+
+        // Format integer part with thousand separators
+        const sisa = integerPart.length % 3;
+        let rupiah = integerPart.substr(0, sisa);
+        const ribuan = integerPart.substr(sisa).match(/\d{3}/gi);
 
         // Tambahkan titik jika sudah menjadi ribuan
         if (ribuan) {
-            let separator = sisa ? '.' : '';
+            const separator = sisa ? '.' : '';
             rupiah += separator + ribuan.join('.');
         }
 
-        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-        return rupiah;
+        // Add decimal part if it exists and is not empty
+        return decimalPart ? rupiah + ',' + decimalPart : rupiah;
     }
 
     /**
      * Parse format Rupiah kembali ke angka untuk kalkulasi
-     * Contoh: "1.000.000" -> 1000000
+     * Contoh: "Rp" -> 1000000
      */
     function parseRupiah(rupiah) {
         if (!rupiah) return 0;
@@ -1326,7 +1337,7 @@ $('.required').on('input change', function() {
                 <div class="col-md-3 col-12">
                     <div class="form-group">
                         <label class="form-label">Harga Barang</label>
-                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][estimasi_harga]" placeholder="1.000.000">
+                        <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][estimasi_harga]" placeholder="Rp">
                     </div>
                 </div>
                 <div class="col-md-3 col-12">

@@ -591,14 +591,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Toggle Chart Function
     window.toggleChart = function(viewType) {
-        console.log('Toggling chart view to:', viewType);
         // You can implement chart view switching logic here
     };
 
     // Real-time updates every 5 minutes
     setInterval(() => {
         // Auto refresh functionality can be implemented here
-        console.log('Auto-refreshing dashboard data...');
     }, 300000);
 
 
