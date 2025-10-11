@@ -610,32 +610,21 @@ $(document).ready(function() {
     function formatRupiah(angka) {
         if (!angka) return '';
 
-        // Convert to string and handle decimal numbers
-        let numberString = angka.toString();
-
-        // Remove trailing .00 if present
-        if (numberString.endsWith('.00')) {
-            numberString = numberString.slice(0, -3);
-        }
-
-        // Split by decimal point to handle both integer and decimal parts
-        const parts = numberString.split('.');
-        const integerPart = parts[0];
-        const decimalPart = parts[1];
-
-        // Format integer part with thousand separators
-        const sisa = integerPart.length % 3;
-        let rupiah = integerPart.substr(0, sisa);
-        const ribuan = integerPart.substr(sisa).match(/\d{3}/gi);
+        // Hapus semua karakter non-digit
+        let number_string = angka.toString().replace(/[^,\d]/g, '');
+        let split = number_string.split(',');
+        let sisa = split[0].length % 3;
+        let rupiah = split[0].substr(0, sisa);
+        let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
 
         // Tambahkan titik jika sudah menjadi ribuan
         if (ribuan) {
-            const separator = sisa ? '.' : '';
+            let separator = sisa ? '.' : '';
             rupiah += separator + ribuan.join('.');
         }
 
-        // Add decimal part if it exists and is not empty
-        return decimalPart ? rupiah + ',' + decimalPart : rupiah;
+        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+        return rupiah;
     }
 
     /**

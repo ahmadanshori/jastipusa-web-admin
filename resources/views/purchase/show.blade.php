@@ -1259,12 +1259,20 @@
 
                 // Format values dengan Rupiah
                 const totalEstimasi = $(this).data('total-estimasi');
-                $('#jumlah_transfer').val(totalEstimasi ? formatRupiah(totalEstimasi.toString()) : '');
+                let estimasiValue = totalEstimasi ? totalEstimasi.toString() : '';
+                if (estimasiValue.endsWith('.00')) {
+                    estimasiValue = estimasiValue.slice(0, -3);
+                }
+                $('#jumlah_transfer').val(estimasiValue ? formatRupiah(estimasiValue) : '');
 
                 const dp = $(this).data('dp');
                 $('#dp').val(dp ? formatRupiah(dp.toString()) : '');
 
                 const fullPayment = $(this).data('full-payment');
+                let fullPaymentValue = fullPayment ? fullPayment.toString() : '';
+                if (fullPaymentValue.endsWith('.00')) {
+                    fullPaymentValue = fullPaymentValue.slice(0, -3);
+                }
                 $('#full_payment').val(fullPayment ? formatRupiah(fullPayment.toString()) : '');
 
                 $('#status_follow_up').val($(this).data('status-follow-up'));
@@ -2313,31 +2321,21 @@
         function formatRupiah(angka) {
             if (!angka) return '';
 
-            // Convert to string and handle decimal numbers
-            let numberString = angka.toString();
+            // Hapus semua karakter non-digit
+            let number_string = angka.toString().replace(/[^,\d]/g, '');
+            let split = number_string.split(',');
+            let sisa = split[0].length % 3;
+            let rupiah = split[0].substr(0, sisa);
+            let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
 
-            // Remove trailing .00 if present
-            if (numberString.endsWith('.00')) {
-                numberString = numberString.slice(0, -3);
-            }
-
-            // Split by decimal point to handle both integer and decimal parts
-            const parts = numberString.split('.');
-            const integerPart = parts[0];
-            const decimalPart = parts[1];
-
-            // Format integer part with thousand separators
-            const sisa = integerPart.length % 3;
-            let rupiah = integerPart.substr(0, sisa);
-            const ribuan = integerPart.substr(sisa).match(/\d{3}/gi);
-
+            // Tambahkan titik jika sudah menjadi ribuan
             if (ribuan) {
-                const separator = sisa ? '.' : '';
+                let separator = sisa ? '.' : '';
                 rupiah += separator + ribuan.join('.');
             }
 
-            // Add decimal part if it exists and is not empty
-            return decimalPart ? rupiah + ',' + decimalPart : rupiah;
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return rupiah;
         }
 
         // Parse Rupiah format back to number ("1.000.000" -> 1000000)
