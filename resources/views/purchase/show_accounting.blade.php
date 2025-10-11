@@ -1136,6 +1136,22 @@
                         const formData = new FormData($('#hppForm')[0]);
                         const itemId = $('#hpp_item_id').val();
 
+                        // Convert formatted numbers to plain numbers before sending
+                        const dollarFields = ['total_purchase', 'harga_barang', 'pajak', 'diskon', 'pengiriman'];
+                        dollarFields.forEach(fieldName => {
+                            const fieldValue = formData.get(fieldName);
+                            if (fieldValue) {
+                                // Parse as float and remove trailing .00
+                                let cleanValue = parseFloat(fieldValue) || 0;
+                                // Convert to string and remove trailing .00 if present
+                                let cleanValueStr = cleanValue.toString();
+                                if (cleanValueStr.endsWith('.00')) {
+                                    cleanValueStr = cleanValueStr.slice(0, -3);
+                                }
+                                formData.set(fieldName, cleanValueStr);
+                            }
+                        });
+
                         // Tampilkan loading
                         Swal.fire({
                             title: 'Menyimpan...',

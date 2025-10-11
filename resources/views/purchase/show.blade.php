@@ -1260,20 +1260,24 @@
                 // Format values dengan Rupiah
                 const totalEstimasi = $(this).data('total-estimasi');
                 let estimasiValue = totalEstimasi ? totalEstimasi.toString() : '';
-                if (estimasiValue.endsWith('.00')) {
+                if (estimasiValue && estimasiValue.endsWith('.00')) {
                     estimasiValue = estimasiValue.slice(0, -3);
                 }
                 $('#jumlah_transfer').val(estimasiValue ? formatRupiah(estimasiValue) : '');
 
                 const dp = $(this).data('dp');
-                $('#dp').val(dp ? formatRupiah(dp.toString()) : '');
+                let dpValue = dp ? dp.toString() : '';
+                if (dpValue.endsWith('.00')) {
+                    dpValue = dpValue.slice(0, -3);
+                }
+                $('#dp').val(dpValue ? formatRupiah(dpValue) : '');
 
                 const fullPayment = $(this).data('full-payment');
                 let fullPaymentValue = fullPayment ? fullPayment.toString() : '';
                 if (fullPaymentValue.endsWith('.00')) {
                     fullPaymentValue = fullPaymentValue.slice(0, -3);
                 }
-                $('#full_payment').val(fullPayment ? formatRupiah(fullPayment.toString()) : '');
+                $('#full_payment').val(fullPaymentValue ? formatRupiah(fullPaymentValue) : '');
 
                 $('#status_follow_up').val($(this).data('status-follow-up'));
                 $('#foto-bukti').val($(this).data('foto-bukti'));
@@ -1589,16 +1593,16 @@
                 $('#notes').val($(this).data('notes'));
 
                 const pajak = $(this).data('pajak');
-                $('#pajak').val(pajak ? formatRupiah(pajak.toString()) : '');
+                $('#pajak').val(pajak ? parseFloat(pajak).toFixed(2) : '');
 
                 const diskon = $(this).data('diskon');
-                $('#diskon').val(diskon ? formatRupiah(diskon.toString()) : '');
+                $('#diskon').val(diskon ? parseFloat(diskon).toFixed(2) : '');
 
                 const pengiriman = $(this).data('pengiriman');
-                $('#pengiriman').val(pengiriman ? formatRupiah(pengiriman.toString()) : '');
+                $('#pengiriman').val(pengiriman ? parseFloat(pengiriman).toFixed(2) : '');
 
                 const hargaHpp = $(this).data('harga-hpp');
-                $('#harga_barang').val(hargaHpp ? formatRupiah(hargaHpp.toString()) : '');
+                $('#harga_barang').val(hargaHpp ? parseFloat(hargaHpp).toFixed(2) : '');
 
                 $("#txt_foto_bukti_pembelian").val($(this).data('bukti-pembelian'));
                 hitungTotalPurchase();
@@ -1865,12 +1869,18 @@
                         const itemId = $('#hpp_item_id').val();
 
                         // Convert formatted numbers to plain numbers before sending
-                        const numericFields = ['total_purchase', 'harga_barang', 'pajak', 'diskon', 'pengiriman'];
-                        numericFields.forEach(fieldName => {
+                        const dollarFields = ['total_purchase', 'harga_barang', 'pajak', 'diskon', 'pengiriman'];
+                        dollarFields.forEach(fieldName => {
                             const fieldValue = formData.get(fieldName);
                             if (fieldValue) {
-                                const cleanValue = parseRupiah(fieldValue);
-                                formData.set(fieldName, cleanValue);
+                                // Parse as float and remove trailing .00
+                                let cleanValue = parseFloat(fieldValue) || 0;
+                                // Convert to string and remove trailing .00 if present
+                                let cleanValueStr = cleanValue.toString();
+                                if (cleanValueStr.endsWith('.00')) {
+                                    cleanValueStr = cleanValueStr.slice(0, -3);
+                                }
+                                formData.set(fieldName, cleanValueStr);
                             }
                         });
 
@@ -1978,13 +1988,25 @@
                 // Isi form modal
                 $('#operasional_item_id').val(itemId);
 
-                // Fix Weight tidak perlu format Rupiah (dalam kg)
-                const fixWeight = $(this).data('fix-weight');
-                $('#fix_weight').val(fixWeight || 0);
+                // Fix Weight tidak perlu format Rupiah (dalam kg), hapus juga jika ada .00
+                let fixWeight = $(this).data('fix-weight');
+                if (typeof fixWeight !== 'undefined' && fixWeight !== null && fixWeight !== '') {
+                    fixWeight = String(fixWeight).replace(/\.00$/, '');
+                } else {
+                    fixWeight = 0;
+                }
+                $('#fix_weight').val(fixWeight);
 
-                // Format values dengan Rupiah
-                const fixPrice = $(this).data('fix-price');
-                $('#fix_price').val(fixPrice ? formatRupiah(fixPrice.toString()) : '');
+                // Format values dengan Rupiah dan hapus ".00" jika ada, dengan best practice
+                const fixPriceData = $(this).data('fix-price');
+                let fixPriceFormatted = '';
+                if (typeof fixPriceData !== 'undefined' && fixPriceData !== null && fixPriceData !== '') {
+                    let fixPriceString = (typeof fixPriceData !== 'undefined' && fixPriceData !== null && fixPriceData !== '')
+                        ? String(fixPriceData).replace(/\.00$/, '')
+                        : '0';
+                    fixPriceFormatted = formatRupiah(fixPriceString);
+                }
+                $('#fix_price').val(fixPriceFormatted);
 
                 $('#status_barang_sampai').val(statusBarang);
 
@@ -1992,11 +2014,24 @@
                 $('#sku').val($(this).data('sku'));
 
                 const kurirLokal = $(this).data('kurir-lokal');
-                $('#kurir_lokal').val(kurirLokal ? formatRupiah(kurirLokal.toString()) : '');
+                let kurirLokalFormatted = '';
+                if (typeof kurirLokal !== 'undefined' && kurirLokal !== null && kurirLokal !== '') {
+                    let kurirLokalString = (typeof kurirLokal !== 'undefined' && kurirLokal !== null && kurirLokal !== '')
+                        ? String(kurirLokal)
+                        : '0';
+                    kurirLokalString = kurirLokalString.replace(/\.00$/, '');
+                    kurirLokalFormatted = formatRupiah(kurirLokalString);
+                }
+                $('#kurir_lokal').val(kurirLokalFormatted);
 
-                const pelunasan = $(this).data('pelunasan');
-                $('#pelunasan').val(pelunasan ? formatRupiah(pelunasan.toString()) : '');
-
+                const pelunasanData = $(this).data('pelunasan');
+                let pelunasanFormatted = '';
+                if (typeof pelunasanData !== 'undefined' && pelunasanData !== null && pelunasanData !== '') {
+                    let pelunasanString = pelunasanData !== undefined && pelunasanData !== null && pelunasanData !== '' ? String(pelunasanData) : '0';
+                    pelunasanString = pelunasanString.replace(/\.00$/, '');
+                    pelunasanFormatted = formatRupiah(pelunasanString);
+                }
+                $('#pelunasan').val(pelunasanFormatted);
 
                 var statusFollowUp = $(this).data('status-barang-sampai');
 
@@ -2206,8 +2241,8 @@
                         const formData = new FormData($('#operasionalForm')[0]);
                         const itemId = $('#operasional_item_id').val();
 
-                        // Convert formatted numbers to plain numbers before sending
-                        const numericFields = ['fix_weight', 'fix_price', 'asuransi', 'kurir_lokal', 'pelunasan'];
+                       // Convert formatted numbers to plain numbers before sending
+                       const numericFields = ['fix_weight', 'fix_price', 'asuransi', 'kurir_lokal', 'pelunasan'];
                         numericFields.forEach(fieldName => {
                             const fieldValue = formData.get(fieldName);
                             if (fieldValue) {
@@ -2447,11 +2482,11 @@
         }
 
         function hitungTotalPurchase() {
-            // Ambil nilai dari input dengan parseRupiah
-            const hargaBarang = parseRupiah($('#harga_barang').val());
-            const pajak = parseRupiah($('#pajak').val());
-            const diskon = parseRupiah($('#diskon').val());
-            const pengiriman = parseRupiah($('#pengiriman').val());
+            // Ambil nilai dari input - harga_barang sudah dalam format dollar
+            const hargaBarang = parseFloat($('#harga_barang').val()) || 0;
+            const pajak = parseFloat($('#pajak').val()) || 0;
+            const diskon = parseFloat($('#diskon').val()) || 0;
+            const pengiriman = parseFloat($('#pengiriman').val()) || 0;
             const exchange = parseFloat($('#exchange').val()) || 0;
 
             // Format individual currency fields in IDR
@@ -2473,9 +2508,9 @@
             // Hitung total
             const total = hargaBarang + pajak + pengiriman - diskon;
 
-            // Tampilkan hasil dengan format Rupiah (pastikan tidak negatif)
+            // Tampilkan hasil dalam format dollar (pastikan tidak negatif)
             const totalValue = total >= 0 ? total : 0;
-            $('#total_purchase').val(formatRupiah(Math.round(totalValue).toString()));
+            $('#total_purchase').val(totalValue.toFixed(2));
             const showTotal = parseFloat(total * exchange);
             const formattedTotal = new Intl.NumberFormat('id-ID', {
                 style: 'currency',
