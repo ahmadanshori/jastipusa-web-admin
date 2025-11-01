@@ -214,13 +214,30 @@ class PurchaseOrderController extends Controller
                 ]
             ];
         });
-
+    $category = $this->category->get()->map(function ($itm) {
+        return [
+            'value' => $itm->id,
+            'label' => $itm->name,
+            'name' => $itm->name,
+            'id' => $itm->id
+        ];
+    });
+    $brand = $this->brand->get()->map(function ($itm) {
+        return [
+            'value' => $itm->id,
+            'label' => $itm->name,
+            'name' => $itm->name,
+            'id' => $itm->id
+        ];
+    });
     return view('purchase.edit', [
         'purchase' => $purchase,
         'purchaseOrderDetail' => $purchaseOrderDetail,
         'customers' => $customers,
         'customerOrders' => $customerOrders,
-        'customerOrdersJson' => $customerOrders->toJson()
+        'customerOrdersJson' => $customerOrders->toJson(),
+        'category' => $category,
+        'brand' => $brand,
     ]);
 }
 

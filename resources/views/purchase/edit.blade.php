@@ -232,6 +232,35 @@
                                             <input type="text" class="form-control form-control-lg required" name="items[{{$index}}][total_estimasi]" value="{{ old("items.$index.total_estimasi", number_format($item->total_estimasi,0,'','')) }}">
                                         </div>
                                     </div>
+                                     <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Category</label>
+                                            <select class="choices form-select category-select" 
+                                                name="items[{{ $index }}][category_id]"
+                                                data-index="{{ $index }}" data-selected="{{ $item->category_id }}">
+                                                @if(isset($item))
+                                                    @foreach($category as $categories)
+                                                    <option value="{{ $categories['id'] }}" {{ ($categories['id'] == $item->category_id)? 'selected' : '' }}>{{$categories['name']}}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Brand</label>
+                                            <select class="choices form-select brand-select" 
+                                                name="items[{{ $index }}][brand_id]"
+                                                data-index="{{ $index }}" data-selected="{{ $item->brand_id }}">
+                                                @if(isset($item))
+                                                    @foreach($brand as $brands)
+                                                    <option value="{{ $brands['id'] }}" {{ ($brands['id'] == $item->brand_id)? 'selected' : '' }}>{{$brands['name']}}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="col-md-12 col-12 text-end">
                                         <button type="button" class="btn btn-danger btn-sm remove-item-btn">
                                             <i class="bi bi-trash"></i> Remove Item
@@ -277,6 +306,9 @@ $(document).ready(function() {
     const customerOrders = @json($customerOrders);
     const customerOrdersJson = JSON.parse('{!! addslashes($customerOrdersJson) !!}');
     
+    let dataBrand = @json($brand); // Ubah ke let agar bisa diupdate saat add brand baru
+    let dataCategory = @json($category);
+
     let choicesInstances = [];
     let itemCounter = $('#items-container .item-row').length;
 
@@ -339,6 +371,51 @@ $(document).ready(function() {
         return choices;
     }
 
+ function initializeChoicesCategory(selectElement, index) {
+
+        const choices = new Choices(selectElement, {
+            choices: dataCategory,
+            searchEnabled: true,
+            shouldSort: false,
+            itemSelectText: '',
+            classNames: {
+                containerInner: 'choices__inner form-select category-select'
+            },
+            shouldSortItems: function() {
+                return false;
+            }
+        });
+
+        choicesInstances.push({
+            element: selectElement,
+            instance: choices
+        });
+
+        return choices;
+    }
+
+     function initializeChoicesBrand(selectElement, index) {
+
+        const choices = new Choices(selectElement, {
+            choices: dataBrand,
+            searchEnabled: true,
+            shouldSort: false,
+            itemSelectText: '',
+            classNames: {
+                containerInner: 'choices__inner form-select brand-select'
+            },
+            shouldSortItems: function() {
+                return false;
+            }
+        });
+
+        choicesInstances.push({
+            element: selectElement,
+            instance: choices
+        });
+
+        return choices;
+    }
     // function initializeChoices(selectElement, index) {
     //     const tipeOrder = $('#tipe_order').val();
 
@@ -512,6 +589,27 @@ $(document).ready(function() {
                         <input type="text" class="form-control form-control-lg required" name="items[${itemCounter}][total_estimasi]">
                     </div>
                 </div>
+                 <div class="col-md-6 col-12">
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <div class="form-group">
+                            <select class="form-select category-select required" name="items[${itemCounter}][category_id]" data-category="${itemCounter}">
+                                <option value="">Select Category</option>
+                            </select>
+                      
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="form-group">
+                        <label class="form-label">Brand</label>
+                        <div class="form-group">
+                            <select class="form-select brand-select required" name="items[${itemCounter}][brand_id]" data-brand="${itemCounter}">
+                                <option value="">Select Brand</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-md-12 col-12 text-end">
                     <button type="button" class="btn btn-danger btn-sm remove-item-btn">
                         <i class="bi bi-trash"></i> Remove Item
@@ -522,7 +620,11 @@ $(document).ready(function() {
 
         $('#items-container').append(newItemHtml);
         const newSelect = $(`[data-index="${itemCounter}"]`)[0];
+            const newSelectCat = $(`[data-category="${itemCounter}"]`)[0];
+        const newSelectBrand = $(`[data-brand="${itemCounter}"]`)[0];
         initializeChoices(newSelect, itemCounter);
+          initializeChoicesCategory(newSelectCat, itemCounter);
+        initializeChoicesBrand(newSelectBrand, itemCounter);
         initItemEvents(itemCounter);
 
         itemCounter++;

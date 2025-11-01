@@ -31,13 +31,13 @@
                             <div class="card-header bg-light">
                                 @if ($purchaseOrderDetail->every->mutasi_check && (
                                 App\Models\User::checkRole('master_admin') ||
-                                App\Models\User::checkRole('admin_chat_input')))
+                                App\Models\User::checkRole('admin_chat_input') || App\Models\User::checkRole('accounting')))
                                 <a href="{{ route('purchase-estimasi.pdf', [$purchase->id]) }}" target="_blank"
                                     class="btn icon btn-info"> <i class="fas fa-file-pdf me-2"></i>
                                     Invoice Estimasi
                                 </a>
                                 @endif
-                                @if ($purchaseOrderDetail->every->hpp_mutasi_check && (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_purchase')))
+                                @if ($purchaseOrderDetail->every->hpp_mutasi_check && (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_purchase') || App\Models\User::checkRole('accounting')))
 
                                     <a href="{{ route('purchase-hpp.pdf', [$purchase->id]) }}" target="_blank"
                                         class="btn icon btn-warning"> <i class="fas fa-file-pdf me-2"></i>
@@ -45,7 +45,7 @@
                                     </a>
                                 @endif
 
-                                @if ($purchaseOrderDetail->every->status_on_check && (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('operasional')))
+                                @if ($purchaseOrderDetail->every->status_on_check && (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('operasional') || App\Models\User::checkRole('accounting')))
 
                                     <a href="{{ route('purchase-operasional.pdf', [$purchase->id]) }}" target="_blank"
                                         class="btn icon btn-danger"> <i class="fas fa-file-pdf me-2"></i>
@@ -1314,6 +1314,7 @@
 
                 // Jika Choices.js terdeteksi
                 if (typeof Choices !== 'undefined') {
+
                     // Destroy existing instance jika ada
                     if (selectElement.choices) {
                         selectElement.choices.destroy();
@@ -1333,9 +1334,11 @@
                     });
 
                     // Set nilai yang dipilih
+                    choicesInstance.setChoiceByValue("");
                     choicesInstance.setChoiceByValue(statusFollowUp);
                 } else {
                     // Fallback traditional method
+
                     $('#status_follow_up').html('\
                                                             <option value="">Press to select</option>\
                                                             <option value="Scheduled"' + (statusFollowUp === 'Scheduled' ? ' selected' : '') + '>Scheduled</option>\
@@ -1654,21 +1657,21 @@
                 });
                 // Inisialisasi Choices untuk select
 
-                var statusFollowUp = $(this).data('status-purchase');
+                var statusPurchase = $(this).data('status-purchase');
 
                 // Dapatkan instance Choices
-                var selectElement = document.getElementById('status_purchase');
+                var selectElementPurchase = document.getElementById('status_purchase');
 
                 // Jika Choices.js terdeteksi
                 if (typeof Choices !== 'undefined') {
                     // Destroy existing instance jika ada
-                    if (selectElement.choices) {
-                        selectElement.choices.destroy();
+                    if (selectElementPurchase.choices) {
+                        selectElementPurchase.choices.destroy();
                     }
 
 
                     // Buat instance Choices baru dengan opsi yang benar
-                    var choicesInstance = new Choices(selectElement, {
+                    var choicesInstance = new Choices(selectElementPurchase, {
                         choices: [
                             { value: '', label: 'Press to select', selected: true, disabled: true },
                             { value: 'Wait For Order', label: 'Wait For Order' },
@@ -1680,15 +1683,24 @@
                         itemSelectText: ''
                     });
 
+                    choicesInstance.removeActiveItems();
                     // Set nilai yang dipilih
-                    choicesInstance.setChoiceByValue(statusFollowUp);
+                    if (statusPurchase) {
+                        selectElementPurchase.choices.destroy();
+
+                        choicesInstance.setChoiceByValue(statusPurchase);
+                    } else {
+
+                        choicesInstance.setChoiceByValue(''); // Clear ke default
+                    }
                 } else {
                     // Fallback traditional method
+                    $('#status_purchase').html('');
                     $('#status_purchase').html('\
                                                             <option value="">Press to select</option>\
-                                                            <option value="Wait For Order"' + (statusFollowUp === 'Wait For Order' ? ' selected' : '') + '>Wait For Order</option>\
-                                                            <option value="Ordered"' + (statusFollowUp === 'Ordered' ? ' selected' : '') + '>Ordered</option>\
-                                                            <option value="Failed Order"' + (statusFollowUp === 'Failed Order' ? ' selected' : '') + '>Failed Order</option>\
+                                                            <option value="Wait For Order"' + (statusPurchase === 'Wait For Order' ? ' selected' : '') + '>Wait For Order</option>\
+                                                            <option value="Ordered"' + (statusPurchase === 'Ordered' ? ' selected' : '') + '>Ordered</option>\
+                                                            <option value="Failed Order"' + (statusPurchase === 'Failed Order' ? ' selected' : '') + '>Failed Order</option>\
                                                         ');
                     $('#status_purchase').trigger('change');
                 }
@@ -1722,11 +1734,14 @@
         // Set nilai yang dipilih setelah timeout kecil
         setTimeout(function() {
             if (paymentMethodValue) {
+                //  paymentMethodChoices.setChoiceByValue("");
                 paymentMethodChoices.setChoiceByValue(paymentMethodValue);
             } else {
                 // Auto select index 0 jika belum ada data payment method
                 // Pilih opsi pertama setelah opsi default
                 if ($('#payment_method option').length > 1) {
+                    // paymentMethodChoices.setChoiceByValue("");
+
                     paymentMethodChoices.setChoiceByValue($('#payment_method option:eq(1)').val());
                 }
             }
@@ -2059,6 +2074,8 @@
                     });
 
                     // Set nilai yang dipilih
+                     choicesInstance.setChoiceByValue("");
+
                     choicesInstance.setChoiceByValue(statusFollowUp);
                 } else {
                     // Fallback traditional method
