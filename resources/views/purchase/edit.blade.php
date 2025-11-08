@@ -34,14 +34,14 @@
                                     <div class="form-group">
                                          <label for="tipe_order" class="form-label">Tipe Order</label>
                                         <select class="required choices form-select" id="tipe_order" name="tipe_order" readonly>
-                                            
+
                                             <option value="">Press to select</option>
                                                 <option value="01" {{ $purchase->tipe_order == '01' ? 'selected' : '' }}>Jasmin</option>
                                                 <option value="02" {{ $purchase->tipe_order == '02' ? 'selected' : '' }}>Jastip Order</option>
                                                 <option value="03" {{ $purchase->tipe_order == '03' ? 'selected' : '' }}>Jastip Only</option>
                                                 <option value="04" {{ $purchase->tipe_order == '04' ? 'selected' : '' }}>Jastip B2B</option>
 
-                                           
+
                                         </select>
                                     </div>
                                     @error('publish_at')
@@ -56,10 +56,10 @@
                                          <label for="customer" class="form-label">Customer</label>
                                         <select class="required choices form-select" id="customer" name="no_telp">
                                              <option value="custom">-- Custom / Buat Baru --</option>
-                                            
+
                                             <option value="">Press to select</option>
                                             @foreach($customers as $customer)
-                                                <option value="{{ $customer->whatsapp_number }}" 
+                                                <option value="{{ $customer->whatsapp_number }}"
                                                     {{ $purchase->no_telp === $customer->whatsapp_number ? 'selected' : '' }}>
                                                     {{ $customer->whatsapp_number }} - {{ $customer->display_name }}
                                                 </option>
@@ -122,7 +122,7 @@
                                 </div>
                             </div>
 
-                        
+
                             </div>
                         </div>
                     </div>
@@ -147,9 +147,9 @@
                                   <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Customer Order</label>
-                                          
-                                            <select class="choices form-select customer-order-select" 
-                                                    name="items[{{ $index }}][customer_order_id]" 
+
+                                            <select class="choices form-select customer-order-select"
+                                                    name="items[{{ $index }}][customer_order_id]"
                                                     data-index="{{ $index }}"
                                                     data-selected="{{ $item->no_po }}">
                                                     <option value="">Select Customer Order</option>
@@ -187,7 +187,7 @@
                                             <input type="text" class="form-control form-control-lg required" value="{{ old("items.$index.estimasi_kg", $item->estimasi_kg) }}" name="items[{{$index}}][estimasi_kg]">
                                         </div>
                                     </div>
-                                  
+
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Nama Barang</label>
@@ -203,11 +203,11 @@
                                     <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Jasa Kg</label>
-                                            <input type="text" class="form-control form-control-lg required" name="items[{{$index}}][jasakg]" value="{{ old("items.$index.jasakg", number_format($item->jasakg,0,'','')) }}">
+                                            <input type="text" class="form-control form-control-lg required" name="items[{{$index}}][jasakg]" value="{{ old("items.$index.jasakg", $item->jasa ? number_format($item->jasa,0,'','') : '') }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
-                                        
+
                                          <div class="form-group">
                                             <label class="form-label">Link Barang</label>
                                             <div class="input-group">
@@ -223,7 +223,7 @@
                                     <div class="col-md-3 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Diskon</label>
-                                            <input type="text" class="form-control form-control-lg required" value="{{ old("items.$index.diskon", number_format($item->diskon,0,'','')) }}" name="items[{{$index}}][diskon]">
+                                            <input type="text" class="form-control form-control-lg required" value="{{ old("items.$index.diskon", $item->estimasi_diskon ? number_format($item->estimasi_diskon,0,'','') : '') }}" name="items[{{$index}}][diskon]">
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-12">
@@ -235,7 +235,7 @@
                                      <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Category</label>
-                                            <select class="choices form-select category-select" 
+                                            <select class="choices form-select category-select"
                                                 name="items[{{ $index }}][category_id]"
                                                 data-index="{{ $index }}" data-selected="{{ $item->category_id }}">
                                                 @if(isset($item))
@@ -250,7 +250,7 @@
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Brand</label>
-                                            <select class="choices form-select brand-select" 
+                                            <select class="choices form-select brand-select"
                                                 name="items[{{ $index }}][brand_id]"
                                                 data-index="{{ $index }}" data-selected="{{ $item->brand_id }}">
                                                 @if(isset($item))
@@ -305,7 +305,7 @@ $(document).ready(function() {
 
     const customerOrders = @json($customerOrders);
     const customerOrdersJson = JSON.parse('{!! addslashes($customerOrdersJson) !!}');
-    
+
     let dataBrand = @json($brand); // Ubah ke let agar bisa diupdate saat add brand baru
     let dataCategory = @json($category);
 
@@ -334,7 +334,7 @@ $(document).ready(function() {
     function initializeChoices(selectElement, index) {
         const selectedValue = $(selectElement).data('selected');
         const tipeOrder = $('#tipe_order').val();
-        
+
         const customOption = {
             value: "custom",
             label: "-- Custom / Buat Baru --",
@@ -342,7 +342,7 @@ $(document).ready(function() {
             customProperties: {}
         };
         let choicesData = [];
-        if (tipeOrder === "01") { 
+        if (tipeOrder === "01") {
             choicesData = customerOrdersJson
         }else{
             choicesData = [customOption]
@@ -434,7 +434,7 @@ $(document).ready(function() {
     //             selected: true,
     //             customProperties: {}
     //         };
-    //     if (tipeOrder === "01") { 
+    //     if (tipeOrder === "01") {
     //         const availableOrders = currentCustomerId
     //             ? customerOrders.filter(order =>
     //                 order.customProperties.customer_id == currentCustomerId &&
@@ -442,7 +442,7 @@ $(document).ready(function() {
     //                 order.value === $(selectElement).val()))
     //             : [];
 
-          
+
     //         choicesData = [customerOrdersJson];
     //     }else{
     //         choicesData = [customOption];
@@ -463,7 +463,7 @@ $(document).ready(function() {
     //              this.setChoiceByValue(selectedValue);
     //                 autoFillItem(index, selectedValue);
     //             }
-               
+
     //         },
     //         shouldSortItems: function() {
     //             return false;
@@ -596,7 +596,7 @@ $(document).ready(function() {
                             <select class="form-select category-select required" name="items[${itemCounter}][category_id]" data-category="${itemCounter}">
                                 <option value="">Select Category</option>
                             </select>
-                      
+
                         </div>
                     </div>
                 </div>
@@ -635,14 +635,14 @@ $(document).ready(function() {
         if ($('#items-container .item-row').length > 1) {
             const itemRow = $(this).closest('.item-row');
             const selectElement = itemRow.find('.customer-order-select')[0];
-            
+
             // Hancurkan instance Choices sebelum menghapus
             const instanceIndex = choicesInstances.findIndex(i => i.element === selectElement);
             if (instanceIndex !== -1) {
                 choicesInstances[instanceIndex].instance.destroy();
                 choicesInstances.splice(instanceIndex, 1);
             }
-            
+
             itemRow.remove();
             reindexItems();
         } else {
@@ -658,19 +658,19 @@ $(document).ready(function() {
                 const name = $(this).attr('name').replace(/items\[\d+\]/, `items[${newIndex}]`);
                 $(this).attr('name', name);
             });
-            
+
             const selectElement = $(this).find('.customer-order-select')[0];
             $(selectElement).attr('data-index', newIndex);
-            
+
             // Update instance Choices jika ada
             const instance = choicesInstances.find(i => i.element === selectElement);
             if (instance) {
                 instance.instance.setValue([$(selectElement).val()]);
             }
-            
+
             newIndex++;
         });
-        
+
         itemCounter = newIndex;
     }
 
@@ -680,11 +680,11 @@ $(document).ready(function() {
         const jasa = parseFloat(itemRow.find('input[name="items[' + index + '][jasakg]"]').val().replace(/[^\d.]/g, '')) || 0;
         const diskon = parseFloat(itemRow.find('input[name="items[' + index + '][diskon]"]').val().replace(/[^\d.]/g, '')) || 0;
         const qty = parseFloat(itemRow.find('input[name="items[' + index + '][quantity]"]').val().replace(/[^\d.]/g, '')) || 0;
-        
+
         // Hitung asuransi (2% dari harga)
         const asuransi = harga * qty * 0.02;
         itemRow.find('input[name="items[' + index + '][asuransi]"]').val(asuransi);
-        
+
         // Hitung total
         const total = (harga * qty) + jasa + asuransi - diskon;
         itemRow.find('input[name="items[' + index + '][total_estimasi]"]').val(total);
@@ -692,18 +692,18 @@ $(document).ready(function() {
 
      function initItemEvents(index) {
         const itemRow = $(`[data-index="${index}"]`).closest('.item-row');
-        
+
         // Hitung total ketika harga, jasa, atau diskon berubah
         itemRow.find('input[name="items[' + index + '][estimasi_harga]"], input[name="items[' + index + '][jasakg]"], input[name="items[' + index + '][diskon]"],  input[name="items[' + index + '][quantity]"]').on('input', function() {
             calculateTotals(index);
         });
-        
+
         // Link button enable/disable
         itemRow.find('.link-input').on('input', function() {
             const btn = $(this).closest('.input-group').find('.btn-open-link');
             btn.prop('disabled', !$(this).val().trim());
         });
-        
+
         // Open link button
         itemRow.find('.btn-open-link').click(function() {
             const url = $(this).closest('.input-group').find('.link-input').val().trim();
