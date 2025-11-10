@@ -99,6 +99,9 @@ class PurchaseOrderDetail extends Model
 
         static::updating(function ($model) {
             unset($model->created_at); // buang kalau ada
+            
+                $model->sku = self::generateSku($model->category_id, $model->brand_id);
+            
         });
     }
 

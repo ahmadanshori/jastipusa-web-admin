@@ -133,11 +133,13 @@
             <div class="row">
                 <div class="col-md-12 col-12">
                     <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Customer PO</h4>
-                            <button type="button" class="btn btn-primary btn-sm float-end" id="add-item-btn">
-                                <i class="bi bi-plus"></i> Add Item
-                            </button>
+                       <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4 class="card-title mb-0">Edit #{{ $purchase->no_invoice }}</h4>
+                                <button type="button" class="btn btn-primary btn-sm" id="add-item-btn">
+                                    <i class="bi bi-plus"></i> Add Item
+                                </button>
+                            </div>
                         </div>
                         <div class="card-content">
                             <div class="card-body">
@@ -147,6 +149,7 @@
                                   <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label class="form-label">Customer Order</label>
+                                        <input type="hidden" value="{{ (isset($item->id)? $item->id:old('id')) }}"  name="items[{{ $index }}][purchase_order_detail_id]">
                                           
                                             <select class="choices form-select customer-order-select" 
                                                     name="items[{{ $index }}][customer_order_id]" 

@@ -249,41 +249,80 @@ class PurchaseOrderController extends Controller
         // Update data purchase utama
         $purchase = $this->purchase->where('id', $id)->first();
         $purchase->update([
-                 'nama' => $request->nama,
+            'nama' => $request->nama,
             'no_telp' => $request->no_telp,
             'alamat' => $request->alamat,
             'email' => $request->email,
         ]);
 
-    $this->purchaseOrderDetail->where('purchase_order_id', $id)->delete();
+        $existingItemIds = $this->purchaseOrderDetail
+        ->where('purchase_order_id', $id)
+        ->pluck('id')
+        ->toArray();
 
-
-        // Buat items baru
+        $sentItemIds = []; // untuk menampung ID yang ada di request
         foreach ($request->items as $item) {
-             $this->purchaseOrderDetail->create([
-                'purchase_order_id' => $purchase->id,
-                'no_po' => $item['no_po_customer'],
-                'tipe_order' => $request->tipe_order,
-                'nama_barang' => $item['nama_barang'],
-                'link_barang' => $item['link_barang'],
-                'estimasi_kg' => $item['estimasi_kg'],
-                'estimasi_harga' => $item['estimasi_harga'],
-                'qty' => $item['quantity'],
-                'estimasi_diskon' => $item['diskon'],
-                'total_estimasi' => $item['total_estimasi'],
-                'asuransi' => $item['asuransi'],
-                'jasa' => $item['jasakg'],
-                'estimasi_notes' => $item['estimasi_notes'],
-            ]);
+
+            // Jika item punya ID → berarti update
+            if (!empty($item['purchase_order_detail_id'])) {
+
+                $sentItemIds[] = $item['purchase_order_detail_id']; // tandai bahwa item ini masih ada
+                
+                $this->purchaseOrderDetail
+                    ->where('id', $item['purchase_order_detail_id'])
+                    ->update([
+                        'no_po' => $item['no_po_customer'],
+                        'tipe_order' => $request->tipe_order,
+                        'nama_barang' => $item['nama_barang'],
+                        'link_barang' => $item['link_barang'],
+                        'estimasi_kg' => $item['estimasi_kg'],
+                        'estimasi_harga' => $item['estimasi_harga'],
+                        'qty' => $item['quantity'],
+                        'estimasi_diskon' => $item['diskon'],
+                        'total_estimasi' => $item['total_estimasi'],
+                        'asuransi' => $item['asuransi'],
+                        'jasa' => $item['jasakg'],
+                        'estimasi_notes' => $item['estimasi_notes'],
+                        'category_id' => $item['category_id'],
+                        'brand_id' => $item['brand_id']
+                    ]);
+
+            } else {
+
+                // Jika tidak ada ID → item baru → create
+                $new = $this->purchaseOrderDetail->create([
+                    'purchase_order_id' => $id,
+                    'no_po' => $item['no_po_customer'],
+                    'tipe_order' => $request->tipe_order,
+                    'nama_barang' => $item['nama_barang'],
+                    'link_barang' => $item['link_barang'],
+                    'estimasi_kg' => $item['estimasi_kg'],
+                    'estimasi_harga' => $item['estimasi_harga'],
+                    'qty' => $item['quantity'],
+                    'estimasi_diskon' => $item['diskon'],
+                    'total_estimasi' => $item['total_estimasi'],
+                    'asuransi' => $item['asuransi'],
+                    'jasa' => $item['jasakg'],
+                    'estimasi_notes' => $item['estimasi_notes'],
+                    'category_id' => $item['category_id'],
+                    'brand_id' => $item['brand_id']
+                ]);
+
+                $sentItemIds[] = $new->id; // tambahkan ke list item yang harus dipertahankan
+            }
         }
 
-        DB::commit();
+    // HAPUS item lama yang tidak ada di request
+        $this->purchaseOrderDetail
+            ->where('purchase_order_id', $id)
+            ->whereNotIn('id', $sentItemIds)
+            ->delete();
+            DB::commit();
 
         return redirect()->route('purchase.index')
             ->with('success', 'Purchase order updated successfully');
 
     } catch (\Exception $e) {
-        dd($e);
         DB::rollBack();
         return back()->withInput()
             ->with('error', 'Failed to update purchase order: ' . $e->getMessage());

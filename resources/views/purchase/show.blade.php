@@ -478,11 +478,11 @@
                                                                         aria-controls="collapseHpp{{ $index }}">
                                                                         HPP
                                                                     </button>
-                                                                    @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_purchase') || App\Models\User::checkRole('accounting'))
+                                                                    @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('admin_purchase') || App\Models\User::checkRole('accounting') || App\Models\User::checkRole('manager'))
                                                                         <button type="button"
                                                                             class="btn btn-outline-primary btn-sm edit-hpp-btn ms-2"
                                                                             data-item-id="{{ $item->id }}"
-                                                                            data-payment-method="{{ $item->payment_method }}"
+                                                                            data-payment-method="{{ $item->payment_method ?? '' }}"
                                                                             data-total-purchase="{{ $item->total_purchase }}"
                                                                             data-status-purchase="{{ $item->status_purchase }}"
                                                                             data-notes="{{ $item->notes }}"
@@ -938,6 +938,7 @@
                                     <label class="form-label">Status Follow Up</label>
                                     <select class="form-select" id="status_follow_up" {{ App\Models\User::checkRole('accounting') ? 'disabled':''  }} name="status_follow_up">
                                     </select>
+                                    <input type="hidden" name="status_follow_up" {{ App\Models\User::checkRole('accounting') ? '':'disabled'  }} id="status_follow_up_value">
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
@@ -992,7 +993,7 @@
                                 <div class="form-group">
                                     <label class="form-label">Payment Method</label>
 
-                                    <select class="form-select" id="payment_method" {{ App\Models\User::checkRole('accounting') ? 'disabled':''  }} name="payment_method">
+                                    <select class="form-select" id="payment_method" {{ App\Models\User::checkRole('accounting') || App\Models\User::checkRole('manager') ? 'disabled':''  }} name="payment_method">
                                         <option value="">Press to select</option>
 
                                         {{-- @foreach($paymentMethod as $paymentMethods)
@@ -1001,14 +1002,18 @@
                                             </option>
                                         @endforeach --}}
                                     </select>
+                                    <input type="hidden" name="payment_method" {{ App\Models\User::checkRole('accounting') || App\Models\User::checkRole('manager')  ? '':'disabled'  }} id="payment_method_value">
+
                                 </div>
                             </div>
 
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Status Purchase</label>
-                                    <select class="form-select" id="status_purchase" {{ App\Models\User::checkRole('accounting') ? 'disabled':''  }} name="status_purchase">
+                                    <select class="form-select" id="status_purchase" {{ App\Models\User::checkRole('accounting') || App\Models\User::checkRole('manager') ? 'disabled':''  }} name="status_purchase">
                                     </select>
+                                    <input type="hidden" name="status_purchase" {{ App\Models\User::checkRole('accounting') || App\Models\User::checkRole('manager') ? '':'disabled'  }} id="status_purchase_value">
+
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
@@ -1016,7 +1021,7 @@
                                     <label class="form-label">Harga Barang</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="text" id="harga_barang" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
+                                        <input type="text" id="harga_barang" {{ App\Models\User::checkRole('accounting') || App\Models\User::checkRole('manager') ? 'readonly':''  }} class="form-control form-control-lg"
                                             name="harga_barang" placeholder="100">
                                     </div>
                                     <span id="show_harga_barang" class="invalid-feedback" style="display: block">
@@ -1028,7 +1033,7 @@
                                     <label class="form-label">Pajak</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="text" id="pajak" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg" name="pajak"
+                                        <input type="text" id="pajak" {{ App\Models\User::checkRole('accounting') || App\Models\User::checkRole('manager') ? 'readonly':''  }} class="form-control form-control-lg" name="pajak"
                                             placeholder="10">
                                     </div>
                                     <span id="show_pajak" class="invalid-feedback" style="display: block">
@@ -1040,7 +1045,7 @@
                                     <label class="form-label">Diskon</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="text" id="diskon" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg" name="diskon"
+                                        <input type="text" id="diskon" {{ App\Models\User::checkRole('accounting') || App\Models\User::checkRole('manager') ? 'readonly':''  }} class="form-control form-control-lg" name="diskon"
                                             placeholder="5">
                                     </div>
                                     <span id="show_diskon" class="invalid-feedback" style="display: block">
@@ -1052,13 +1057,14 @@
                                     <label class="form-label">Pengiriman</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="text" id="pengiriman" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} class="form-control form-control-lg"
+                                        <input type="text" id="pengiriman" {{ App\Models\User::checkRole('accounting') || App\Models\User::checkRole('manager') ? 'readonly':''  }} class="form-control form-control-lg"
                                             name="pengiriman" placeholder="15">
                                     </div>
                                     <span id="show_pengiriman" class="invalid-feedback" style="display: block">
                                     </span>
                                 </div>
                             </div>
+                            @if(App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('manager') || App\Models\User::checkRole('accounting'))
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Notes</label>
@@ -1066,13 +1072,14 @@
                                         placeholder="Color, Size, Etc">
                                 </div>
                             </div>
+                            @endif
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Total Purchase</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
                                         <input type="number" id="total_purchase" readonly
-                                            class="form-control form-control-lg" name="total_purchase" {{ App\Models\User::checkRole('accounting') ? 'readonly':''  }} placeholder="$">
+                                            class="form-control form-control-lg" name="total_purchase" {{ App\Models\User::checkRole('accounting') || App\Models\User::checkRole('manager') ? 'readonly':''  }} placeholder="$">
                                     </div>
                                     <span id="show_total_purchase" class="invalid-feedback" style="display: block">
                                     </span>
@@ -1081,7 +1088,7 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                     <label class="form-label">Foto Bukti Pembelian</label>
-                                    <input type="file" id="bukti_pembelian" {{ App\Models\User::checkRole('accounting') ? 'disabled':''  }} class="form-control form-control-lg"
+                                    <input type="file" id="bukti_pembelian" {{ App\Models\User::checkRole('accounting') || App\Models\User::checkRole('manager') ? 'disabled':''  }} class="form-control form-control-lg"
                                         name="bukti_pembelian">
                                     {{-- <div id="bukti_pembelian_preview" class="mt-2"></div> --}}
 
@@ -1179,6 +1186,8 @@
                                     <select class="form-select" {{ App\Models\User::checkRole('accounting') ? 'disabled':''  }} id="status_barang_sampai" name="status_barang_sampai">
 
                                     </select>
+                                    <input type="hidden" name="status_barang_sampai" {{ App\Models\User::checkRole('accounting') ? '':'disabled'  }} id="status_barang_sampai_value">
+
                                 </div>
                             </div>
                             @if (App\Models\User::checkRole('master_admin') || App\Models\User::checkRole('accounting'))
@@ -1205,7 +1214,7 @@
 
                                 </div>
                             </div>
-                            <div class="col-md-6 col-12">
+                            <div class="col-md-6 col-12" id="show_wh_indo">
                                 <div class="form-group">
                                     <label class="form-label">WH Indo</label>
                                     <input type="file" id="wh_indonesia" {{ App\Models\User::checkRole('accounting') ? 'disabled':''  }} class="form-control form-control-lg"
@@ -1233,6 +1242,11 @@
 @section('scripts')
     <script src="{{ asset('js/utils/currency.js') }}"></script>
     <script>
+        let choicesStatusFollowUp = null;
+        let choicesStatusPurchase = null;
+        let paymentMethodChoices = null;
+        let choicesStatusBarang = null;
+
         $(document).ready(function () {
             // Format all currency elements using formatDollar
             $('.currency-format').each(function () {
@@ -1313,17 +1327,15 @@
                 var selectElement = document.getElementById('status_follow_up');
 
                 // Jika Choices.js terdeteksi
-                if (typeof Choices !== 'undefined') {
-
-                    // Destroy existing instance jika ada
-                    if (selectElement.choices) {
-                        selectElement.choices.destroy();
+                if (choicesStatusFollowUp) {
+                        choicesStatusFollowUp.destroy();
+                        choicesStatusFollowUp = null;
                     }
 
-                    // Buat instance Choices baru dengan opsi yang benar
-                    var choicesInstance = new Choices(selectElement, {
+                    // Buat instance baru
+                    choicesStatusFollowUp = new Choices('#status_follow_up', {
                         choices: [
-                            { value: '', label: 'Press to select', selected: true, disabled: true },
+                            { value: '', label: 'Press to select', disabled: true },
                             { value: 'Scheduled', label: 'Scheduled' },
                             { value: 'Followed', label: 'Followed' },
                             { value: 'Unfollowed', label: 'Unfollowed' }
@@ -1333,20 +1345,14 @@
                         itemSelectText: ''
                     });
 
-                    // Set nilai yang dipilih
-                    choicesInstance.setChoiceByValue("");
-                    choicesInstance.setChoiceByValue(statusFollowUp);
-                } else {
-                    // Fallback traditional method
-
-                    $('#status_follow_up').html('\
-                                                            <option value="">Press to select</option>\
-                                                            <option value="Scheduled"' + (statusFollowUp === 'Scheduled' ? ' selected' : '') + '>Scheduled</option>\
-                                                            <option value="Followed"' + (statusFollowUp === 'Followed' ? ' selected' : '') + '>Followed</option>\
-                                                            <option value="Unfollowed"' + (statusFollowUp === 'Unfollowed' ? ' selected' : '') + '>Unfollowed</option>\
-                                                        ');
-                    $('#status_follow_up').trigger('change');
-                }
+                    // Set nilai
+                    if (statusFollowUp) {
+                        choicesStatusFollowUp.setChoiceByValue(statusFollowUp);
+                        $('#status_follow_up_value').val(statusFollowUp || "");
+                    } else {
+                        // Tidak ada data → reset jadi default
+                        choicesStatusFollowUp.setChoiceByValue('');
+                    }
 
                 // Set toggle dengan cara yang benar
                 const isChecked = $(this).data('mutasi-check');
@@ -1659,116 +1665,44 @@
 
                 var statusPurchase = $(this).data('status-purchase');
 
+                if (choicesStatusPurchase) {
+                    choicesStatusPurchase.destroy();
+                    choicesStatusPurchase = null;
+                }
+
+                // Buat instance baru
+                choicesStatusPurchase = new Choices('#status_purchase', {
+                    choices: [
+                        { value: '', label: 'Press to select', selected: true, disabled: true },
+                        { value: 'Wait For Order', label: 'Wait For Order' },
+                        { value: 'Ordered', label: 'Ordered' },
+                        { value: 'Failed Order', label: 'Failed Order' }
+                    ],
+                    searchEnabled: false,
+                    shouldSort: false,
+                    itemSelectText: ''
+                });
+
+                // Set nilai
+                if (statusPurchase) {
+                    choicesStatusPurchase.setChoiceByValue(statusPurchase);
+                    $('#status_purchase_value').val(statusPurchase || "");
+
+                } else {
+                    // Tidak ada data → reset jadi default
+                    choicesStatusPurchase.setChoiceByValue('');
+                }
+                
                 // Dapatkan instance Choices
                 var selectElementPurchase = document.getElementById('status_purchase');
 
-                // Jika Choices.js terdeteksi
-                if (typeof Choices !== 'undefined') {
-                    // Destroy existing instance jika ada
-                    if (selectElementPurchase.choices) {
-                        selectElementPurchase.choices.destroy();
-                    }
+               
 
+                let paymentMethodValue = $(this).data('payment-method');
+                $('#payment_method').val(paymentMethodValue); // Set value langsung ke select element
+    
+                initializePaymentMethod(paymentMethodValue);
 
-                    // Buat instance Choices baru dengan opsi yang benar
-                    var choicesInstance = new Choices(selectElementPurchase, {
-                        choices: [
-                            { value: '', label: 'Press to select', selected: true, disabled: true },
-                            { value: 'Wait For Order', label: 'Wait For Order' },
-                            { value: 'Ordered', label: 'Ordered' },
-                            { value: 'Failed Order', label: 'Failed Order' }
-                        ],
-                        searchEnabled: false,
-                        shouldSort: false,
-                        itemSelectText: ''
-                    });
-
-                    choicesInstance.removeActiveItems();
-                    // Set nilai yang dipilih
-                    if (statusPurchase) {
-                        selectElementPurchase.choices.destroy();
-
-                        choicesInstance.setChoiceByValue(statusPurchase);
-                    } else {
-
-                        choicesInstance.setChoiceByValue(''); // Clear ke default
-                    }
-                } else {
-                    // Fallback traditional method
-                    $('#status_purchase').html('');
-                    $('#status_purchase').html('\
-                                                            <option value="">Press to select</option>\
-                                                            <option value="Wait For Order"' + (statusPurchase === 'Wait For Order' ? ' selected' : '') + '>Wait For Order</option>\
-                                                            <option value="Ordered"' + (statusPurchase === 'Ordered' ? ' selected' : '') + '>Ordered</option>\
-                                                            <option value="Failed Order"' + (statusPurchase === 'Failed Order' ? ' selected' : '') + '>Failed Order</option>\
-                                                        ');
-                    $('#status_purchase').trigger('change');
-                }
-
-                 var paymentMethodValue = $(this).data('payment-method');
-
-    // Dapatkan instance Choices untuk payment method
-    var paymentMethodElement = document.getElementById('payment_method');
-
-     if (typeof Choices !== 'undefined') {
-        // Destroy existing instance jika ada
-        if (paymentMethodElement.choices) {
-            paymentMethodElement.choices.destroy();
-        }
-
-        // Pastikan opsi payment method sudah ada
-        if ($('#payment_method option').length <= 1) {
-            // Isi opsi payment method dari data PHP
-            @foreach($paymentMethod as $paymentMethods)
-                $('#payment_method').append('<option value="{{ $paymentMethods->name . '-' . $paymentMethods->number }}">{{ $paymentMethods->name . '-' . $paymentMethods->number }}</option>');
-            @endforeach
-        }
-
-        // Buat instance Choices baru
-        var paymentMethodChoices = new Choices(paymentMethodElement, {
-            searchEnabled: true,
-            shouldSort: false,
-            itemSelectText: ''
-        });
-
-        // Set nilai yang dipilih setelah timeout kecil
-        setTimeout(function() {
-            if (paymentMethodValue) {
-                //  paymentMethodChoices.setChoiceByValue("");
-                paymentMethodChoices.setChoiceByValue(paymentMethodValue);
-            } else {
-                // Auto select index 0 jika belum ada data payment method
-                // Pilih opsi pertama setelah opsi default
-                if ($('#payment_method option').length > 1) {
-                    // paymentMethodChoices.setChoiceByValue("");
-
-                    paymentMethodChoices.setChoiceByValue($('#payment_method option:eq(1)').val());
-                }
-            }
-        }, 100);
-    } else {
-        // Fallback traditional method
-        // Pastikan opsi payment method sudah ada
-        if ($('#payment_method option').length <= 1) {
-            // Isi opsi payment method dari data PHP
-            @foreach($paymentMethod as $paymentMethods)
-                $('#payment_method').append('<option value="{{ $paymentMethods->name . '-' . $paymentMethods->number }}">{{ $paymentMethods->name . '-' . $paymentMethods->number }}</option>');
-            @endforeach
-        }
-
-        // Set nilai yang dipilih atau auto select index 0
-        if (paymentMethodValue) {
-            $('#payment_method').val(paymentMethodValue);
-        } else {
-            // Auto select index 0 jika belum ada data payment method
-            // Pilih opsi pertama setelah opsi default
-            if ($('#payment_method option').length > 1) {
-                $('#payment_method').val($('#payment_method option:eq(1)').val());
-            }
-        }
-        $('#payment_method').trigger('change');
-    }
-                // Tampilkan modal
                 hppModal.show();
             });
 
@@ -2048,45 +1982,37 @@
                 }
                 $('#pelunasan').val(pelunasanFormatted);
 
-                var statusFollowUp = $(this).data('status-barang-sampai');
-
                 // Dapatkan instance Choices
                 var selectElement = document.getElementById('status_barang_sampai');
 
-                // Jika Choices.js terdeteksi
-                if (typeof Choices !== 'undefined') {
-                    // Destroy existing instance jika ada
-                    if (selectElement.choices) {
-                        selectElement.choices.destroy();
-                    }
-
-                    // Buat instance Choices baru dengan opsi yang benar
-                    var choicesInstance = new Choices(selectElement, {
-                        choices: [
-                            { value: '', label: 'Press to select', selected: true, disabled: true },
-                            { value: 'Waiting Courier', label: 'Waiting Courier' },
-                            { value: 'Received', label: 'Received' },
-                            { value: 'Cancel', label: 'Cancel' }
-                        ],
-                        searchEnabled: false,
-                        shouldSort: false,
-                        itemSelectText: ''
-                    });
-
-                    // Set nilai yang dipilih
-                     choicesInstance.setChoiceByValue("");
-
-                    choicesInstance.setChoiceByValue(statusFollowUp);
-                } else {
-                    // Fallback traditional method
-                    $('#status_barang_sampai').html('\
-                                                            <option value="">Press to select</option>\
-                                                            <option value="Waiting Courier"' + (statusFollowUp === 'Waiting Courier' ? ' selected' : '') + '>Waiting Courier</option>\
-                                                            <option value="Received"' + (statusFollowUp === 'Received' ? ' selected' : '') + '>Received</option>\
-                                                            <option value="Cancel"' + (statusFollowUp === 'Cancel' ? ' selected' : '') + '>Cancel</option>\
-                                                        ');
-                    $('#status_barang_sampai').trigger('change');
+                 if (choicesStatusBarang) {
+                    choicesStatusBarang.destroy();
+                    choicesStatusBarang = null;
                 }
+
+                // Buat instance baru
+                choicesStatusBarang = new Choices('#status_barang_sampai', {
+                    choices: [
+                       { value: '', label: 'Press to select', selected: true, disabled: true },
+                        { value: 'Waiting Courier', label: 'Waiting Courier' },
+                        { value: 'Received', label: 'Received' },
+                        { value: 'Cancel', label: 'Cancel' }
+                    ],
+                    searchEnabled: false,
+                    shouldSort: false,
+                    itemSelectText: ''
+                });
+
+                // Set nilai
+                if (statusBarang) {
+                    choicesStatusBarang.setChoiceByValue(statusBarang);
+                    $('#status_barang_sampai_value').val(statusBarang || "");
+
+                } else {
+                    // Tidak ada data → reset jadi default
+                    choicesStatusBarang.setChoiceByValue('');
+                }
+             
 
                 const isChecked = $(this).data('wh-usa-mutasi-check');
 
@@ -2110,6 +2036,11 @@
                 const whUsaImg = $(this).data('wh-usa-path');
                 const whIndoImg = $(this).data('wh-indonesia-path');
                 $("#txt_foto_wh_usa").val(whUsaImg);
+                    $("#show_wh_indo").hide();
+
+                if(whUsaImg){
+                    $("#show_wh_indo").show();
+                }
                 $("#txt_foto_wh_indonesia").val(whIndoImg);
                 const fotoBuktiFieldUsa = $('#wh_usa');
                 const fotoPreviewUsa = $('#foto-preview-wh-usa');
@@ -2547,6 +2478,62 @@
                 $element.text(formatted);
             });
         }
+
+        function initializePaymentMethod(selectedValue) {
+
+            const paymentMethodElement = document.getElementById('payment_method');
+
+            console.log('=== INIT PAYMENT METHOD ===');
+            console.log('Selected value:', selectedValue);
+
+            if (typeof Choices !== 'undefined') {
+
+                // HANCURKAN instance lama
+                if (paymentMethodChoices) {
+                    console.log('🔄 Destroying existing Choices instance');
+                    paymentMethodChoices.destroy();
+                    paymentMethodChoices = null;
+                }
+
+                // Bikin opsi baru
+                $('#payment_method').empty();
+                $('#payment_method').append('<option value="">Pilih Payment Method</option>');
+
+                @foreach($paymentMethod as $paymentMethods)
+                    $('#payment_method').append('<option value="{{ $paymentMethods->name . '-' . $paymentMethods->number }}">{{ $paymentMethods->name . '-' . $paymentMethods->number }}</option>');
+                @endforeach
+
+                console.log('✅ Options recreated');
+
+                // Buat instance baru
+                paymentMethodChoices = new Choices(paymentMethodElement, {
+                    searchEnabled: true,
+                    shouldSort: false,
+                    itemSelectText: ''
+                });
+
+                console.log('🎉 New Choices created');
+
+                // Set value
+                if (selectedValue) {
+                    paymentMethodChoices.setChoiceByValue(selectedValue);
+                    console.log('🎯 Set selected value:', selectedValue);
+                    $('#payment_method_value').val(selectedValue || "");
+
+
+                } else {
+                    // Jadikan default placeholder
+                    paymentMethodChoices.setChoiceByValue('');
+                }
+
+                console.log('📊 Current value:', paymentMethodChoices.getValue(true));
+
+            } else {
+                // Fallback non Choices.js
+                $('#payment_method').val(selectedValue);
+            }
+        }
+
 
         // Format currency elements when page loads
         formatAllCurrencyElements();
