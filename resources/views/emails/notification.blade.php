@@ -7,7 +7,7 @@
     
     <p>Ada data order baru:</p>
     <ul>
-        <li>No Po: {{ $data->no_invoice }}</li>
+        <li>No PO: <a href="{{ config('app.url') }}/purchase/{{ $data->id }}">{{ $data->no_invoice }}</a></li>
         <li>Customer: {{ $data->nama }}</li>
         <li>Alamat: {{ $data->alamat }}</li>
     </ul>

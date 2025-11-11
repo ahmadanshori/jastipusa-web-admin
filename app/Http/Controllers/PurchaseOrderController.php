@@ -164,7 +164,7 @@ class PurchaseOrderController extends Controller
 
         // Send email notification
         try {
-            $emails = $this->user->pluck('email')->toArray();
+            $emails = $this->user->whereIn('role_id',[2,5])->pluck('email')->toArray();
             $user = $this->user->where('id', Auth::id())->first();
             $role = $this->role->where('id', $user->role_id)->first();
             $purchase["role"] = $role->name;
@@ -349,6 +349,18 @@ public function updateEstimasi(Request $request, $id)
         $purchaseOrderDetail = $this->purchaseOrderDetail->where('id', $id)->first();
         $purchaseOrderDetail->update($data);
 
+         try {
+            $emails = $this->user->whereIn('role_id',[3,5,6])->pluck('email')->toArray();
+            $user = $this->user->where('id', Auth::id())->first();
+            $role = $this->role->where('id', $user->role_id)->first();
+            $purchase = $this->purchase->where('id', $purchaseOrderDetail->purchase_order_id)->first();
+            $purchase["role"] = $role->name;
+            $purchase["user"] = $user->name;
+            Mail::to('no-reply@mail.com')
+                ->bcc($emails)
+                ->send(new NotificationEmail($purchase));
+        } catch (\Exception $mailError) {
+        }
     return response()->json([
         'success' => true,
         'message' => 'Estimasi berhasil diperbarui'
@@ -377,6 +389,19 @@ public function updateHpp(Request $request, $id)
     $purchaseOrderDetail = $this->purchaseOrderDetail->where('id', $id)->first();
     $purchaseOrderDetail->update($data);
 
+     try {
+            $emails = $this->user->whereIn('role_id',[4,5])->pluck('email')->toArray();
+            $user = $this->user->where('id', Auth::id())->first();
+            $role = $this->role->where('id', $user->role_id)->first();
+             $purchase = $this->purchase->where('id', $purchaseOrderDetail->purchase_order_id)->first();
+            $purchase["role"] = $role->name;
+            $purchase["user"] = $user->name;
+            Mail::to('no-reply@mail.com')
+                ->bcc($emails)
+                ->send(new NotificationEmail($purchase));
+        } catch (\Exception $mailError) {
+            // Continue even if email fails
+        }
     return response()->json([
         'success' => true,
         'message' => 'HPP berhasil diperbarui'
@@ -409,6 +434,20 @@ public function updateOprasional(Request $request, $id)
 
         $purchaseOrderDetail = $this->purchaseOrderDetail->where('id', $id)->first();
         $purchaseOrderDetail->update($data);
+
+    try {
+        $emails = $this->user->whereIn('role_id',[5])->pluck('email')->toArray();
+        $user = $this->user->where('id', Auth::id())->first();
+        $role = $this->role->where('id', $user->role_id)->first();
+          $purchase = $this->purchase->where('id', $purchaseOrderDetail->purchase_order_id)->first();
+        $purchase["role"] = $role->name;
+        $purchase["user"] = $user->name;
+        Mail::to('no-reply@mail.com')
+            ->bcc($emails)
+            ->send(new NotificationEmail($purchase));
+    } catch (\Exception $mailError) {
+        // Continue even if email fails
+    }
 
     return response()->json([
         'success' => true,
