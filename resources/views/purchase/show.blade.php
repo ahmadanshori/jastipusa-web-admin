@@ -485,7 +485,7 @@
                                                                             data-payment-method="{{ $item->payment_method ?? '' }}"
                                                                             data-total-purchase="{{ $item->total_purchase }}"
                                                                             data-status-purchase="{{ $item->status_purchase }}"
-                                                                            data-notes="{{ $item->notes }}"
+
                                                                             data-bukti-pembelian="{{ $item->foto_bukti_pembelian }}"
                                                                             data-harga-hpp="{{ $item->harga_hpp }}"
                                                                             data-diskon="{{ $item->diskon }}"
@@ -1242,10 +1242,11 @@
 @section('scripts')
     <script src="{{ asset('js/utils/currency.js') }}"></script>
     <script>
-        let choicesStatusFollowUp = null;
-        let choicesStatusPurchase = null;
-        let paymentMethodChoices = null;
-        let choicesStatusBarang = null;
+    let choicesStatusFollowUp = null;
+    let choicesStatusPurchase = null;
+    let paymentMethodChoices = null;
+    let choicesStatusBarang = null;
+    const hppNotesRequired = @json(App\Models\User::checkRole('manager'));
 
         $(document).ready(function () {
             // Format all currency elements using formatDollar
@@ -1692,15 +1693,15 @@
                     // Tidak ada data → reset jadi default
                     choicesStatusPurchase.setChoiceByValue('');
                 }
-                
+
                 // Dapatkan instance Choices
                 var selectElementPurchase = document.getElementById('status_purchase');
 
-               
+
 
                 let paymentMethodValue = $(this).data('payment-method');
                 $('#payment_method').val(paymentMethodValue); // Set value langsung ke select element
-    
+
                 initializePaymentMethod(paymentMethodValue);
 
                 hppModal.show();
@@ -1747,10 +1748,6 @@
                     name: 'Total Purchase'
                 },
                 {
-                    id: '#notes',
-                    name: 'Notes'
-                },
-                {
                     id: '#pajak',
                     name: 'Pajak'
                 },
@@ -1767,6 +1764,10 @@
                     name: 'Pengiriman'
                 }
                 ];
+
+                if (hppNotesRequired) {
+                    requiredFields.push({ id: '#notes', name: 'Notes' });
+                }
 
                  if (!fotoBukti) {
                     requiredFields.push({ id: '#bukti_pembelian', name: 'Foto Bukti Pembelian' });
@@ -2012,7 +2013,7 @@
                     // Tidak ada data → reset jadi default
                     choicesStatusBarang.setChoiceByValue('');
                 }
-             
+
 
                 const isChecked = $(this).data('wh-usa-mutasi-check');
 
