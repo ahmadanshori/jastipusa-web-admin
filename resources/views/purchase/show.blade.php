@@ -485,7 +485,7 @@
                                                                             data-payment-method="{{ $item->payment_method ?? '' }}"
                                                                             data-total-purchase="{{ $item->total_purchase }}"
                                                                             data-status-purchase="{{ $item->status_purchase }}"
-
+                                                                            data-notes="{{ $item->notes }}"
                                                                             data-bukti-pembelian="{{ $item->foto_bukti_pembelian }}"
                                                                             data-harga-hpp="{{ $item->harga_hpp }}"
                                                                             data-diskon="{{ $item->diskon }}"
