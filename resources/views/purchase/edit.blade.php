@@ -634,16 +634,26 @@ $(document).ready(function() {
     });
 
     // Hapus item
-    $('#items-container').on('click', '.remove-item-btn', function() {
+   $('#items-container').on('click', '.remove-item-btn', function() {
         if ($('#items-container .item-row').length > 1) {
             const itemRow = $(this).closest('.item-row');
             const selectElement = itemRow.find('.customer-order-select')[0];
 
             // Hancurkan instance Choices sebelum menghapus
-            const instanceIndex = choicesInstances.findIndex(i => i.element === selectElement);
-            if (instanceIndex !== -1) {
-                choicesInstances[instanceIndex].instance.destroy();
-                choicesInstances.splice(instanceIndex, 1);
+            if (selectElement) {
+                const instanceIndex = choicesInstances.findIndex(i => i.element === selectElement);
+                if (instanceIndex !== -1) {
+                    const instance = choicesInstances[instanceIndex];
+                    // Check if instance and destroy method exist
+                    if (instance && instance.instance && typeof instance.instance.destroy === 'function') {
+                        try {
+                            instance.instance.destroy();
+                        } catch (e) {
+                            console.warn('Error destroying Choices instance:', e);
+                        }
+                    }
+                    choicesInstances.splice(instanceIndex, 1);
+                }
             }
 
             itemRow.remove();
@@ -657,9 +667,15 @@ $(document).ready(function() {
     function reindexItems() {
         let newIndex = 0;
         $('#items-container .item-row').each(function() {
+           
             $(this).find('input, select').each(function() {
-                const name = $(this).attr('name').replace(/items\[\d+\]/, `items[${newIndex}]`);
-                $(this).attr('name', name);
+                const currentName = $(this).attr('name');
+                
+                // Check if name attribute exists and is not undefined
+                if (currentName) {
+                    const newName = currentName.replace(/items\[\d+\]/, `items[${newIndex}]`);
+                    $(this).attr('name', newName);
+                }
             });
 
             const selectElement = $(this).find('.customer-order-select')[0];
