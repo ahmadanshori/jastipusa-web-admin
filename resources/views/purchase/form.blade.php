@@ -1519,6 +1519,7 @@ $('.required').on('input change', function() {
         const jasa = parseRupiah(itemRow.find('input[name="items[' + index + '][jasakg]"]').val());
         const diskon = parseRupiah(itemRow.find('input[name="items[' + index + '][diskon]"]').val());
         const qty = parseFloat(itemRow.find('input[name="items[' + index + '][quantity]"]').val().replace(/[^\d.]/g, '')) || 0;
+        const estimasiKg = parseFloat(itemRow.find('input[name="items[' + index + '][estimasi_kg]"]').val().replace(/[^\d.]/g, '')) || 0;
 
         // Hitung asuransi (2% dari harga)
         const asuransi = harga * qty * 0.02;
@@ -1526,7 +1527,7 @@ $('.required').on('input change', function() {
         itemRow.find('input[name="items[' + index + '][asuransi]"]').val(asuransiFormatted);
 
         // Hitung total
-        const total = (harga * qty) + jasa + asuransi - diskon;
+        const total = (harga * qty) + (jasa * estimasiKg) + asuransi - diskon;
         const totalFormatted = formatRupiah(Math.round(total).toString());
         itemRow.find('input[name="items[' + index + '][total_estimasi]"]').val(totalFormatted);
     }

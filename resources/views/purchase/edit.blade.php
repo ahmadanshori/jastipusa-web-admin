@@ -150,9 +150,9 @@
                                         <div class="form-group">
                                             <label class="form-label">Customer Order</label>
                                         <input type="hidden" value="{{ (isset($item->id)? $item->id:old('id')) }}"  name="items[{{ $index }}][purchase_order_detail_id]">
-                                          
-                                            <select class="choices form-select customer-order-select" 
-                                                    name="items[{{ $index }}][customer_order_id]" 
+
+                                            <select class="choices form-select customer-order-select"
+                                                    name="items[{{ $index }}][customer_order_id]"
                                                     data-index="{{ $index }}"
                                                     data-selected="{{ $item->no_po }}">
                                                     <option value="">Select Customer Order</option>
@@ -667,10 +667,10 @@ $(document).ready(function() {
     function reindexItems() {
         let newIndex = 0;
         $('#items-container .item-row').each(function() {
-           
+
             $(this).find('input, select').each(function() {
                 const currentName = $(this).attr('name');
-                
+
                 // Check if name attribute exists and is not undefined
                 if (currentName) {
                     const newName = currentName.replace(/items\[\d+\]/, `items[${newIndex}]`);
@@ -699,13 +699,14 @@ $(document).ready(function() {
         const jasa = parseFloat(itemRow.find('input[name="items[' + index + '][jasakg]"]').val().replace(/[^\d.]/g, '')) || 0;
         const diskon = parseFloat(itemRow.find('input[name="items[' + index + '][diskon]"]').val().replace(/[^\d.]/g, '')) || 0;
         const qty = parseFloat(itemRow.find('input[name="items[' + index + '][quantity]"]').val().replace(/[^\d.]/g, '')) || 0;
+        const estimasiKg = parseFloat(itemRow.find('input[name="items[' + index + '][estimasi_kg]"]').val().replace(/[^\d.]/g, '')) || 0;
 
         // Hitung asuransi (2% dari harga)
         const asuransi = harga * qty * 0.02;
         itemRow.find('input[name="items[' + index + '][asuransi]"]').val(asuransi);
 
         // Hitung total
-        const total = (harga * qty) + jasa + asuransi - diskon;
+        const total = (harga * qty) + (jasa * estimasiKg) + asuransi - diskon;
         itemRow.find('input[name="items[' + index + '][total_estimasi]"]').val(total);
     }
 
