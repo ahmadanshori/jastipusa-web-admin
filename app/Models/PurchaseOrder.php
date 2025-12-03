@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PurchaseOrder extends Model
 {
@@ -25,8 +26,19 @@ class PurchaseOrder extends Model
         'status',
         'no_invoice',
         'tipe_order',
+        'created_by',
+        'updated_by',
+        'estimasi_by',
+        'hpp_by',
+        'operasional_by',
     ];
 
+//     ALTER TABLE purchase_order 
+// ADD COLUMN created_by INTEGER,
+// ADD COLUMN updated_by INTEGER,
+// ADD COLUMN estimasi_by INTEGER,
+// ADD COLUMN hpp_by INTEGER,
+// ADD COLUMN operasional_by INTEGER;
    
     /**
      * The attributes that should be mutated to dates.
@@ -117,5 +129,47 @@ class PurchaseOrder extends Model
     public function getOrderTypeNameAttribute()
     {
         return $this->getOrderTypeName($this->tipe_order);
+    }
+
+     public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * Relasi ke user yang mengupdate purchase order
+     */
+    public function updatedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    /**
+     * Relasi ke user yang melakukan estimasi
+     */
+    public function estimasiBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'estimasi_by');
+    }
+
+    /**
+     * Relasi ke user yang menetapkan HPP
+     */
+    public function hppBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'hpp_by');
+    }
+
+    /**
+     * Relasi ke user yang menangani operasional
+     */
+    public function operasionalBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'operasional_by');
+    }
+
+     public function paymentMethod(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'payment_method_id');
     }
 }

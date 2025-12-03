@@ -132,6 +132,7 @@ class PurchaseOrderController extends Controller
             'alamat' => $request->alamat,
             'email' => $request->email,
             'tipe_order' => $request->tipe_order,
+            'created_by' => Auth::id()
         ];
 
         $purchase = $this->purchase->create($data);
@@ -253,6 +254,7 @@ class PurchaseOrderController extends Controller
             'no_telp' => $request->no_telp,
             'alamat' => $request->alamat,
             'email' => $request->email,
+            'updated_by' => Auth::id()
         ]);
 
         $existingItemIds = $this->purchaseOrderDetail
@@ -332,25 +334,152 @@ class PurchaseOrderController extends Controller
 
 public function updateEstimasi(Request $request, $id)
 {
-    $data = [
-        'nama_rek_transfer' => $request->nama_rek,
-        'jumlah_transfer' => $request->jumlah_transfer,
-        'dp' => $request->dp,
-        'fullpayment' => $request->full_payment,
-        'kurang_bayar' => $request->kurang_bayar,
-        'status_follow_up' => $request->status_follow_up,
-        'mutasi_check' => $request->mutasi_check
-    ];
-    if ($request->hasFile('bukti_transfer')) {
-        $path = $request->file('bukti_transfer')->store('bukti_transfer', 'public');
-        $data['foto_bukti_tf'] = $path;
+    DB::beginTransaction();
+
+    try {
+        $data = [
+            'nama_rek_transfer' => $request->nama_rek,
+            'jumlah_transfer' => $request->jumlah_transfer,
+            'dp' => $request->dp,
+            'fullpayment' => $request->full_payment,
+            'kurang_bayar' => $request->kurang_bayar,
+            'status_follow_up' => $request->status_follow_up,
+            'mutasi_check' => $request->mutasi_check
+        ];
+        if ($request->hasFile('bukti_transfer')) {
+            $path = $request->file('bukti_transfer')->store('bukti_transfer', 'public');
+            $data['foto_bukti_tf'] = $path;
+        }
+
+            $purchaseOrderDetail = $this->purchaseOrderDetail->where('id', $id)->first();
+            $purchase = $this->purchase->where('id', $purchaseOrderDetail->purchase_order_id)->first();
+
+            $purchaseOrderDetail->update($data);
+            $purchase->update([
+                'estimasi_by' => Auth::id(),
+                'updated_by' => Auth::id()
+            ]);
+
+            try {
+                $emails = $this->user->whereIn('role_id',[3,5,6])->pluck('email')->toArray();
+                $user = $this->user->where('id', Auth::id())->first();
+                $role = $this->role->where('id', $user->role_id)->first();
+                $purchase = $this->purchase->where('id', $purchaseOrderDetail->purchase_order_id)->first();
+                $purchase["role"] = $role->name;
+                $purchase["user"] = $user->name;
+                Mail::to('no-reply@mail.com')
+                    ->bcc($emails)
+                    ->send(new NotificationEmail($purchase));
+            } catch (\Exception $mailError) {
+            }
+            DB::commit();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Estimasi berhasil diperbarui'
+        ]);
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return back()->withInput()
+            ->with('error', 'Failed to update estimasi: ' . $e->getMessage());
     }
+}
+
+public function updateHpp(Request $request, $id)
+{
+    DB::beginTransaction();
+
+    try {
+        $data = [
+            'payment_method' => $request->payment_method,
+            'total_purchase' => $request->total_purchase,
+            'status_purchase' => $request->status_purchase,
+            'notes' => $request->notes,
+            'hpp_mutasi_check' => $request->hpp_mutasi_check,
+            'pajak' => $request->pajak,
+            'diskon' => $request->diskon,
+            'pengiriman' => $request->pengiriman,
+            'harga_hpp' => $request->harga_barang
+        ];
+
+    if ($request->hasFile('bukti_pembelian')) {
+            $path = $request->file('bukti_pembelian')->store('bukti_pembelian', 'public');
+            $data['foto_bukti_pembelian'] = $path;
+        }
 
         $purchaseOrderDetail = $this->purchaseOrderDetail->where('id', $id)->first();
-        $purchaseOrderDetail->update($data);
+        $purchase = $this->purchase->where('id', $purchaseOrderDetail->purchase_order_id)->first();
 
-         try {
-            $emails = $this->user->whereIn('role_id',[3,5,6])->pluck('email')->toArray();
+        $purchaseOrderDetail->update($data);
+        $purchase->update([
+            'hpp_by' => Auth::id(),
+            'updated_by' => Auth::id()
+        ]);
+
+        try {
+                $emails = $this->user->whereIn('role_id',[4,5])->pluck('email')->toArray();
+                $user = $this->user->where('id', Auth::id())->first();
+                $role = $this->role->where('id', $user->role_id)->first();
+                $purchase = $this->purchase->where('id', $purchaseOrderDetail->purchase_order_id)->first();
+                $purchase["role"] = $role->name;
+                $purchase["user"] = $user->name;
+                Mail::to('no-reply@mail.com')
+                    ->bcc($emails)
+                    ->send(new NotificationEmail($purchase));
+            } catch (\Exception $mailError) {
+                // Continue even if email fails
+            }
+            DB::commit();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'HPP berhasil diperbarui'
+        ]);
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return back()->withInput()
+            ->with('error', 'Failed to update hpp: ' . $e->getMessage());
+    }
+}
+
+public function updateOprasional(Request $request, $id)
+{
+    DB::beginTransaction();
+
+    try {
+        $data = [
+            'fix_weight' => $request->fix_weight,
+            'fix_price' => $request->fix_price,
+            'status_barang_sampai' => $request->status_barang_sampai,
+            'status_on_check' => $request->wh_usa_mutasi_check,
+            'no_box' => $request->nomor_box,
+            'kurir_lokal' => $request->kurir_lokal,
+            'pelunasan' => $request->pelunasan,
+        ];
+
+        if ($request->hasFile('wh_usa')) {
+            // Hapus file lama jika ada
+            $path = $request->file('wh_usa')->store('wh_usa', 'public');
+            $data['wh_usa'] = $path;
+        }
+
+        // Handle file upload WH Indonesia
+        if ($request->hasFile('wh_indonesia')) {
+            $path = $request->file('wh_indonesia')->store('wh_indonesia', 'public');
+            $data['wh_indo'] = $path;
+        }
+
+            $purchaseOrderDetail = $this->purchaseOrderDetail->where('id', $id)->first();
+            $purchase = $this->purchase->where('id', $purchaseOrderDetail->purchase_order_id)->first();
+
+            $purchaseOrderDetail->update($data);
+            $purchase->update([
+                'operasional_by' => Auth::id(),
+                'updated_by' => Auth::id(),
+            ]);
+
+        try {
+            $emails = $this->user->whereIn('role_id',[5])->pluck('email')->toArray();
             $user = $this->user->where('id', Auth::id())->first();
             $role = $this->role->where('id', $user->role_id)->first();
             $purchase = $this->purchase->where('id', $purchaseOrderDetail->purchase_order_id)->first();
@@ -360,105 +489,26 @@ public function updateEstimasi(Request $request, $id)
                 ->bcc($emails)
                 ->send(new NotificationEmail($purchase));
         } catch (\Exception $mailError) {
-        }
-    return response()->json([
-        'success' => true,
-        'message' => 'Estimasi berhasil diperbarui'
-    ]);
-}
-
-public function updateHpp(Request $request, $id)
-{
-    $data = [
-        'payment_method' => $request->payment_method,
-        'total_purchase' => $request->total_purchase,
-        'status_purchase' => $request->status_purchase,
-        'notes' => $request->notes,
-        'hpp_mutasi_check' => $request->hpp_mutasi_check,
-        'pajak' => $request->pajak,
-        'diskon' => $request->diskon,
-        'pengiriman' => $request->pengiriman,
-        'harga_hpp' => $request->harga_barang
-    ];
-
-   if ($request->hasFile('bukti_pembelian')) {
-        $path = $request->file('bukti_pembelian')->store('bukti_pembelian', 'public');
-        $data['foto_bukti_pembelian'] = $path;
-    }
-
-    $purchaseOrderDetail = $this->purchaseOrderDetail->where('id', $id)->first();
-    $purchaseOrderDetail->update($data);
-
-     try {
-            $emails = $this->user->whereIn('role_id',[4,5])->pluck('email')->toArray();
-            $user = $this->user->where('id', Auth::id())->first();
-            $role = $this->role->where('id', $user->role_id)->first();
-             $purchase = $this->purchase->where('id', $purchaseOrderDetail->purchase_order_id)->first();
-            $purchase["role"] = $role->name;
-            $purchase["user"] = $user->name;
-            Mail::to('no-reply@mail.com')
-                ->bcc($emails)
-                ->send(new NotificationEmail($purchase));
-        } catch (\Exception $mailError) {
             // Continue even if email fails
         }
-    return response()->json([
-        'success' => true,
-        'message' => 'HPP berhasil diperbarui'
-    ]);
-}
+            DB::commit();
 
-public function updateOprasional(Request $request, $id)
-{
-    $data = [
-        'fix_weight' => $request->fix_weight,
-        'fix_price' => $request->fix_price,
-        'status_barang_sampai' => $request->status_barang_sampai,
-        'status_on_check' => $request->wh_usa_mutasi_check,
-        'no_box' => $request->nomor_box,
-        'kurir_lokal' => $request->kurir_lokal,
-        'pelunasan' => $request->pelunasan,
-    ];
 
-    if ($request->hasFile('wh_usa')) {
-        // Hapus file lama jika ada
-        $path = $request->file('wh_usa')->store('wh_usa', 'public');
-        $data['wh_usa'] = $path;
+        return response()->json([
+            'success' => true,
+            'message' => 'Oprasional berhasil diperbarui',
+            // 'nama_rek' => $item->nama_rek,
+            // 'jumlah_transfer' => $item->jumlah_transfer,
+            // 'dp' => $item->dp,
+            // 'full_payment' => $item->full_payment,
+            // 'status_follow_up' => $item->status_follow_up,
+            // 'mutasi_check' => $item->mutasi_check
+        ]);
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return back()->withInput()
+            ->with('error', 'Failed to update oprasional: ' . $e->getMessage());
     }
-
-    // Handle file upload WH Indonesia
-    if ($request->hasFile('wh_indonesia')) {
-        $path = $request->file('wh_indonesia')->store('wh_indonesia', 'public');
-        $data['wh_indo'] = $path;
-    }
-
-        $purchaseOrderDetail = $this->purchaseOrderDetail->where('id', $id)->first();
-        $purchaseOrderDetail->update($data);
-
-    try {
-        $emails = $this->user->whereIn('role_id',[5])->pluck('email')->toArray();
-        $user = $this->user->where('id', Auth::id())->first();
-        $role = $this->role->where('id', $user->role_id)->first();
-          $purchase = $this->purchase->where('id', $purchaseOrderDetail->purchase_order_id)->first();
-        $purchase["role"] = $role->name;
-        $purchase["user"] = $user->name;
-        Mail::to('no-reply@mail.com')
-            ->bcc($emails)
-            ->send(new NotificationEmail($purchase));
-    } catch (\Exception $mailError) {
-        // Continue even if email fails
-    }
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Estimasi berhasil diperbarui',
-        // 'nama_rek' => $item->nama_rek,
-        // 'jumlah_transfer' => $item->jumlah_transfer,
-        // 'dp' => $item->dp,
-        // 'full_payment' => $item->full_payment,
-        // 'status_follow_up' => $item->status_follow_up,
-        // 'mutasi_check' => $item->mutasi_check
-    ]);
 }
 
  public function show($id)
@@ -598,7 +648,7 @@ public function updateOprasional(Request $request, $id)
 
      public function generatePDFEstimasi($id)
     {
-        $purchase = $this->purchase->where('id', $id)->first();
+        $purchase = $this->purchase->where('id', $id)->with(['createdBy','createdBy.role'])->first();
         $purchaseOrderDetail = $this->purchaseOrderDetail->where('purchase_order_id', $id)->get();
         // Ambil data customer untuk dropdown
         $customers = $this->customer->where('whatsapp_number',$purchase->no_telp)->first();
@@ -616,6 +666,7 @@ public function updateOprasional(Request $request, $id)
             'isPdf' => true
         ];
 
+        // return view('purchase.pdf_estimasi', $data);
         $pdf = PDF::loadView('purchase.pdf_estimasi', $data);
 
         return $pdf->download('purchase-estimasi-'.$purchase->purchase_number.'.pdf');
@@ -623,7 +674,7 @@ public function updateOprasional(Request $request, $id)
 
     public function generatePDFHpp($id)
     {
-        $purchase = $this->purchase->where('id', $id)->first();
+        $purchase = $this->purchase->where('id', $id)->with(['hppBy','hppBy.role','paymentMethod'])->first();
         $purchaseOrderDetail = $this->purchaseOrderDetail->where('purchase_order_id', $id)->get();
         // Ambil data customer untuk dropdown
         $customers = $this->customer->where('whatsapp_number',$purchase->no_telp)->first();
@@ -639,6 +690,8 @@ public function updateOprasional(Request $request, $id)
             'role' => $role,
         ];
 
+        // return view('purchase.pdf_hpp', $data);
+
         $pdf = PDF::loadView('purchase.pdf_hpp', $data);
 
         return $pdf->download('purchase-hpp-'.$purchase->purchase_number.'.pdf');
@@ -646,7 +699,7 @@ public function updateOprasional(Request $request, $id)
 
     public function generatePDFOperasional($id)
     {
-        $purchase = $this->purchase->where('id', $id)->first();
+        $purchase = $this->purchase->where('id', $id)->with(['operasionalBy','operasionalBy.role'])->first();
         $purchaseOrderDetail = $this->purchaseOrderDetail->where('purchase_order_id', $id)->get();
         // Ambil data customer untuk dropdown
         $customers = $this->customer->where('whatsapp_number',$purchase->no_telp)->first();
@@ -661,18 +714,21 @@ public function updateOprasional(Request $request, $id)
             'user' => $user,
             'role' => $role,
         ];
+        // return view('purchase.pdf_operasional', $data);
+
         $pdf = PDF::loadView('purchase.pdf_operasional', $data);
         return $pdf->download('purchase-operasional-'.$purchase->purchase_number.'.pdf');
     }
 
     public function generatePDFReceived($id)
     {
-        $purchase = $this->purchase->where('id', $id)->first();
+        $purchase = $this->purchase->where('id', $id)->with(['updatedBy','operasionalBy','operasionalBy.role'])->first();
         $purchaseOrderDetail = $this->purchaseOrderDetail->where('purchase_order_id', $id)->get();
         // Ambil data customer untuk dropdown
         $customers = $this->customer->where('whatsapp_number',$purchase->no_telp)->first();
         $user = $this->user->where('id', Auth::id())->first();
         $role = $this->role->where('id', $user->role_id)->first();
+        $exchange = $this->exchange->first();
         $data = [
             'purchase' => $purchase,
             'purchaseOrderDetail' => $purchaseOrderDetail,
@@ -681,7 +737,10 @@ public function updateOprasional(Request $request, $id)
             'date' => now()->format('d F Y'),
             'user' => $user,
             'role' => $role,
+            'exchange' => $exchange
         ];
+        // return view('purchase.pdf_received', $data);
+
         $pdf = PDF::loadView('purchase.pdf_received', $data);
         return $pdf->download('purchase-received-'.$purchase->purchase_number.'.pdf');
     }

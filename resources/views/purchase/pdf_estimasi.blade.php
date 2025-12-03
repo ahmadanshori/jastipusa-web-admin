@@ -9,6 +9,8 @@
             margin: 0;
             color: #333;
             background: #fff;
+            font-size: 12px;
+
         }
         .container {
             width: 100%;
@@ -39,6 +41,7 @@
         .info-table {
             width: 100%;
             margin-bottom: 20px;
+            font-size: 14px;
         }
         .info-table td {
             padding: 5px;
@@ -112,15 +115,29 @@
     <table class="info-table">
             <tr>
                 <td width="50%">
-                    <strong>Kepada:</strong><br>
+                    <strong>Kepada :</strong><br>
                     {{$purchase->nama}}<br>
                     {{$purchase->no_telp}}<br>
                     {{$purchase->alamat}}
                 </td>
                 <td width="50%" class="invoice-info">
-                    <strong>No. Invoice:</strong> {{$purchase->no_invoice}}<br>
-                    <strong>Tanggal:</strong> {{ $purchase->created_at->format('d F Y') }}<br>
-                    <strong>Pengiriman:</strong> {{ $purchase->updated_at->format('d F Y') }}
+                    <table width="100%">
+                        <tr>
+                            <td><strong>No. Invoice</strong></td>
+                            <td><strong>:</strong></td>
+                            <td>{{$purchase->no_invoice}}</td>
+                        </tr>
+                            <tr>
+                            <td><strong>PO Tanggal</strong></td>
+                            <td><strong>:</strong></td>
+                            <td>{{ $purchase->created_at->format('d F Y') }}</td>
+                        </tr>
+                            <tr>
+                            <td><strong>Pengiriman</strong></td>
+                            <td><strong>:</strong></td>
+                            <td>{{ $purchase->updated_at->format('d F Y') }}</td>
+                        </tr>
+                    </table>
                 </td>
             </tr>
         </table>
@@ -142,7 +159,7 @@
                 <td>{{ $item->nama_barang }}</td>  <!-- Product Name -->
                 <td>{{ $item->estimasi_notes }}</td>  <!-- Product Name -->
                 <td>{{ $item->qty }}</td>  <!-- Quantity (using estimasi_kg) -->
-                <td>{{ $item->qty }}</td>  <!-- Quantity (using estimasi_kg) -->
+                <td>{{ $item->estimasi_kg }}</td>  <!-- Quantity (using estimasi_kg) -->
                 <td>{{ number_format($item->estimasi_harga ?? 0, 0, ',', '.') }}</td>  
             </tr>
             @endforeach
@@ -161,11 +178,11 @@
             </tr> --}}
             <tr>
                 <td>Diskon</td>
-                <td>{{ $purchaseOrderDetail->sum('estimasi_diskon') }}</td>
+                <td>{{ number_format($purchaseOrderDetail->sum('estimasi_diskon') ?? 0, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td>Asuransi (2%)</td>
-                <td>{{ $purchaseOrderDetail->sum('asuransi') }}</td>
+                <td>{{ number_format($purchaseOrderDetail->sum('asuransi') ?? 0, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td>PPN (0%)</td>
@@ -173,7 +190,7 @@
             </tr>
             <tr>
                 <td>Biaya Jasa/Kg (0%)</td>
-                <td>{{ $purchaseOrderDetail->sum('jasa') }}</td>
+                <td>{{ number_format($purchaseOrderDetail->sum('jasa') ?? 0, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td>Biaya Lain-lain</td>
@@ -195,10 +212,14 @@
             </tr>
             <tr>
                 <td><b>Requested By :</b></td>
-                <td>{{ $user->name }}</td>
-                <td>({{ $role->name }})</td>
+                <td>{{ $purchase->createdBy->role ? $purchase->createdBy->role->name : $role->name }}</td>
+            </tr>
+             <tr>
+                <td></td>
+                <td>{{ $purchase->createdBy ? $purchase->createdBy->name : $user->name }}</td>
             </tr>
             <tr>
+                <td></td>
                 <td>{{ $purchaseOrderDetail[0]->nama_rek_transfer }}</td>
             </tr>
            

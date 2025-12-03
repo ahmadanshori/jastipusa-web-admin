@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Models\Role;
 use Auth;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 
 class User extends Authenticatable
 {
@@ -82,5 +84,10 @@ class User extends Authenticatable
             return false;
         }
 
+    }
+
+     public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class, 'role_id');
     }
 }
