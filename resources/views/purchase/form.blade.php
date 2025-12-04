@@ -1523,12 +1523,12 @@ $('.required').on('input change', function() {
 
         // Hitung asuransi (2% dari harga)
         const asuransi = harga * qty * 0.02;
-        const asuransiFormatted = formatRupiah(Math.round(asuransi).toString());
+        const asuransiFormatted = formatRupiah(Math.floor(asuransi).toString());
         itemRow.find('input[name="items[' + index + '][asuransi]"]').val(asuransiFormatted);
 
         // Hitung total
         const total = (harga * qty) + (jasa * estimasiKg) + asuransi - diskon;
-        const totalFormatted = formatRupiah(Math.round(total).toString());
+        const totalFormatted = formatRupiah(Math.floor(total).toString());
         itemRow.find('input[name="items[' + index + '][total_estimasi]"]').val(totalFormatted);
     }
 

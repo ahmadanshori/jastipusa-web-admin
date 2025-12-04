@@ -701,13 +701,14 @@ $(document).ready(function() {
         const qty = parseFloat(itemRow.find('input[name="items[' + index + '][quantity]"]').val().replace(/[^\d.]/g, '')) || 0;
         const estimasiKg = parseFloat(itemRow.find('input[name="items[' + index + '][estimasi_kg]"]').val().replace(/[^\d.]/g, '')) || 0;
 
-        // Hitung asuransi (2% dari harga)
-        const asuransi = harga * qty * 0.02;
+        // Hitung asuransi (2% dari harga) - floor untuk hilangkan desimal
+        const asuransiRaw = harga * qty * 0.02;
+        const asuransi = Math.floor(asuransiRaw);
         itemRow.find('input[name="items[' + index + '][asuransi]"]').val(asuransi);
 
         // Hitung total
         const total = (harga * qty) + (jasa * estimasiKg) + asuransi - diskon;
-        itemRow.find('input[name="items[' + index + '][total_estimasi]"]').val(total);
+        itemRow.find('input[name="items[' + index + '][total_estimasi]"]').val(Math.floor(total));
     }
 
      function initItemEvents(index) {
